@@ -1,0 +1,1018 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DnDEngine</name>
+    </assembly>
+    <members>
+        <member name="T:DnDEngine.Combat.CombatEntity">
+            <summary>
+            Wraps an IUnit object and adds volatile stats for use in battle. May also be transparently used as an IUnit.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatEntity.Initialize">
+            <summary>
+            Set this unit's volatile stats to their initial states.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatEntity.#ctor(RPGEngine.IUnit,System.Boolean)">
+            <summary>
+            Creates a new CombatEntity instance for a given unit.
+            </summary>
+            <param name="unit">The IUnit interface that the CombatEntity will encapsulate.</param>
+            <param name="canAct">(optional) Whether or not this unit can take actions.</param>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatEntity.Compare(DnDEngine.Combat.CombatEntity,DnDEngine.Combat.CombatEntity)">
+            <summary>
+            Compare two units by initiative.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Name">
+            <summary>
+            Gets the unit's name.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Class">
+            <summary>
+            Gets the unit's class.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Level">
+            <summary>
+            Gets the unit's level.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.BaseStats">
+            <summary>
+            Gets this unit's base stats (without any modifiers).
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Stats">
+            <summary>
+            Gets this unit's stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.StatModsAdditive">
+            <summary>
+            Gets the total additive modifiers applied to this unit's stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.StatModsMultiplicative">
+            <summary>
+            Gets the total multiplicative modifiers applied to this unit's stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Extensions">
+            <summary>
+            Gets a DnDUnit.UnitExtensions object containing additional properties or methods. Cast to supported interfaces to access different properties.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Details">
+            <summary>
+            Gets additional details about this unit
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Inventory">
+            <summary>
+            Gets this unit's inventory.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Equipped">
+            <summary>
+            Gets this unit's equipment
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Buffs">
+            <summary>
+            Gets the buffs and debuffs applied to this unit
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Spells">
+            <summary>
+            Gets this unit's known spells
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.TeamID">
+            <summary>
+            Gets or sets the ID of the team this unit is on.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.CanAct">
+            <summary>
+            Gets whether or not this unit can take actions.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Initiative">
+            <summary>
+            Gets or sets and object containing this unit's initiative roll and modifier
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.CurrentHP">
+            <summary>
+            Gets or sets this unit's current HP. Clamped between 0 and the unit's max HP stat.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.CurrentMP">
+            <summary>
+            Gets or sets this unit's current MP. Clamped between 0 and the unit's max MP stat.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.IsAlive">
+            <summary>
+            Gets if this unit is alive.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.ExpGained">
+            <summary>
+            Gets or sets the experience that this unit has gained.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Summary">
+            <summary>
+            Gets a short description of this unit.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatEntity.Full">
+            <summary>
+            Gets a full description of this unit.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Combat.CombatManager">
+            <summary>
+            Contains methods for carrying out combat actions
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatManager.RollInitiative(RPGEngine.IUnit)">
+            <summary>
+            Roll for initiative
+            </summary>
+            <param name="unit">Unit</param>
+            <returns>Result of initiative roll</returns>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatManager.CalculateDamage(RPGEngine.IUnit,System.Int32,System.Enum)">
+            <summary>
+            Calculate attacker's damage with a given roll after damage bonuses
+            </summary>
+            <param name="attacker">Attacking unit</param>
+            <param name="roll">Result of dice roll</param>
+            <param name="stat">(optional) The stat to use for scaling (passing null will default to DerivedStats.Type.ATK)</param>
+            <returns>Damage after bonuses</returns>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatManager.ApplyDamage(DnDEngine.Combat.CombatEntity,DnDEngine.Combat.DamageDetails,System.Single)">
+            <summary>
+            Calculate damage after applying the defender's damage reductions
+            </summary>
+            <param name="defender">Defending unit</param>
+            <param name="damage">Incoming damage</param>
+            <param name="multiplier">(optional) Multiplies the final damage value</param>
+            <returns>Actual total damage value</returns>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatManager.RollAttack(DnDEngine.Combat.CombatEntity,DnDEngine.Combat.CombatEntity)">
+            <summary>
+            Make an attack
+            </summary>
+            <param name="attacker">Attacking unit</param>
+            <param name="defender">Defending unit</param>
+            <returns>Results of combat</returns>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatManager.CastSpell(System.UInt32,DnDEngine.Combat.CombatEntity,System.Collections.Generic.IEnumerable{DnDEngine.Combat.CombatEntity})">
+            <summary>
+            Cast a spell
+            </summary>
+            <param name="spellId"></param>
+            <param name="caster"></param>
+            <param name="targets"></param>
+        </member>
+        <member name="T:DnDEngine.Combat.CombatDetails">
+            <summary>
+            Contains details about a combat action.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatDetails.#ctor(RPGEngine.IUnit,RPGEngine.IUnit)">
+            <summary>
+            Initializes a new CombatDetails object with the attacker's and defender's names, the attacking weapon, and the defender's AC.
+            Values are copied from the units and references are not stored.
+            </summary>
+            <param name="attacker">The attacking unit.</param>
+            <param name="defender">The defending unit.</param>
+        </member>
+        <member name="M:DnDEngine.Combat.CombatDetails.ToString">
+            <summary>
+            Gets a short summary of the combat action.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.Attacker">
+            <summary>
+            Gets the attacking unit's name.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.Defender">
+            <summary>
+            Gets the defending unit's name.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.AttackWeapon">
+            <summary>
+            Gets a copy of the attacking weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.DefenderAC">
+            <summary>
+            Gets the defender's AC.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.HitRoll">
+            <summary>
+            Gets or sets the result of the hit die roll.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.HitMod">
+            <summary>
+            Gets or sets the attacker's hit modifier.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.Hit">
+            <summary>
+            Gets or sets whether or not the attack hit.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.Crit">
+            <summary>
+            Gets or sets whether or not the attack crit.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.CritRoll">
+            <summary>
+            Gets or sets the result of the crit confirm die roll.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.CritConfirm">
+            <summary>
+            Gets or sets whether or not the attacker confirmed crit.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.Miss">
+            <summary>
+            Gets or sets what the attack missed by.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.DamageDealt">
+            <summary>
+            Gets or sets details about the damage dealt.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.DamageTaken">
+            <summary>
+            Gets or sets the actual damage taken by the defender.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.RemainingHP">
+            <summary>
+            Gets or sets the defender's remaining HP after the attack.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.Summary">
+            <summary>
+            Gets a short summary of the combat action.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.CombatDetails.Full">
+            <summary>
+            Gets a detailed breakdown of the combat action.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Combat.CombatDetails.MissedBy">
+            <summary>
+            Indicates how an attack missed.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Combat.CombatDetails.MissedBy.Base">
+            <summary>
+            Attack missed completely.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Combat.CombatDetails.MissedBy.NaturalArmor">
+            <summary>
+            Attack couldn't penetrate defender's natural armor.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Combat.CombatDetails.MissedBy.ArmorBonus">
+            <summary>
+            Attack blocked by defender's armor.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Combat.CombatDetails.MissedBy.DexBonus">
+            <summary>
+            Defender evaded the attack.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Constants">
+            <summary>
+            Contains various strings and values for convenience.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Constants.PossessivePronoun(DnDEngine.DnDUnit.GenderType)">
+            <summary>
+            Gets the appropriate pronoun for a given gender.
+            </summary>
+            <param name="gender">Gender enum</param>
+            <returns>The pronoun corresponding to the given gender. His, her, or its, no special snowflakes here.</returns>
+        </member>
+        <member name="P:DnDEngine.Constants.ModifierFormat">
+            <summary>
+            Use with ToString() function to display +/- sign for modifiers.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Constants.EquipmentModifierFormat">
+            <summary>
+            Use with ToString() function to display +/- sign for modifiers and a dash for 0.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Items.Equipment">
+            <summary>
+            Contains properties for unit equipment.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.UnitModifier">
+            <summary>
+            Base class for unit modifiers.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.UnitModifier.Bind(RPGEngine.IUnit)">
+            <summary>
+            Bind this modifier to the given unit.
+            </summary>
+            <param name="baseUnit">Unit that this modifier will be bound to.</param>
+            <returns>The bound modifier cast as an IUnit.</returns>
+        </member>
+        <member name="M:DnDEngine.UnitModifier.#ctor(DnDEngine.CoreStats,DnDEngine.CoreStats,DnDEngine.DerivedStats,DnDEngine.DerivedStats)">
+            <summary>
+            Creates a new generic UnitModifier with the specified stat modifiers.
+            </summary>
+            <param name="coreAdds">Additive core stat modifiers</param>
+            <param name="coreMults">Multiplicative core stat modifiers</param>
+            <param name="derivedAdds">Additive derived stat modifiers</param>
+            <param name="derivedMults">Multiplicative derived stat modifiers</param>
+        </member>
+        <member name="T:DnDEngine.Items.IEquipment">
+            <summary>
+            Defines equipment properties.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.IEquipment.Slot">
+            <summary>
+            Gets the slot this equipment fits in.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.IEquipment.WeaponProperties">
+            <summary>
+            Gets this equipment's combat properties if it is a weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.IEquipment.CoreStatMods">
+            <summary>
+            Gets the core stat modifiers for the new equipment.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.IEquipment.DerivedStatMods">
+            <summary>
+            Gets the derived stat modifiers for the new equipment.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.IEquipment.GrantedBuffs">
+            <summary>
+            Gets the buffs that the new equipment will grant the wearer.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.Clone">
+            <summary>
+            Returns a deep copy of this equipment.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.ID">
+            <summary>
+            Gets this equipment's ID as registered in the armory.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Name">
+            <summary>
+            Gets the name of this equipment.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Description">
+            <summary>
+            Gets the description of this equipment.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Slot">
+            <summary>
+            Gets the slot this equipment fits in.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProperties">
+            <summary>
+            Gets this equipment's combat properties if it is a weapon. Returns null if Slot is not Equipment.Type.Weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.CoreStatMods">
+            <summary>
+            Gets the core stat modifiers for the new equipment as a read-only object. Equipment may only have additive stat multipliers.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.DerivedStatMods">
+            <summary>
+            Gets the derived stat modifiers for the new equipment as a read-only object. Equipment may only have additive stat multipliers.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.GrantedBuffs">
+            <summary>
+            Gets the buffs that the new equipment will grant the wearer.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Items.Equipment.Type">
+            <summary>
+            Defines the different equipment slots.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Items.Equipment.Builder">
+            <summary>
+            Builder class to configure and create new equipment.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.Builder.Build(System.UInt32)">
+            <summary>
+            Builds a new Equipment object out of the set properties.
+            </summary>
+            <param name="id">(optional) The ID for the new equipment. This will be overwritten when registering in the Armory, so this is only for testing.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.Builder.#ctor">
+            <summary>
+            Creates a new Equipment.Builder.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Builder.Name">
+            <summary>
+            Gets or sets the name of the new equipment.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Builder.Description">
+            <summary>
+            Gets or sets the description of the new equipment.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Builder.Slot">
+            <summary>
+            Gets or sets the equipment slot of the new equipment.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Builder.CoreStatMods">
+            <summary>
+            Gets or sets the core stat modifiers for the new equipment. Equipment may only have additive stat multipliers.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Builder.DerivedStatMods">
+            <summary>
+            Gets or sets the derived stat modifiers for the new equipment. Equipment may only have additive stat multipliers.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Builder.WeaponProperties">
+            <summary>
+            Gets or sets the combat properties for the new equipment. This will only be set in the new object if it is of Equipment.Type.Weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Builder.GrantedBuffs">
+            <summary>
+            Gets the collection of buffs that the new equipment will grant the wearer. 
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Combat.Magic.Buff">
+            <summary>
+            Represents a buff or debuff.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Combat.Magic.Spell.Cast(DnDEngine.Combat.CombatEntity,System.Collections.Generic.IEnumerable{DnDEngine.Combat.CombatEntity})">
+            <summary>
+            Cast this spell on the specified target(s)
+            <para>Override to add spell effects</para>
+            </summary>
+            <param name="caster">The casting unit</param>
+            <param name="targets">Targets of the spell</param>
+        </member>
+        <member name="T:DnDEngine.CoreStats">
+            <summary>
+            Represents the fundamental stats that make up a unit.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.CoreStats.Get(System.Enum)">
+            <summary>
+            Gets a specified stat value.
+            </summary>
+            <param name="stat">Enum value of the stat to be retrieved. Must be of type CoreStats.Type.</param>
+            <returns>The retrieved stat value.</returns>
+        </member>
+        <member name="M:DnDEngine.CoreStats.Set(System.Enum,System.Int16)">
+            <summary>
+            Sets a specified stat value.
+            </summary>
+            <param name="stat">Enum value of the stat to be set. Must be of type CoreStats.Type.</param>
+            <param name="value">The new value for the stat.</param>
+        </member>
+        <member name="M:DnDEngine.CoreStats.Clone">
+            <summary>
+            Copies stat values to a new CoreStats object. Does not copy linked stats.
+            </summary>
+            <returns>A new object containing the same stat values.</returns>
+        </member>
+        <member name="M:DnDEngine.CoreStats.#ctor">
+            <summary>
+            Creates a new CoreStats object and initializes all stats to 0.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.CoreStats.#ctor(System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16)">
+            <summary>
+            Creates a new CoreStats object with the given stats. Level, base AC, and natural armor are set to 0. Use this for UnitModifier stats.
+            </summary>
+            <param name="str">Strength</param>
+            <param name="con">Constitution</param>
+            <param name="dex">Dexterity</param>
+            <param name="int">Intelligence</param>
+            <param name="wis">Wisdom</param>
+            <param name="cha">Charisma</param>
+            <param name="mov">Movement</param>
+        </member>
+        <member name="M:DnDEngine.CoreStats.#ctor(System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16)">
+            <summary>
+            Creates a new CoreStats object with the given stats.
+            </summary>
+            <param name="lvl">Level</param>
+            <param name="str">Strength</param>
+            <param name="con">Constitution</param>
+            <param name="dex">Dexterity</param>
+            <param name="int">Intelligence</param>
+            <param name="wis">Wisdom</param>
+            <param name="cha">Charisma</param>
+            <param name="mov">Movement</param>
+            <param name="baseAC">Base armor class</param>
+            <param name="naturalArmor">Natural armor</param>
+        </member>
+        <member name="M:DnDEngine.CoreStats.#ctor(RPGEngine.IStats)">
+            <summary>
+            Creates a new read-only CoreStats object that wraps a given IStats object. The object should contain mappings for CoreStats.Type enum values.
+            </summary>
+            <param name="source">Should contain mappings for CoreStats.Type enum values.</param>
+        </member>
+        <member name="T:DnDEngine.CoreStats.Type">
+            <summary>
+            Defines a unit's core stats.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.LVL">
+            <summary>
+            Level
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.STR">
+            <summary>
+            Strength
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.CON">
+            <summary>
+            Constitution
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.DEX">
+            <summary>
+            Dexterity
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.INT">
+            <summary>
+            Intelligence
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.WIS">
+            <summary>
+            Wisdom
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.CHA">
+            <summary>
+            Charisma
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.MOV">
+            <summary>
+            Movement
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.BaseAC">
+            <summary>
+            Base armor class
+            </summary>
+        </member>
+        <member name="F:DnDEngine.CoreStats.Type.NaturalArmor">
+            <summary>
+            Natural armor
+            </summary>
+        </member>
+        <member name="T:DnDEngine.DerivedStats">
+            <summary>
+            Represents the stats that are calculated from the core stats.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.DerivedStats.Get(System.Enum)">
+            <summary>
+            Gets a specified stat value.
+            </summary>
+            <param name="stat">Enum value of the stat to be retrieved. Must be of type DerivedStats.Type.</param>
+            <returns>The retrieved stat value.</returns>
+        </member>
+        <member name="M:DnDEngine.DerivedStats.Set(System.Enum,System.Int16)">
+            <summary>
+            Sets a specified stat value.
+            </summary>
+            <param name="stat">Enum value of the stat to be set. Must be of type DerivedStats.Type.</param>
+            <param name="value">The new value for the stat.</param>
+        </member>
+        <member name="M:DnDEngine.DerivedStats.Clone">
+            <summary>
+            Copies stat values to a new DerivedStats object. Does not copy linked stats.
+            </summary>
+            <returns>A new object containing the same stat values.</returns>
+        </member>
+        <member name="M:DnDEngine.DerivedStats.#ctor">
+            <summary>
+            Creates a new DerivedStats object and initializes all stats to 0.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.DerivedStats.#ctor(System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16,System.Int16)">
+            <summary>
+            Creates a new DerivedStats object with the given stats. Use this for UnitModifier stats.
+            </summary>
+            <param name="hp">HP bonus</param>
+            <param name="mp">MP bonus</param>
+            <param name="hit">Hit bonus</param>
+            <param name="ac">Armor bonus</param>
+            <param name="atk">Attack bonus</param>
+            <param name="def">Defense bonus</param>
+            <param name="mag">Magic bonus</param>
+            <param name="res">Resistance bonus</param>
+        </member>
+        <member name="M:DnDEngine.DerivedStats.#ctor(DnDEngine.CoreStats)">
+            <summary>
+            Creates a new read-only DerivedStats object linked to the given CoreStats object.
+            </summary>
+            <param name="coreStats">Derived stat values will be calculated based on these core stats.</param>
+        </member>
+        <member name="M:DnDEngine.DerivedStats.#ctor(RPGEngine.IStats)">
+            <summary>
+            Creates a new read-only DerivedStats object that wraps a given IStats object. The object should contain mappings for DerivedStats.Type enum values.
+            </summary>
+            <param name="source">Should contain mappings for DerivedStats.Type enum values.</param>
+        </member>
+        <member name="T:DnDEngine.DerivedStats.Type">
+            <summary>
+            Defines a unit's derived stats.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.HP">
+            <summary>
+            Health points
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.MP">
+            <summary>
+            Mana points
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.HIT">
+            <summary>
+            Hit modifier
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.AC_Natural">
+            <summary>
+            Armor class with natural armor only
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.AC_Flat">
+            <summary>
+            Flat-footed armor class (no DEX bonus)
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.AC_Touch">
+            <summary>
+            Touch armor class (no armor bonus)
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.AC">
+            <summary>
+            Armor class (hit evasion)
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.ATK">
+            <summary>
+            Physical damage bonus
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.DEF">
+            <summary>
+            Physical damage resistance
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.MAG">
+            <summary>
+            Magical damage bonus
+            </summary>
+        </member>
+        <member name="F:DnDEngine.DerivedStats.Type.RES">
+            <summary>
+            Magical damage bonus
+            </summary>
+        </member>
+        <member name="T:DnDEngine.DnDUnit">
+            <summary>
+            Represents a unit based on the DnD 3.5e stat system.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.Evaluate">
+            <summary>
+            Evaluate and link all decorators assigned to this object.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.Relink">
+            <summary>
+            Relinks non-serialized dynamic properties after deserialization.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.#ctor(DnDEngine.DnDUnit.ClassType,DnDEngine.CoreStats,DnDEngine.DnDUnit.BodyType,DnDEngine.DnDUnit.GenderType)">
+            <summary>
+            Creates a new DnDUnit object with the specified parameters. Name is set to the class.
+            </summary>
+            <param name="class">The unit's class.</param>
+            <param name="coreStats">The unit's core stats.</param>
+            <param name="body">(optional) The unit's body shape. This is used to set up equipment slots.</param>
+            <param name="gender">(optional) The unit's gender.</param>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.#ctor(System.String,DnDEngine.DnDUnit.ClassType,DnDEngine.CoreStats,DnDEngine.DnDUnit.BodyType,DnDEngine.DnDUnit.GenderType)">
+            <summary>
+            Creates a new DnDUnit object with the specified parameters.
+            </summary>
+            <param name="name">The unit's name.</param>
+            <param name="class">The unit's class.</param>
+            <param name="coreStats">The unit's core stats.</param>
+            <param name="body">(optional) The unit's body shape. This is used to set up equipment slots.</param>
+            <param name="gender">(optional) The unit's gender.</param>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.ToString">
+            <summary>
+            Gets a short summary of this unit.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.Describe(RPGEngine.IUnit)">
+            <summary>
+            Gets print-friendly descriptions of the given unit.
+            </summary>
+            <param name="unit">The unit to be described.</param>
+            <returns>ILoggable object containing the summary and full descriptions.</returns>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Core">
+            <summary>
+            Gets this unit's core stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Derived">
+            <summary>
+            Gets this unit's derived stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Experience">
+            <summary>
+            Gets or sets this unit's experience points.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.StatPoints">
+            <summary>
+            Gets or sets this unit's unused stat points.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Class">
+            <summary>
+            Gets this unit's class as a string.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Level">
+            <summary>
+            Gets this unit's level.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.BaseStats">
+            <summary>
+            Gets this unit's base stats (without any modifiers).
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Stats">
+            <summary>
+            Gets this unit's stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.StatModsAdditive">
+            <summary>
+            Gets the total additive modifiers applied to this unit's stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.StatModsMultiplicative">
+            <summary>
+            Gets the total multiplicative modifiers applied to this unit's stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Extensions">
+            <summary>
+            Gets a DnDUnit.UnitExtensions object containing additional properties or methods. Cast to supported interfaces to access different properties.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Details">
+            <summary>
+            Gets additional details about this unit
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Inventory">
+            <summary>
+            Gets this unit's inventory.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Equipped">
+            <summary>
+            Gets this unit's equipment
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Buffs">
+            <summary>
+            Gets the buffs and debuffs applied to this unit
+            </summary>
+        </member>
+        <member name="P:DnDEngine.DnDUnit.Spells">
+            <summary>
+            Gets this unit's known spells
+            </summary>
+        </member>
+        <member name="T:DnDEngine.DnDUnit.UnitExtensions">
+            <summary>
+            Internal class to hold additional unit data. Cast to interfaces to expose different properties.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.IDetails">
+            <summary>
+            Allows access to additional unit properties.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IDetails.Class">
+            <summary>
+            Gets the unit's class enum value.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IDetails.Body">
+            <summary>
+            Gets the unit's body shape enum value.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IDetails.Gender">
+            <summary>
+            Gets the unit's gender enum value.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IDetails.Experience">
+            <summary>
+            Gets the unit's experience points.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IDetails.NextLevel">
+            <summary>
+            Gets the experience threshold for the unit's next level up.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.IInventory">
+            <summary>
+            Allows access to unit's inventory.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.IEquipped">
+            <summary>
+            Allows access to unit's equipment.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.IEquipped.Equip(DnDEngine.Items.Equipment,DnDEngine.Items.Equipment.Type,System.UInt16)">
+            <summary>
+            Assigns an equipment to a slot.
+            </summary>
+            <param name="equipment">Equipment to be assigned</param>
+            <param name="slot">Target slot</param>
+            <param name="position">(optional) Target position in the slot</param>
+        </member>
+        <member name="P:DnDEngine.IEquipped.Slots">
+            <summary>
+            Gets the unit's equipment organized by equipment slot.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IEquipped.All">
+            <summary>
+            Gets all the unit's equipment without organization.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IEquipped.Weapon">
+            <summary>
+            Gets the unit's equipped weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IEquipped.SlotCount">
+            <summary>
+            Gets the number of available equipment slots.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IEquipped.Item(DnDEngine.Items.Equipment.Type)">
+            <summary>
+            Gets the equipment in a given slot.
+            </summary>
+            <param name="slot">Equipment slot</param>
+            <returns>List of equipment in the given slot</returns>
+        </member>
+        <member name="T:DnDEngine.IBuffs">
+            <summary>
+            Allows access to unit's buffs and debuffs.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.IBuffs.AddBuffToUnit(DnDEngine.Combat.Magic.Buff)">
+            <summary>
+            Adds a new buff or debuff to the unit.
+            </summary>
+            <param name="buff">Buff or debuff to be added</param>
+        </member>
+        <member name="M:DnDEngine.IBuffs.RemoveBuffFromUnit(DnDEngine.Combat.Magic.Buff)">
+            <summary>
+            Attempts to remove a particular Buff object from the unit.
+            </summary>
+            <param name="buff"></param>
+        </member>
+        <member name="P:DnDEngine.IBuffs.All">
+            <summary>
+            Gets all the buffs and debuffs on this unit.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.IBuffs.Count">
+            <summary>
+            Gets the number of buffs and debuffs on this unit.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.ISpells">
+            <summary>
+            Allows access to unit's known spells
+            </summary>
+        </member>
+        <member name="P:DnDEngine.ISpells.All">
+            <summary>
+            Gets all the spells known by the unit.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.ISpells.Count">
+            <summary>
+            Gets the number of spells known by the unit.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.UnitExtensions.LinkUnit(DnDEngine.DnDUnit)">
+            <summary>
+            Links a DnDUnit to this object. Used to re-link dynamic properties following post-serialization.
+            </summary>
+            <param name="unit"></param>
+        </member>
+        <member name="M:DnDEngine.DnDUnit.UnitExtensions.#ctor(DnDEngine.DnDUnit)">
+            <summary>
+            Create a new UnitExtensions object for the given unit.
+            </summary>
+            <param name="unit">The unit this object will be attached to.</param>
+        </member>
+        <member name="T:DnDEngine.StatsRouter">
+            <summary>
+            Consolidates CoreStats and DerivedStats into a single IStats interface.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.StatsRouter.Get(System.Enum)">
+            <summary>
+            Gets a specified stat value.
+            </summary>
+            <param name="stat">Enum value of the stat to be retrieved. Must be of type CoreStats.Type or DerivedStats.Type.</param>
+            <returns>The retrieved stat value.</returns>
+        </member>
+        <member name="M:DnDEngine.StatsRouter.#ctor(DnDEngine.CoreStats,DnDEngine.DerivedStats,System.Boolean)">
+            <summary>
+            Creates a new StatsRouter object from the given CoreStats and DerivedStats objects.
+            </summary>
+            <param name="coreStats">Core stats will be retrieved from this object.</param>
+            <param name="derivedStats">Derived stats will be retrieved from this object.</param>
+            <param name="final">(optional) If set to true, core stats will have a lower bound of 0.</param>
+        </member>
+    </members>
+</doc>

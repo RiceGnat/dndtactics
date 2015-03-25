@@ -1,0 +1,181 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>RPGEngine</name>
+    </assembly>
+    <members>
+        <member name="T:RPGEngine.Dice">
+            <summary>
+            Class to simulate dice rolls
+            </summary>
+        </member>
+        <member name="M:RPGEngine.Dice.Roll">
+            <summary>
+            Roll the dice
+            </summary>
+            <returns>Result of the roll</returns>
+        </member>
+        <member name="M:RPGEngine.Dice.#ctor(RPGEngine.Dice.Type)">
+            <summary>
+            Create a new preset die
+            </summary>
+            <param name="d">Die type</param>
+        </member>
+        <member name="M:RPGEngine.Dice.#ctor(System.Int32,RPGEngine.Dice.Type)">
+            <summary>
+            Create a new set of preset dice
+            </summary>
+            <param name="count">Number of dice</param>
+            <param name="d">Die type</param>
+        </member>
+        <member name="M:RPGEngine.Dice.#ctor(System.Int32)">
+            <summary>
+            Create a new die with a specified number of sides
+            </summary>
+            <param name="sides">Number of sides</param>
+        </member>
+        <member name="M:RPGEngine.Dice.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Create a new set of dice with a specified number of sides
+            </summary>
+            <param name="count">Number of dice</param>
+            <param name="sides">Number of sides on each die</param>
+        </member>
+        <member name="T:RPGEngine.ICatalogable">
+            <summary>
+            Represents an item to be listed.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.ICatalogable.ID">
+            <summary>
+            Gets the internal ID for this item.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.ICatalogable.Name">
+            <summary>
+            Gets the name of this item.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.ICatalogable.Description">
+            <summary>
+            Gets the description of this item.
+            </summary>
+        </member>
+        <member name="T:RPGEngine.IDecorator">
+            <summary>
+            Defines a method to bind a decorator to unit.
+            </summary>
+        </member>
+        <member name="M:RPGEngine.IDecorator.Bind(RPGEngine.IUnit)">
+            <summary>
+            Bind this decorator to the given unit.
+            </summary>
+            <param name="baseUnit">Unit that this decorator will be bound to.</param>
+            <returns>The bound decorator cast as an IUnit.</returns>
+        </member>
+        <member name="T:RPGEngine.ILoggable">
+            <summary>
+            Defines properties that get long and short print-friendly descriptions of an object.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.ILoggable.Summary">
+            <summary>
+            Gets the short description of this object.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.ILoggable.Full">
+            <summary>
+            Gets the full description of this object.
+            </summary>
+        </member>
+        <member name="T:RPGEngine.IStats">
+            <summary>
+            Represents a collection of stats mapped to enum values.
+            </summary>
+        </member>
+        <member name="M:RPGEngine.IStats.Get(System.Enum)">
+            <summary>
+            Gets a specified stat value.
+            </summary>
+            <param name="stat">Enum value of the stat to be retrieved.</param>
+            <returns>The retrieved stat value.</returns>
+        </member>
+        <member name="P:RPGEngine.IStats.Item(System.Enum)">
+            <summary>
+            Gets a specified stat value.
+            </summary>
+            <param name="stat">Enum value of the stat to be retrieved.</param>
+            <returns>The retrieved stat value.</returns>
+        </member>
+        <member name="T:RPGEngine.IUnit">
+            <summary>
+            Defines properties and methods for handling units.
+            </summary>
+        </member>
+        <member name="M:RPGEngine.IUnit.Evaluate">
+            <summary>
+            Evaluate and link all decorators assigned to this object.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.Name">
+            <summary>
+            Gets this unit's name.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.Class">
+            <summary>
+            Gets this unit's class.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.Level">
+            <summary>
+            Gets this unit's level.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.BaseStats">
+            <summary>
+            Gets this unit's base stats (without any modifiers).
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.Stats">
+            <summary>
+            Gets this unit's stats.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.StatModsAdditive">
+            <summary>
+            Gets the total additive modifiers applied to this unit's stats.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.StatModsMultiplicative">
+            <summary>
+            Gets the total multiplicative modifiers applied to this unit's stats.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.IUnit.Extensions">
+            <summary>
+            Gets an object containing additional properties or methods.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.Stats.Zero">
+            <summary>
+            Gets a reference to an object that returns 0 for all stats
+            </summary>
+        </member>
+        <member name="P:RPGEngine.Unit.Name">
+            <summary>
+            This unit's name.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.Unit.Class">
+            <summary>
+            Gets this unit's class.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.Unit.Level">
+            <summary>
+            Gets this unit's level.
+            </summary>
+        </member>
+    </members>
+</doc>
