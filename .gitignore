@@ -1,0 +1,8 @@
+# Visual Studio generated
+bin
+obj
+*.suo
+*.user
+
+# Specifics
+DnDEngineTest
