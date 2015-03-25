@@ -12,12 +12,16 @@ namespace DnDTactics.UI
 		[SerializeField]
 		private EventButton activator;
 		[SerializeField]
-		private Window equipmentWindow;
+		private EventButton itemButton;
+		[SerializeField]
+		private Window equipmentPanel;
 		#endregion
 
 		public override void Draw()
 		{
 			base.Draw();
+
+			
 
 			Activate();
 		}
@@ -26,7 +30,12 @@ namespace DnDTactics.UI
 		{
 			base.Clear();
 
-			ClearEvents();
+			// Clear panel events
+			equipmentPanel.Clear();
+
+			// Clear existing buttons
+			equipmentPanel.ClearButtons();
+
 		}
 
 		protected override void Awake()

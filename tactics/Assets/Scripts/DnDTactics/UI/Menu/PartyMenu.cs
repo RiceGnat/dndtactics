@@ -38,7 +38,10 @@ namespace DnDTactics.UI
 
 		private void CloseDetails()
 		{
+			// Clean up UnitDetails page
+			detailsPage.Canceled -= CloseDetails;
 			detailsPage.Hide();
+
 			Activate();
 			EventSystem.current.SetSelectedGameObject(lastSelected.gameObject);
 		}
@@ -105,11 +108,7 @@ namespace DnDTactics.UI
 			partyPanel.Clear();
 
 			// Clear existing unit cards
-			foreach (var card in partyPanel.Buttons)
-			{
-				Destroy(card.gameObject);
-			}
-			partyPanel.Buttons.Clear();
+			partyPanel.ClearButtons();
 
 			// Reset scroll height
 			scrollContent.GetComponent<RectTransform>().offsetMin = Vector2.Scale(scrollContent.GetComponent<RectTransform>().offsetMin, new Vector2(1, 0));

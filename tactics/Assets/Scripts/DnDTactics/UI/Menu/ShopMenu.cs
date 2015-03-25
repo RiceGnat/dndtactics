@@ -71,6 +71,7 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
+			// This menu will be static so it only needs to be drawn once
 			equipList = new Equipment[(int)Equipment.Armory.NextID - 1];
 
 			EventButton button, prev = null;

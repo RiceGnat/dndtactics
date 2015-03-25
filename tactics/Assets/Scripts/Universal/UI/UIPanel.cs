@@ -11,10 +11,28 @@ namespace Universal.UI
 	/// </summary>
 	public class UIPanel : MonoBehaviour
 	{
+		#region Events
+		/// <summary>
+		/// Called when the user cancels out of the UIPanel.
+		/// </summary>
+		public event UnityAction Canceled;
+
+		/// <summary>
+		/// Called when the user submits the UIPanel.
+		/// </summary>
+		public event UnityAction Submitted;
+		#endregion
+
 		/// <summary>
 		/// Gets the activated state of this UIPanel.
 		/// </summary>
 		public bool IsActivated { get; private set; }
+
+		protected virtual void ClearEvents()
+		{
+			Canceled = null;
+			Submitted = null;
+		}
 
 		/// <summary>
 		/// When overridden in a derived class, draws the UI elements for this menu item.
@@ -69,25 +87,6 @@ namespace Universal.UI
 		{
 			if (Debug.isDebugBuild) Debug.Log("Deactivating " + name);
 			IsActivated = false;
-		}
-
-		/// <summary>
-		/// Called when the user cancels out of the UIPanel.
-		/// </summary>
-		public event UnityAction Canceled;
-
-		/// <summary>
-		/// Called when the user submits the UIPanel.
-		/// </summary>
-		public event UnityAction Submitted;
-
-		/// <summary>
-		/// Clears all handlers from the Exit event.
-		/// </summary>
-		public void ClearEvents()
-		{
-			Canceled = null;
-			Submitted = null;
 		}
 
 		protected void OnSubmitted()

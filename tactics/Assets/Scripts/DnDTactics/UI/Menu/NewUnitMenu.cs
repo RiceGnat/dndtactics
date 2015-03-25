@@ -168,11 +168,7 @@ namespace DnDTactics.UI
 			genderPanel.Clear();
 
 			// Clear existing buttons
-			foreach (EventButton button in classPanel.Buttons)
-			{
-				Destroy(button.gameObject);
-			}
-			classPanel.Buttons.Clear();
+			classPanel.ClearButtons();
 
 			lastClass = null;
 			lastGender = null;

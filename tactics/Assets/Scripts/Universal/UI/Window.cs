@@ -75,9 +75,47 @@ namespace Universal.UI
 			OnCanceled();
 		}
 
+		protected override void ClearEvents()
+		{
+			// Clear window event handlers
+			Selected = null;
+			Clicked = null;
+
+			ClearButtonEvents();
+		}
+
+		/// <summary>
+		/// Removes all buttons.
+		/// </summary>
+		public void ClearButtons()
+		{
+			// Clear existing buttons
+			foreach (EventButton button in Buttons)
+			{
+				Destroy(button.gameObject);
+			}
+			Buttons.Clear();
+		}
+
+		/// <summary>
+		/// Clears all button events.
+		/// </summary>
+		public void ClearButtonEvents()
+		{
+			foreach (var button in buttons)
+			{
+				button.Select -= OnButtonSelected;
+				button.Selectable.onClick.RemoveAllListeners();
+			}
+			if (closeButton)
+			{
+				closeButton.Submit -= OnButtonCanceled;
+			}
+		}
+
 		#region UIPanel events
 		/// <summary>
-		/// Draws window UI elements and binds button events.
+		/// Draws window UI elements and binds button events. Does not instantiate new buttons.
 		/// </summary>
 		public override void Draw()
 		{
@@ -104,7 +142,7 @@ namespace Universal.UI
 		}
 
 		/// <summary>
-		/// Clears window UI elements and button events.
+		/// Clears window UI elements and button events. Does not clear buttons.
 		/// </summary>
 		public override void Clear()
 		{
@@ -115,21 +153,7 @@ namespace Universal.UI
 			if (text) text.text = "";
 			Message = "";
 
-			// Clear button events
-			foreach (var button in buttons)
-			{
-				button.Select -= OnButtonSelected;
-				button.Selectable.onClick.RemoveAllListeners();
-				//button.Cancel -= OnButtonCanceled;
-			}
-			if (closeButton)
-			{
-				closeButton.Submit -= OnButtonCanceled;
-			}
-
-			// Clear window event handlers
-			Clicked = null;
-			Selected = null;
+			ClearEvents();
 		}
 
 		/// <summary>
