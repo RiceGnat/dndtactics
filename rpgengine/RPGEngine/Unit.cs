@@ -2,6 +2,9 @@
 
 namespace RPGEngine
 {
+    /// <summary>
+    /// Template class for IUnit implementations.
+    /// </summary>
     [Serializable]
     public abstract class Unit : IUnit
     {

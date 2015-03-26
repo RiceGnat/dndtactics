@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace RPGEngine
 {
+    /// <summary>
+    /// Template for stats implementations.
+    /// </summary>
     [Serializable]
     public abstract class Stats : IStats
     {

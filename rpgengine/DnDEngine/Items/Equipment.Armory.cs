@@ -7,18 +7,33 @@ namespace DnDEngine.Items
 {
     public partial class Equipment
     {
+        /// <summary>
+        /// Contains equipment presets.
+        /// </summary>
         public static class Armory
         {
             private static IList<Equipment> equipmentList = new List<Equipment>();
 
+            /// <summary>
+            /// Gets the next available ID; effectively, this is the number of equipment registered in the armor.
+            /// </summary>
             public static uint NextID { get { return (uint)equipmentList.Count; } }
 
+            /// <summary>
+            /// Register a new equipment in the armory.
+            /// </summary>
+            /// <param name="equipment">Equipment to be registered</param>
             public static void Register(Equipment equipment)
             {
                 equipment.ID = NextID;
                 equipmentList.Add(equipment);
             }
 
+            /// <summary>
+            /// Get a copy of an equipment in the armory.
+            /// </summary>
+            /// <param name="id">The ID of the equipment</param>
+            /// <returns>A deep copy of the requested equipment</returns>
             public static Equipment GetNewEquipment(uint id)
             {
                 try

@@ -151,8 +151,9 @@ namespace DnDEngine.Combat
         }
 
         /// <summary>
-        /// Gets a short summary of the combat action.
+        /// Gets the combat summary.
         /// </summary>
+        /// <returns>Summary string</returns>
         public override string ToString()
         {
             return Summary;

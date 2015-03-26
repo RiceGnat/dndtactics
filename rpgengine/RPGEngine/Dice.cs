@@ -7,22 +7,61 @@ namespace RPGEngine
     /// </summary>
     public class Dice
     {
+        /// <summary>
+        /// Defines die presets.
+        /// </summary>
         public enum Type
         {
+            /// <summary>
+            /// Default null value
+            /// </summary>
             None,
+            /// <summary>
+            /// Defines a d4
+            /// </summary>
             D4 = 4,
+            /// <summary>
+            /// Defines a d4
+            /// </summary>
             D6 = 6,
+            /// <summary>
+            /// Defines a d4
+            /// </summary>
             D8 = 8,
+            /// <summary>
+            /// Defines a d10
+            /// </summary>
             D10 = 10,
+            /// <summary>
+            /// Defines a d12
+            /// </summary>
             D12 = 12,
+            /// <summary>
+            /// Defines a d20
+            /// </summary>
             D20 = 20
         }
 
         private static Random rng;
 
+        /// <summary>
+        /// Gets the number of dice.
+        /// </summary>
         public byte Count { get; private set; }
+
+        /// <summary>
+        /// Gets the number of sides of each die.
+        /// </summary>
         public byte Sides { get; private set; }
+
+        /// <summary>
+        /// Gets the total result of the roll.
+        /// </summary>
         public ushort Result { get; private set; }
+
+        /// <summary>
+        /// Gets an array of the individual die rolls.
+        /// </summary>
         public byte[] Breakdown { get; private set; }
 
         /// <summary>
@@ -78,6 +117,10 @@ namespace RPGEngine
             if (rng == null) rng = new Random();
         }
 
+        /// <summary>
+        /// Prints a summary of the roll.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             string result = Count + "d" + Sides;

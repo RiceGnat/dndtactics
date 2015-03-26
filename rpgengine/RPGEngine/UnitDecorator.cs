@@ -2,6 +2,9 @@
 
 namespace RPGEngine
 {
+    /// <summary>
+    /// Template class for unit decorator implementations.
+    /// </summary>
     [Serializable]
     public abstract class UnitDecorator : IUnit, IDecorator
     {

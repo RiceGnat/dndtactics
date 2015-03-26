@@ -1,7 +1,7 @@
 ﻿namespace RPGEngine
 {
     /// <summary>
-    /// Represents an item to be listed.
+    /// Represents a catalogable item.
     /// </summary>
     public interface ICatalogable
     {
