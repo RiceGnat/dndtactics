@@ -126,7 +126,7 @@ namespace DnDTactics.UI
 				// Add button to list
 				classPanel.Buttons.Add(button);
 
-				// Show the card
+				// Show the button
 				button.gameObject.SetActive(true);
 
 				// Set button navigation

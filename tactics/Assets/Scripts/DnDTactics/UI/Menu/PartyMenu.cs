@@ -16,14 +16,14 @@ namespace DnDTactics.UI
 		[SerializeField]
 		private Window partyPanel;
 		[SerializeField]
-		private CanvasRenderer scrollContent;
-		[SerializeField]
 		private UnitCard unitCard;
 		[SerializeField]
 		private UnitDetails detailsPage;
 		#endregion
 
 		private UnitCard lastSelected;
+
+		private RectTransform partyContainer { get { return partyPanel.GetComponent<ScrollRect>().content; } }
 
 		private void BindDetails(int index, object data)
 		{
@@ -53,26 +53,22 @@ namespace DnDTactics.UI
 		{
 			base.Draw();
 
-			// Add space for gutter in scroll region
-			scrollContent.GetComponent<RectTransform>().offsetMin += new Vector2(0, unitCard.GetComponent<RectTransform>().offsetMax.y);
-
 			// Create unit cards for party
 			UnitCard card;
 			EventButton button;
 			RectTransform rectTransform;
-			float offset;
+			float offset = 0;
 			foreach (var unit in DataManager.Party)
 			{
 				card = Instantiate(unitCard).GetComponent<UnitCard>();
 
 				// Set parent to container
-				card.transform.SetParent(scrollContent.transform, false);
+				card.transform.SetParent(partyContainer.transform, false);
 
 				// Adjust card offset and container height
 				rectTransform = card.GetComponent<RectTransform>();
-				offset = rectTransform.rect.height + 20;
-				rectTransform.ShiftDown(offset * partyPanel.Buttons.Count);
-				scrollContent.GetComponent<RectTransform>().offsetMin -= new Vector2(0, offset);
+				partyContainer.Append(rectTransform, offset);
+				offset += rectTransform.rect.height + 20;
 
 				// Bind card to unit
 				card.Bind(unit);
@@ -85,6 +81,9 @@ namespace DnDTactics.UI
 				button = card.GetComponent<EventButton>();
 				partyPanel.Buttons.Add(button);
 			}
+
+			// Add space for gutter in scroll region
+			partyContainer.offsetMin += new Vector2(0, unitCard.GetComponent<RectTransform>().offsetMax.y);
 
 			// Bind event handler for populating details panel on select
 			//partyPanel.Selected += BindDetails;
@@ -111,7 +110,7 @@ namespace DnDTactics.UI
 			partyPanel.ClearButtons();
 
 			// Reset scroll height
-			scrollContent.GetComponent<RectTransform>().offsetMin = Vector2.Scale(scrollContent.GetComponent<RectTransform>().offsetMin, new Vector2(1, 0));
+			partyContainer.offsetMin = Vector2.Scale(partyContainer.offsetMin, new Vector2(1, 0));
 		}
 
 		/// <summary>
@@ -134,7 +133,6 @@ namespace DnDTactics.UI
 		protected override void Awake()
 		{
 			base.Awake();
-			if (scrollContent == null) scrollContent = this.GetComponent<CanvasRenderer>();
 
 			partyPanel.Canceled += OnCanceled;
 		}

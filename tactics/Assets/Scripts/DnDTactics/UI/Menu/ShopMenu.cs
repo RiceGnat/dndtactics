@@ -24,6 +24,8 @@ namespace DnDTactics.UI
 		private Equipment[] equipList;
 		private int lastSelected;
 
+		private RectTransform itemContainer { get { return itemPanel.GetComponent<ScrollRect>().content; } }
+
 		private void BindDetails(int index)
 		{
 			lastSelected = index;
@@ -76,25 +78,26 @@ namespace DnDTactics.UI
 
 			EventButton button, prev = null;
 			RectTransform rectTransform;
-			float offset;
+			float offset = 0;
 			for (uint i = 0; i < equipList.Length; i++)
 			{
 				equipList[i] = Equipment.Armory.GetNewEquipment(i + 1);
 
 				button = Instantiate(itemButton);
 
-				button.transform.SetParent(scrollRegion.content.transform, false);
-
+				// Set button name and text
 				button.name = equipList[i].Name;
 				button.SetText(String.Format("{0} ({1})", equipList[i].Name, equipList[i].Description));
 
+				// Adjust item offset and container height
 				rectTransform = button.GetComponent<RectTransform>();
-				offset = rectTransform.rect.height * itemPanel.Buttons.Count;
-				rectTransform.offsetMin -= new Vector2(0, offset);
-				rectTransform.offsetMax -= new Vector2(0, offset);
+				itemContainer.Append(rectTransform, offset);
+				offset += rectTransform.rect.height;
 
+				// Add button to list
 				itemPanel.Buttons.Add(button);
 
+				// Show button
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
