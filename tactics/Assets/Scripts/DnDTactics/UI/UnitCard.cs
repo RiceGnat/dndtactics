@@ -53,13 +53,6 @@ namespace DnDTactics.UI
 		private Text res;
 
 		[SerializeField]
-		private Text equipment;
-		[SerializeField]
-		private Text spells;
-		[SerializeField]
-		private Text enchantments;
-
-		[SerializeField]
 		private Image artwork;
 		[SerializeField]
 		private Image portrait;
@@ -106,38 +99,38 @@ namespace DnDTactics.UI
 			if (mag) mag.text = Unit.Stats[DerivedStats.Type.MAG].ToString(Constants.ModifierFormat);
 			if (res) res.text = Unit.Stats[DerivedStats.Type.RES].ToString(Constants.ModifierFormat);
 
-			if (equipment)
-			{
-				equipment.text = "";
+			//if (equipment)
+			//{
+			//	equipment.text = "";
 
-				foreach (var slot in (Unit.Extensions as IEquipped).Slots)
-				{
-					foreach (var equip in slot.Value)
-					{
-						equipment.text += String.Format("[{0}] {1}\n", slot.Key, equip != null ? equip.Name : "");
-					}
-				}
-			}
+			//	foreach (var slot in (Unit.Extensions as IEquipped).Slots)
+			//	{
+			//		foreach (var equip in slot.Value)
+			//		{
+			//			equipment.text += String.Format("[{0}] {1}\n", slot.Key, equip != null ? equip.Name : "");
+			//		}
+			//	}
+			//}
 
-			if (spells)
-			{
-				spells.text = "";
+			//if (spells)
+			//{
+			//	spells.text = "";
 
-				foreach (var spell in (Unit.Extensions as ISpells).All)
-				{
-					spells.text += string.Format("{0}\n", DnDEngine.Combat.Magic.Spell.Compendium.GetSpell(spell).Name);
-				}
-			}
+			//	foreach (var spell in (Unit.Extensions as ISpells).All)
+			//	{
+			//		spells.text += string.Format("{0}\n", DnDEngine.Combat.Magic.Spell.Compendium.GetSpell(spell).Name);
+			//	}
+			//}
 
-			if (enchantments)
-			{
-				enchantments.text = "";
+			//if (enchantments)
+			//{
+			//	enchantments.text = "";
 
-				foreach (var buff in (Unit.Extensions as IBuffs).All)
-				{
-					enchantments.text += string.Format("{0}\n", buff.Name);
-				}
-			}
+			//	foreach (var buff in (Unit.Extensions as IBuffs).All)
+			//	{
+			//		enchantments.text += string.Format("{0}\n", buff.Name);
+			//	}
+			//}
 
 			if (artwork) artwork.sprite = DataManager.GetClassArtwork((Unit.Extensions as IDetails).Class);
 			if (portrait) portrait.sprite = DataManager.GetClassPortrait((Unit.Extensions as IDetails).Class);

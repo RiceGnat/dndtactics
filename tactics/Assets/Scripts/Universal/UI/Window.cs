@@ -102,7 +102,7 @@ namespace Universal.UI
 		/// </summary>
 		public void ClearButtonEvents()
 		{
-			foreach (var button in buttons)
+			foreach (EventButton button in Buttons)
 			{
 				button.Select -= OnButtonSelected;
 				button.Selectable.onClick.RemoveAllListeners();

@@ -60,12 +60,15 @@ namespace Universal.UI
 
 		private void ItemClicked()
 		{
+			Deactivate();
 			// Clicked implies selected event has already occurred
 			selected.target.Activate();
 		}
 
-		private void OnExit()
+		private void ItemExited()
 		{
+			selected.target.Deactivate();
+			Activate();
 			EventSystem.current.SetSelectedGameObject(selected.button.gameObject);
 		}
 
@@ -83,7 +86,7 @@ namespace Universal.UI
 				// Bind events
 				item.button.Select += ItemSelected;
 				item.button.Selectable.onClick.AddListener(ItemClicked);
-				item.target.Canceled += OnExit;
+				item.target.Canceled += ItemExited;
 
 				if (!manualButtonNavigation)
 				{

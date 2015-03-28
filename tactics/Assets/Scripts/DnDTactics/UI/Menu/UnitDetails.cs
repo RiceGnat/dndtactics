@@ -12,49 +12,30 @@ namespace DnDTactics.UI
 	{
 		#region Inspector fields
 		[SerializeField]
-		private EventButton activator;
-		[SerializeField]
-		private EventButton itemButton;
-		[SerializeField]
 		private Window equipmentPanel;
+		[SerializeField]
+		private Window inventoryPanel;
 		#endregion
 
 		private IEquipped unitEquipment { get { return Unit.Extensions as IEquipped; } }
 
 		private RectTransform equipmentContainer { get { return equipmentPanel.GetComponent<ScrollRect>().content; } }
 
+		private void ActivateEquipment()
+		{
+			Deactivate();
+			equipmentPanel.Activate();
+		}
+
 		public override void Draw()
 		{
 			base.Draw();
 
-			EventButton button;
-			RectTransform rectTransform;
-			float offset = 0;
-			foreach (var slot in unitEquipment.Slots)
-			{
-				foreach (Equipment equip in slot.Value)
-				{
-					button = Instantiate<EventButton>(itemButton);
-					
-					// Set button name and text
-					button.name = equip != null ? equip.Name : "(Empty)";
-					button.SetText(String.Format("[{0}] {1}", slot.Key, button.name));
-
-					// Adjust item offset and container height
-					rectTransform = button.GetComponent<RectTransform>();
-					equipmentContainer.Append(rectTransform, offset);
-					offset += rectTransform.rect.height;
-
-					// Add button to list
-					equipmentPanel.Buttons.Add(button);
-
-					// Show button
-					button.gameObject.SetActive(true);
-				}
-			}
-
+			// Draw equipment panel
+			equipmentPanel.Data = Unit;
 			equipmentPanel.Draw();
 
+			// Activate input handlers
 			Activate();
 		}
 
@@ -62,26 +43,48 @@ namespace DnDTactics.UI
 		{
 			base.Clear();
 
-			// Clear panel events
+			// Deactivate input handlers
+			Deactivate();
+
+			// Clear equipment panel
 			equipmentPanel.Clear();
-
-			// Clear existing buttons
-			equipmentPanel.ClearButtons();
-
-			// Reset scroll height
-			equipmentContainer.offsetMin = Vector2.Scale(equipmentContainer.offsetMin, new Vector2(1, 0));
 		}
 
+		public override void Activate()
+		{
+			base.Activate();
+
+			EventSystem.current.SetSelectedGameObject(null);
+		}
+
+		#region Unity events
 		protected override void Awake()
 		{
 			base.Awake();
+
+			// Bind window flow events
+			Submitted += () =>
+			{
+				Deactivate();
+				equipmentPanel.Activate();
+			};
+
+			equipmentPanel.Canceled += () =>
+			{
+				equipmentPanel.Deactivate();
+				Activate();
+			};
 		}
 
-		protected override void Start()
+		protected override void Update()
 		{
-			base.Start();
+			base.Update();
 
-			itemButton.gameObject.SetActive(false);
+			if (IsActivated)
+			{
+
+			}
 		}
+		#endregion
 	}
 }

@@ -101,16 +101,7 @@ namespace DnDTactics.UI
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
-				var nav = button.Selectable.navigation;
-				nav.mode = Navigation.Mode.Explicit;
-				if (prev != null)
-				{
-					nav.selectOnUp = prev.Selectable;
-					var prevNav = prev.Selectable.navigation;
-					prevNav.selectOnDown = button.Selectable;
-					prev.Selectable.navigation = prevNav;
-				}
-				button.Selectable.navigation = nav;
+				if (prev != null) button.Selectable.BindNavigation(prev.Selectable);
 				prev = button;
 			}
 

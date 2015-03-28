@@ -68,7 +68,6 @@ namespace Universal.UI
 			//if (Debug.isDebugBuild) Debug.Log("Hiding " + name);
 			gameObject.SetActive(false);
 			Clear();
-			Deactivate();
 		}
 
 		/// <summary>
@@ -118,6 +117,12 @@ namespace Universal.UI
 				{
 					Debug.Log("Cancel event on " + name);
 					OnCanceled();
+					Input.ResetInputAxes();
+				}
+				if (Input.GetButtonDown("Submit"))
+				{
+					Debug.Log("Submit event on " + name);
+					OnSubmitted();
 					Input.ResetInputAxes();
 				}
 			}
