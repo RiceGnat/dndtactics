@@ -21,6 +21,11 @@ namespace Universal.UI
 		/// Called when the user submits the UIPanel.
 		/// </summary>
 		public event UnityAction Submitted;
+
+		public event UnityAction ButtonX;
+		public event UnityAction ButtonY;
+		public event UnityAction BumperL;
+		public event UnityAction BumperR;
 		#endregion
 
 		/// <summary>
@@ -32,6 +37,10 @@ namespace Universal.UI
 		{
 			Canceled = null;
 			Submitted = null;
+			ButtonX = null;
+			ButtonY = null;
+			BumperL = null;
+			BumperR = null;
 		}
 
 		/// <summary>
@@ -48,6 +57,15 @@ namespace Universal.UI
 		public virtual void Clear()
 		{
 			//if (Debug.isDebugBuild) Debug.Log("Clearing " + name);
+		}
+
+		/// <summary>
+		/// Calls Clear() then Draw(). Can be overridden for additional functionality.
+		/// </summary>
+		public virtual void Refresh()
+		{
+			Clear();
+			Draw();
 		}
 
 		/// <summary>
@@ -88,14 +106,39 @@ namespace Universal.UI
 			IsActivated = false;
 		}
 
-		protected void OnSubmitted()
+		protected virtual void OnSubmitted()
 		{
 			if (Submitted != null) Submitted();
 		}
 
-		protected void OnCanceled()
+		protected virtual void OnCanceled()
 		{
 			if (Canceled != null) Canceled();
+		}
+
+		protected virtual void OnButtonX()
+		{
+			if (ButtonX != null) ButtonX();
+		}
+
+		protected virtual void OnButtonY()
+		{
+			if (ButtonY != null) ButtonY();
+		}
+
+		protected virtual void OnBumperL()
+		{
+			if (BumperL != null) BumperL();
+		}
+
+		protected virtual void OnBumperR()
+		{
+			if (BumperR != null) BumperR();
+		}
+
+		private void MapEvents(string inputName)
+		{
+
 		}
 
 		#region Unity events
@@ -113,16 +156,36 @@ namespace Universal.UI
 		{
 			if (IsActivated)
 			{
+				if (Input.GetButtonDown("Submit"))
+				{
+					Debug.Log("Submit event on " + name);
+					OnSubmitted();
+					Input.ResetInputAxes();
+				}
 				if (Input.GetButtonDown("Cancel"))
 				{
 					Debug.Log("Cancel event on " + name);
 					OnCanceled();
 					Input.ResetInputAxes();
 				}
-				if (Input.GetButtonDown("Submit"))
+				if (Input.GetButtonDown("Button X"))
 				{
-					Debug.Log("Submit event on " + name);
-					OnSubmitted();
+					OnButtonX();
+					Input.ResetInputAxes();
+				}
+				if (Input.GetButtonDown("Button Y"))
+				{
+					OnButtonY();
+					Input.ResetInputAxes();
+				}
+				if (Input.GetButtonDown("Bumper L"))
+				{
+					OnBumperL();
+					Input.ResetInputAxes();
+				}
+				if (Input.GetButtonDown("Bumper R"))
+				{
+					OnBumperR();
 					Input.ResetInputAxes();
 				}
 			}

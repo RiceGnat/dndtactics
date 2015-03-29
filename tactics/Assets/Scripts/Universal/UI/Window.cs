@@ -113,6 +113,16 @@ namespace Universal.UI
 			}
 		}
 
+		public override void Refresh()
+		{
+			object data = Data;
+			string msg = Message;
+			Clear();
+			Data = data;
+			Message = msg;
+			Draw();
+		}
+
 		#region UIPanel events
 		/// <summary>
 		/// Draws window UI elements and binds button events. Does not instantiate new buttons.
@@ -120,8 +130,6 @@ namespace Universal.UI
 		public override void Draw()
 		{
 			base.Draw();
-
-			if (text) text.text = Message;
 
 			// Bind callbacks to buttons
 			for (int i = 0; i < buttons.Count; i++)
@@ -151,7 +159,6 @@ namespace Universal.UI
 			Data = null;
 
 			if (text) text.text = "";
-			Message = "";
 
 			ClearEvents();
 		}
@@ -163,7 +170,7 @@ namespace Universal.UI
 		{
 			base.Activate();
 
-			if (buttons.Count > 0) EventSystem.current.SetSelectedGameObject(buttons[0].gameObject);
+			EventSystem.current.SetSelectedGameObject(buttons.Count > 0 ? buttons[0].gameObject : null);
 		}
 		#endregion
 	}

@@ -12,7 +12,7 @@ namespace DnDTactics.UI
 	/// Shows and manages unit's equipment. Uses the Universal.UI.Window object's Data property.
 	/// </summary>
 	[RequireComponent(typeof(ScrollRect))]
-	public class UnitEquipmentWindow : Window
+	public class UnitInventoryWindow : Window
 	{
 		#region Inspector fields
 		[SerializeField]
@@ -20,6 +20,7 @@ namespace DnDTactics.UI
 		#endregion
 
 		private RectTransform container;
+		private bool showCaravan = false;
 
 		/// <summary>
 		/// Gets this window's bound unit.
@@ -45,9 +46,9 @@ namespace DnDTactics.UI
 		}
 
 		/// <summary>
-		/// Gets the bound unit's equipment.
+		/// Gets the bound unit's inventory.
 		/// </summary>
-		public IEquipped UnitEquipment { get { return Unit != null ? Unit.Extensions as IEquipped : null; } }
+		public IInventory UnitInventory { get { return Unit != null ? Unit.Extensions as IInventory : null; } }
 
 		/// <summary>
 		/// Draws the equipment list.
@@ -60,32 +61,32 @@ namespace DnDTactics.UI
 			RectTransform rectTransform;
 			float offset = 0;
 
-			// Draw equipment panel
-			foreach (var slot in UnitEquipment.Slots)
+			var list = showCaravan ? DataManager.Caravan : UnitInventory.All;
+			Message = showCaravan ? "Caravan" : "Inventory";
+
+			// Draw inventory panel
+			foreach (var item in list)
 			{
-				foreach (Equipment equip in slot.Value)
-				{
-					button = Instantiate<EventButton>(itemButton);
+				button = Instantiate<EventButton>(itemButton);
 
-					// Set button name and text
-					button.name = equip != null ? equip.Name : "(Empty)";
-					button.SetText(String.Format("[{0}] {1}", slot.Key, button.name));
+				// Set button name and text
+				button.name = item.Name;
+				button.SetText(item.Name);
 
-					// Adjust item offset and container height
-					rectTransform = button.GetComponent<RectTransform>();
-					Container.Append(rectTransform, offset);
-					offset += rectTransform.rect.height;
+				// Adjust item offset and container height
+				rectTransform = button.GetComponent<RectTransform>();
+				Container.Append(rectTransform, offset);
+				offset += rectTransform.rect.height;
 
-					// Add button to list
-					Buttons.Add(button);
+				// Add button to list
+				Buttons.Add(button);
 
-					// Show button
-					button.gameObject.SetActive(true);
+				// Show button
+				button.gameObject.SetActive(true);
 
-					// Set button navigation
-					if (prev != null) button.Selectable.BindNavigation(prev.Selectable);
-					prev = button;
-				}
+				// Set button navigation
+				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+				prev = button;
 			}
 		}
 
@@ -97,6 +98,19 @@ namespace DnDTactics.UI
 			base.Clear();
 			ClearButtons();
 			Container.Collapse();
+		}
+
+		protected override void Awake()
+		{
+			base.Awake();
+
+			ButtonY += () =>
+			{
+				showCaravan = !showCaravan;
+				Deactivate();
+				Refresh();
+				Activate();
+			};
 		}
 
 		protected override void Start()

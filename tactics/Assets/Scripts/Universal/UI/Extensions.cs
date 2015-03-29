@@ -56,11 +56,14 @@ namespace Universal.UI
 		{
 			var nav = button.navigation;
 			nav.mode = Navigation.Mode.Explicit;
-			nav.selectOnUp = prev;
-			var prevNav = prev.navigation;
-			prevNav.selectOnDown = button;
-			prev.navigation = prevNav;
-			button.navigation = nav;
+			if (prev != null)
+			{
+				nav.selectOnUp = prev;
+				var prevNav = prev.navigation;
+				prevNav.selectOnDown = button;
+				prev.navigation = prevNav;
+				button.navigation = nav;
+			}
 		}
 	}
 }

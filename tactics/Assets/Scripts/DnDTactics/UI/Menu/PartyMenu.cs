@@ -21,25 +21,50 @@ namespace DnDTactics.UI
 		private UnitDetails detailsPage;
 		#endregion
 
-		private UnitCard lastSelected;
+		private int lastIndex;
 
+		private UnitCard lastSelected { get { return partyPanel.Buttons[lastIndex].GetComponent<UnitCard>(); } }
 		private RectTransform partyContainer { get { return partyPanel.GetComponent<ScrollRect>().content; } }
 
 		private void BindDetails(int index, object data)
 		{
-			lastSelected = partyPanel.Buttons[index].GetComponent<UnitCard>();
+			lastIndex = index;
 			Deactivate();
 			detailsPage.Bind(lastSelected.Unit);
 			detailsPage.Canceled += CloseDetails;
+			detailsPage.BumperL += BindPrev;
+			detailsPage.BumperR += BindNext;
 
 			// UnitDetails page automatically calls Activate()
 			detailsPage.Show();
+		}
+
+		private void BindNext()
+		{
+			if (lastIndex + 1 < partyPanel.Buttons.Count)
+			{
+				lastIndex++;
+				detailsPage.Bind(lastSelected.Unit);
+				detailsPage.Refresh();
+			}
+		}
+
+		private void BindPrev()
+		{
+			if (lastIndex > 0)
+			{
+				lastIndex--;
+				detailsPage.Bind(lastSelected.Unit);
+				detailsPage.Refresh();
+			}
 		}
 
 		private void CloseDetails()
 		{
 			// Clean up UnitDetails page
 			detailsPage.Canceled -= CloseDetails;
+			detailsPage.BumperL -= BindPrev;
+			detailsPage.BumperR -= BindNext;
 			detailsPage.Hide();
 
 			Activate();
@@ -88,12 +113,7 @@ namespace DnDTactics.UI
 			// Bind event handler for populating details panel on select
 			//partyPanel.Selected += BindDetails;
 			partyPanel.Clicked += BindDetails;
-			//partyPanel.Canceled += OnCanceled;
 			partyPanel.Draw();
-
-			// Automatically fill detail panel with first unit's information
-			//if (partyPanel.Buttons.Count > 0)
-			//	BindDetails(0);
 		}
 
 		/// <summary>

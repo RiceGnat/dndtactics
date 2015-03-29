@@ -21,12 +21,6 @@ namespace DnDTactics.UI
 
 		private RectTransform equipmentContainer { get { return equipmentPanel.GetComponent<ScrollRect>().content; } }
 
-		private void ActivateEquipment()
-		{
-			Deactivate();
-			equipmentPanel.Activate();
-		}
-
 		public override void Draw()
 		{
 			base.Draw();
@@ -34,6 +28,10 @@ namespace DnDTactics.UI
 			// Draw equipment panel
 			equipmentPanel.Data = Unit;
 			equipmentPanel.Draw();
+			
+			// Draw inventory panel
+			inventoryPanel.Data = Unit;
+			inventoryPanel.Draw();
 
 			// Activate input handlers
 			Activate();
@@ -48,6 +46,7 @@ namespace DnDTactics.UI
 
 			// Clear equipment panel
 			equipmentPanel.Clear();
+			inventoryPanel.Clear();
 		}
 
 		public override void Activate()
@@ -66,6 +65,7 @@ namespace DnDTactics.UI
 			Submitted += () =>
 			{
 				Deactivate();
+				// Activate equipment if A button is pressed
 				equipmentPanel.Activate();
 			};
 
@@ -73,6 +73,24 @@ namespace DnDTactics.UI
 			{
 				equipmentPanel.Deactivate();
 				Activate();
+			};
+
+			equipmentPanel.BumperR += () =>
+			{
+				equipmentPanel.Deactivate();
+				inventoryPanel.Activate();
+			};
+
+			inventoryPanel.Canceled += () =>
+			{
+				inventoryPanel.Deactivate();
+				Activate();
+			};
+
+			inventoryPanel.BumperL += () =>
+			{
+				inventoryPanel.Deactivate();
+				equipmentPanel.Activate();
 			};
 		}
 
