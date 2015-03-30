@@ -121,7 +121,6 @@ namespace Universal.UI
 
 		public override void Refresh()
 		{
-			Debug.Log(name + " refresh");
 			object data = Data;
 			string msg = Message;
 			Clear();

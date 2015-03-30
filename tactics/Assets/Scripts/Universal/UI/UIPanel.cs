@@ -167,13 +167,13 @@ namespace Universal.UI
 			{
 				if (Input.GetButtonDown("Submit"))
 				{
-					Debug.Log("Submit event on " + name);
+					if (Debug.isDebugBuild) Debug.Log("Submit event on " + name);
 					OnSubmitted();
 					Input.ResetInputAxes();
 				}
 				if (Input.GetButtonDown("Cancel"))
 				{
-					Debug.Log("Cancel event on " + name);
+					if (Debug.isDebugBuild) Debug.Log("Cancel event on " + name);
 					OnCanceled();
 					Input.ResetInputAxes();
 				}

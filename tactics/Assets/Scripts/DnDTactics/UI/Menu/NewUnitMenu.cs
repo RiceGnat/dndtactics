@@ -81,7 +81,6 @@ namespace DnDTactics.UI
 
 		private void OnNameSubmitted(int index, object data)
 		{
-			if (Debug.isDebugBuild) Debug.Log(string.Format("Creating new {0} {1} named {2}", selectedGender.ToString().ToLower(), selectedClass.ToString().ToLower(), data));
 			DnDUnit unit = new DnDUnit(data.ToString(), selectedClass, new CoreStats(1, 10, 10, 10, 10, 10, 10, 5, 10), DnDUnit.BodyType.Humanoid, selectedGender);
 			unit.Evaluate();
 			if (Debug.isDebugBuild)
