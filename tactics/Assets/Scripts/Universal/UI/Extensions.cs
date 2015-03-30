@@ -62,8 +62,8 @@ namespace Universal.UI
 				var prevNav = prev.navigation;
 				prevNav.selectOnDown = button;
 				prev.navigation = prevNav;
-				button.navigation = nav;
 			}
+			button.navigation = nav;
 		}
 	}
 }

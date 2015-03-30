@@ -28,6 +28,13 @@ namespace Universal.UI
 		public event UnityAction BumperR;
 		#endregion
 
+		protected static UIPanel activeWindow;
+
+		protected static void DeactivateCurrent()
+		{
+			if (activeWindow) activeWindow.Deactivate();
+		}
+
 		/// <summary>
 		/// Gets the activated state of this UIPanel.
 		/// </summary>
@@ -95,6 +102,7 @@ namespace Universal.UI
 		{
 			if (Debug.isDebugBuild) Debug.Log("Activating " + name);
 			IsActivated = true;
+			activeWindow = this;
 		}
 
 		/// <summary>
@@ -104,6 +112,7 @@ namespace Universal.UI
 		{
 			if (Debug.isDebugBuild) Debug.Log("Deactivating " + name);
 			IsActivated = false;
+			if (this.Equals(activeWindow)) activeWindow = null;
 		}
 
 		protected virtual void OnSubmitted()

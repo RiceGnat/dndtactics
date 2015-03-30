@@ -55,8 +55,6 @@ namespace DnDTactics.UI
 		/// </summary>
 		public override void Draw()
 		{
-			base.Draw();
-
 			EventButton button, prev = null;
 			RectTransform rectTransform;
 			float offset = 0;
@@ -70,7 +68,6 @@ namespace DnDTactics.UI
 				button = Instantiate<EventButton>(itemButton);
 
 				// Set button name and text
-				button.name = item.Name;
 				button.SetText(item.Name);
 
 				// Adjust item offset and container height
@@ -88,6 +85,18 @@ namespace DnDTactics.UI
 				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
 				prev = button;
 			}
+
+			// Add empty placeholder if empty inventory
+			if (Buttons.Count == 0)
+			{
+				button = Instantiate<EventButton>(itemButton);
+				button.SetText("(No items)");
+				Container.Append(button.GetComponent<RectTransform>());
+				Buttons.Add(button);
+				button.gameObject.SetActive(true);
+			}
+
+			base.Draw();
 		}
 
 		/// <summary>

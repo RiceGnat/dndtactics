@@ -86,7 +86,6 @@ namespace DnDTactics.UI
 				button = Instantiate(itemButton);
 
 				// Set button name and text
-				button.name = equipList[i].Name;
 				button.SetText(String.Format("{0} ({1})", equipList[i].Name, equipList[i].Description));
 
 				// Adjust item offset and container height
@@ -101,7 +100,7 @@ namespace DnDTactics.UI
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
-				if (prev != null) button.Selectable.BindNavigation(prev.Selectable);
+				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
 				prev = button;
 			}
 

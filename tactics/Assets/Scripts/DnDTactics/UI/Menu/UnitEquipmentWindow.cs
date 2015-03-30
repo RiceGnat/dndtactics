@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 using RPGEngine;
@@ -54,8 +55,6 @@ namespace DnDTactics.UI
 		/// </summary>
 		public override void Draw()
 		{
-			base.Draw();
-
 			EventButton button, prev = null;
 			RectTransform rectTransform;
 			float offset = 0;
@@ -68,8 +67,8 @@ namespace DnDTactics.UI
 					button = Instantiate<EventButton>(itemButton);
 
 					// Set button name and text
-					button.name = equip != null ? equip.Name : "(Empty)";
-					button.SetText(String.Format("[{0}] {1}", slot.Key, button.name));
+					button.SetText(String.Format("[{0}] {1}", slot.Key, equip != null ? equip.Name : "(Empty)"));
+					button.Data = equip;
 
 					// Adjust item offset and container height
 					rectTransform = button.GetComponent<RectTransform>();
@@ -83,10 +82,12 @@ namespace DnDTactics.UI
 					button.gameObject.SetActive(true);
 
 					// Set button navigation
-					if (prev != null) button.Selectable.BindNavigation(prev.Selectable);
+					button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
 					prev = button;
 				}
 			}
+
+			base.Draw();
 		}
 
 		/// <summary>
@@ -97,6 +98,12 @@ namespace DnDTactics.UI
 			base.Clear();
 			ClearButtons();
 			Container.Collapse();
+		}
+
+		protected override void Awake()
+		{
+			base.Awake();
+
 		}
 
 		protected override void Start()

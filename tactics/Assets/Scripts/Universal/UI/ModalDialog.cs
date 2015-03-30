@@ -162,7 +162,11 @@ namespace Universal.UI
 		/// </summary>
 		public override void Hide()
 		{
-			if (window) Destroy(window.gameObject);
+			if (window)
+			{
+				window.Deactivate();
+				Destroy(window.gameObject);
+			}
 			overlay.gameObject.SetActive(false);
 			window = null;
 

@@ -80,12 +80,12 @@ namespace DnDTactics.UI
 
 			// Create unit cards for party
 			UnitCard card;
-			EventButton button;
+			EventButton button, prev = null;
 			RectTransform rectTransform;
 			float offset = 0;
 			foreach (var unit in DataManager.Party)
 			{
-				card = Instantiate(unitCard).GetComponent<UnitCard>();
+				card = Instantiate<UnitCard>(unitCard);
 
 				// Set parent to container
 				card.transform.SetParent(partyContainer.transform, false);
@@ -105,6 +105,10 @@ namespace DnDTactics.UI
 				// Add card to list
 				button = card.GetComponent<EventButton>();
 				partyPanel.Buttons.Add(button);
+
+				// Set button navigation
+				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+				prev = button;
 			}
 
 			// Add space for gutter in scroll region

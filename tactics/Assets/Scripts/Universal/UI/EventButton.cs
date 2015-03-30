@@ -38,9 +38,15 @@ namespace Universal.UI
 		/// </summary>
 		public int ID { get; set; }
 
+		/// <summary>
+		/// Gets or sets the data for the button.
+		/// </summary>
+		public object Data { get; set; }
+
 		public void SetText(string text)
 		{
 			Selectable.GetComponent<Text>().text = text;
+			Selectable.name = text;
 		}
 
 		void ISelectHandler.OnSelect(BaseEventData eventData)

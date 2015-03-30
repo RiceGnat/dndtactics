@@ -65,6 +65,12 @@ namespace Universal.UI
 
 		protected virtual void OnButtonSelected(Button sender, BaseEventData eventData)
 		{
+			if (!IsActivated)
+			{
+				DeactivateCurrent();
+				Activate();
+			}
+
 			selectedButton = sender.GetComponent<EventButton>().ID;
 
 			if (Selected != null) Selected(selectedButton);
@@ -115,6 +121,7 @@ namespace Universal.UI
 
 		public override void Refresh()
 		{
+			Debug.Log(name + " refresh");
 			object data = Data;
 			string msg = Message;
 			Clear();
@@ -170,7 +177,8 @@ namespace Universal.UI
 		{
 			base.Activate();
 
-			EventSystem.current.SetSelectedGameObject(buttons.Count > 0 ? buttons[0].gameObject : null);
+			if (!EventSystem.current.alreadySelecting)
+				EventSystem.current.SetSelectedGameObject(buttons.Count > 0 ? buttons[0].gameObject : null);
 		}
 		#endregion
 	}

@@ -12,9 +12,9 @@ namespace DnDTactics.UI
 	{
 		#region Inspector fields
 		[SerializeField]
-		private Window equipmentPanel;
+		private UnitEquipmentWindow equipmentPanel;
 		[SerializeField]
-		private Window inventoryPanel;
+		private UnitInventoryWindow inventoryPanel;
 		#endregion
 
 		private IEquipped unitEquipment { get { return Unit.Extensions as IEquipped; } }
@@ -61,6 +61,7 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
+
 			// Bind window flow events
 			Submitted += () =>
 			{
@@ -73,6 +74,28 @@ namespace DnDTactics.UI
 			{
 				equipmentPanel.Deactivate();
 				Activate();
+			};
+
+			equipmentPanel.ButtonX += () =>
+			{
+				var current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
+				var index = current.ID;
+				if (equipmentPanel.Buttons.Contains(current))
+				{
+					// Unequip and move to inventory
+					var equip = current.Data as Equipment;
+					if (equip != null)
+					{
+						var slot = equip.Slot;
+						var list = (Unit.Extensions as IEquipped)[slot];
+						(Unit.Extensions as IInventory).All.Add(equip);
+						list[list.IndexOf(equip)] = null;
+						Unit.Evaluate();
+						Refresh();
+						Deactivate();
+						EventSystem.current.SetSelectedGameObject(equipmentPanel.Buttons[index].gameObject);
+					}
+				}
 			};
 
 			equipmentPanel.BumperR += () =>
