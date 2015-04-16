@@ -31,11 +31,12 @@ namespace DnDEngine.Combat
         {
             Participants.Add(unit);
 
+            // Adding after battle has started
             if (IsReady)
             {
                 unit.Initialize();
                 unit.Initiative = InitiativeDetails.Zero(unit);
-                TurnOrder.Add(unit);
+                if (unit.CanAct) TurnOrder.Add(unit);
             }
         }
 
@@ -127,6 +128,17 @@ namespace DnDEngine.Combat
             TriggerEvent(BattleEnded);
 
             // Cleanup actions (gain exp, etc)
+        }
+
+        private void ResolveState()
+        {
+            foreach (CombatEntity entity in Participants)
+            {
+                if (!entity.IsAlive)
+                {
+                    RemoveUnit(entity);
+                }
+            }
         }
         #endregion
 
