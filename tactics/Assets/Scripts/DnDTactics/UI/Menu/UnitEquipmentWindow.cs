@@ -2,6 +2,7 @@
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
+using System.Collections.Generic;
 using RPGEngine;
 using DnDEngine;
 using DnDEngine.Items;
@@ -62,13 +63,14 @@ namespace DnDTactics.UI
 			// Draw equipment panel
 			foreach (var slot in UnitEquipment.Slots)
 			{
+				var index = 0;
 				foreach (Equipment equip in slot.Value)
 				{
 					button = Instantiate<EventButton>(itemButton);
 
 					// Set button name and text
 					button.SetText(String.Format("[{0}] {1}", slot.Key, equip != null ? equip.Name : "(Empty)"));
-					button.Data = equip;
+					button.Data = new EquipIndex(slot.Key, index, equip);
 
 					// Adjust item offset and container height
 					rectTransform = button.GetComponent<RectTransform>();
@@ -82,8 +84,10 @@ namespace DnDTactics.UI
 					button.gameObject.SetActive(true);
 
 					// Set button navigation
-					button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+					button.Base.BindNavigation(prev != null ? prev.Base : null);
 					prev = button;
+
+					index++;
 				}
 			}
 

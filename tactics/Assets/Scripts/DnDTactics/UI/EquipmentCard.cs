@@ -17,6 +17,8 @@ namespace DnDTactics.UI
 		[SerializeField]
 		private Text equipName;
 		[SerializeField]
+		private Text description;
+		[SerializeField]
 		private Text slot;
 		[SerializeField]
 		private Text hp;
@@ -81,6 +83,7 @@ namespace DnDTactics.UI
  			base.Draw();
 
 			if (equipName) equipName.text = Item.Name;
+			if (description) description.text = Item.Description;
 			if (slot) slot.text = Item.Slot.ToString();
 			if (hp) hp.text = Item.DerivedStatMods.HP.ToString(Constants.ModifierFormat);
 			if (mp) mp.text = Item.DerivedStatMods.MP.ToString(Constants.ModifierFormat);

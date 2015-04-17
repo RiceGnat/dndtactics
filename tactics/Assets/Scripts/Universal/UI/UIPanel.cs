@@ -40,7 +40,7 @@ namespace Universal.UI
 		/// </summary>
 		public bool IsActivated { get; private set; }
 
-		protected virtual void ClearEvents()
+		public virtual void ClearEvents()
 		{
 			Canceled = null;
 			Submitted = null;

@@ -81,8 +81,10 @@ namespace Universal.UI
 			OnCanceled();
 		}
 
-		protected override void ClearEvents()
+		public override void ClearEvents()
 		{
+			base.ClearEvents();
+
 			// Clear window event handlers
 			Selected = null;
 			Clicked = null;
@@ -110,8 +112,11 @@ namespace Universal.UI
 		{
 			foreach (EventButton button in Buttons)
 			{
-				button.Select -= OnButtonSelected;
-				button.Selectable.onClick.RemoveAllListeners();
+				if (button != null)
+				{
+					button.Select -= OnButtonSelected;
+					button.Base.onClick.RemoveAllListeners();
+				}
 			}
 			if (closeButton)
 			{
@@ -119,6 +124,9 @@ namespace Universal.UI
 			}
 		}
 
+		/// <summary>
+		/// Redraws the window while preserving data.
+		/// </summary>
 		public override void Refresh()
 		{
 			object data = Data;
@@ -145,7 +153,7 @@ namespace Universal.UI
 				button.ID = i;
 
 				button.Select += OnButtonSelected;
-				button.Selectable.onClick.AddListener(OnButtonClicked);
+				button.Base.onClick.AddListener(OnButtonClicked);
 				//button.Cancel += OnButtonCanceled;
 			}
 			if (closeButton)
@@ -166,7 +174,7 @@ namespace Universal.UI
 
 			if (text) text.text = "";
 
-			ClearEvents();
+			ClearButtonEvents();
 		}
 
 		/// <summary>

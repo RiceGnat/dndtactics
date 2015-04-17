@@ -24,7 +24,7 @@ namespace Universal.UI
 		/// <summary>
 		/// Gets the UnityEngine.UI.Button Component that this object is paired with.
 		/// </summary>
-		public Button Selectable
+		public Button Base
 		{
 			get
 			{
@@ -39,38 +39,55 @@ namespace Universal.UI
 		public int ID { get; set; }
 
 		/// <summary>
+		/// Gets or set the button's text.
+		/// </summary>
+		public string Text
+		{
+			get { return Base.GetComponent<Text>().text; }
+			set
+			{
+				Base.GetComponent<Text>().text = value;
+				Base.name = value;
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets the data for the button.
 		/// </summary>
 		public object Data { get; set; }
 
-		public void SetText(string text)
+		/// <summary>
+		/// Gets the button's data field as a specific type.
+		/// </summary>
+		/// <typeparam name="T">Type to cast the data to</typeparam>
+		/// <returns>Data cast as T</returns>
+		public T GetData<T>()
 		{
-			Selectable.GetComponent<Text>().text = text;
-			Selectable.name = text;
+			return (T)Data;
 		}
 
 		void ISelectHandler.OnSelect(BaseEventData eventData)
 		{
 			//if (Debug.isDebugBuild) Debug.Log(name + " selected");
-			if (Select != null) Select(Selectable, eventData);
+			if (Select != null) Select(Base, eventData);
 		}
 
 		void IDeselectHandler.OnDeselect(BaseEventData eventData)
 		{
 			//if (Debug.isDebugBuild) Debug.Log(name + " deselected");
-			if (Deselect != null) Deselect(Selectable, eventData);
+			if (Deselect != null) Deselect(Base, eventData);
 		}
 
 		void ISubmitHandler.OnSubmit(BaseEventData eventData)
 		{
 			//if (Debug.isDebugBuild) Debug.Log(name + " submitted");
-			if (Submit != null) Submit(Selectable, eventData);
+			if (Submit != null) Submit(Base, eventData);
 		}
 
 		void ICancelHandler.OnCancel(BaseEventData eventData)
 		{
 			//if (Debug.isDebugBuild) Debug.Log(name + " canceled");
-			if (Cancel != null) Cancel(Selectable, eventData);
+			if (Cancel != null) Cancel(Base, eventData);
 		}
 	}
 }

@@ -129,25 +129,20 @@ namespace DnDTactics.UI
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
-				var nav = button.Selectable.navigation;
+				var nav = button.Base.navigation;
 				nav.mode = Navigation.Mode.Explicit;
 				if (prev != null) {
-					nav.selectOnUp = prev.Selectable;
-					var prevNav = prev.Selectable.navigation;
-					prevNav.selectOnDown = button.Selectable;
-					prev.Selectable.navigation = prevNav;
+					nav.selectOnUp = prev.Base;
+					var prevNav = prev.Base.navigation;
+					prevNav.selectOnDown = button.Base;
+					prev.Base.navigation = prevNav;
 				}
-				button.Selectable.navigation = nav;
+				button.Base.navigation = nav;
 				prev = button;
 			}
 
-			// Bind events
-			classPanel.Selected += SetSelectedClass;
-			classPanel.Clicked += ActivateGender;
+			// Draw panels events (binds button events)
 			classPanel.Draw();
-
-			genderPanel.Selected += SetSelectedGender;
-			genderPanel.Clicked += ShowConfirm;
 			genderPanel.Draw();
 
 			// Automatically show first class in list
@@ -179,6 +174,13 @@ namespace DnDTactics.UI
 		public override void Activate()
 		{
 			classPanel.Activate();
+
+			// Bind control events
+			classPanel.Selected += SetSelectedClass;
+			classPanel.Clicked += ActivateGender;
+
+			genderPanel.Selected += SetSelectedGender;
+			genderPanel.Clicked += ShowConfirm;
 		}
 
 		/// <summary>

@@ -30,7 +30,7 @@ namespace Universal.UI
 			foreach (MenuItem item in items)
 			{
 				// Return item if button object matches
-				if (item.button.Selectable == button) return item;
+				if (item.button.Base == button) return item;
 			}
 
 			// If nothing found return null
@@ -85,22 +85,22 @@ namespace Universal.UI
 
 				// Bind events
 				item.button.Select += ItemSelected;
-				item.button.Selectable.onClick.AddListener(ItemClicked);
+				item.button.Base.onClick.AddListener(ItemClicked);
 				item.target.Canceled += ItemExited;
 
 				if (!manualButtonNavigation)
 				{
 					// Set button navigation
-					var nav = item.button.Selectable.navigation;
+					var nav = item.button.Base.navigation;
 					nav.mode = Navigation.Mode.Explicit;
 					if (prev != null)
 					{
-						nav.selectOnUp = prev.button.Selectable;
-						var prevNav = prev.button.Selectable.navigation;
-						prevNav.selectOnDown = item.button.Selectable;
-						prev.button.Selectable.navigation = prevNav;
+						nav.selectOnUp = prev.button.Base;
+						var prevNav = prev.button.Base.navigation;
+						prevNav.selectOnDown = item.button.Base;
+						prev.button.Base.navigation = prevNav;
 					}
-					item.button.Selectable.navigation = nav;
+					item.button.Base.navigation = nav;
 					prev = item;
 				}
 			}

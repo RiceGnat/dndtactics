@@ -73,7 +73,7 @@ namespace Universal.UI
 			window.Message = message;
 			Instance.Show();
 
-			SetCallback((window as AlertDialog).OkButton.Selectable, callback);
+			SetCallback((window as AlertDialog).OkButton.Base, callback);
 
 			window.Canceled += callback;
 			window.Canceled += Instance.Hide;
@@ -97,8 +97,8 @@ namespace Universal.UI
 			window.Message = message;
 			Instance.Show();
 
-			SetCallback((window as ConfirmDialog).YesButton.Selectable, yesCallback);
-			SetCallback((window as ConfirmDialog).NoButton.Selectable, noCallback);
+			SetCallback((window as ConfirmDialog).YesButton.Base, yesCallback);
+			SetCallback((window as ConfirmDialog).NoButton.Base, noCallback);
 
 			window.Canceled += noCallback;
 			window.Canceled += Instance.Hide;

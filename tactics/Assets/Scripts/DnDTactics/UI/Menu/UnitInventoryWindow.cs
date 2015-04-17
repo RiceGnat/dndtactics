@@ -51,6 +51,11 @@ namespace DnDTactics.UI
 		public IInventory UnitInventory { get { return Unit != null ? Unit.Extensions as IInventory : null; } }
 
 		/// <summary>
+		/// Gets whether or not the panel is showing the caravan.
+		/// </summary>
+		public bool IsCaravan { get { return showCaravan; } }
+
+		/// <summary>
 		/// Draws the equipment list.
 		/// </summary>
 		public override void Draw()
@@ -69,6 +74,7 @@ namespace DnDTactics.UI
 
 				// Set button name and text
 				button.SetText(item.Name);
+				button.Data = item;
 
 				// Adjust item offset and container height
 				rectTransform = button.GetComponent<RectTransform>();
@@ -82,7 +88,7 @@ namespace DnDTactics.UI
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
-				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+				button.Base.BindNavigation(prev != null ? prev.Base : null);
 				prev = button;
 			}
 
@@ -107,6 +113,16 @@ namespace DnDTactics.UI
 			base.Clear();
 			ClearButtons();
 			Container.Collapse();
+		}
+
+		/// <summary>
+		/// Redraws the window while preserving data and state.
+		/// </summary>
+		public override void Refresh()
+		{
+			bool caravan = showCaravan;
+			base.Refresh();
+			showCaravan = caravan;
 		}
 
 		protected override void Awake()

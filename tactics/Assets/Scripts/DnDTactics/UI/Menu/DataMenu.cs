@@ -17,7 +17,7 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
-			saveButton.Selectable.onClick.AddListener(DataManager.Save);
+			saveButton.Base.onClick.AddListener(DataManager.Save);
 		}
 	}
 }

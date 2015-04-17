@@ -107,16 +107,14 @@ namespace DnDTactics.UI
 				partyPanel.Buttons.Add(button);
 
 				// Set button navigation
-				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+				button.Base.BindNavigation(prev != null ? prev.Base : null);
 				prev = button;
 			}
 
 			// Add space for gutter in scroll region
 			partyContainer.offsetMin += new Vector2(0, unitCard.GetComponent<RectTransform>().offsetMax.y);
 
-			// Bind event handler for populating details panel on select
-			//partyPanel.Selected += BindDetails;
-			partyPanel.Clicked += BindDetails;
+			// Draw panel (binds button events)
 			partyPanel.Draw();
 		}
 
@@ -158,6 +156,8 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
+			// Bind details page handler
+			partyPanel.Clicked += BindDetails;
 			partyPanel.Canceled += OnCanceled;
 		}
 

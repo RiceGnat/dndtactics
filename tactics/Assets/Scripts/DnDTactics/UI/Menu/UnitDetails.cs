@@ -15,11 +15,20 @@ namespace DnDTactics.UI
 		private UnitEquipmentWindow equipmentPanel;
 		[SerializeField]
 		private UnitInventoryWindow inventoryPanel;
+		[SerializeField]
+		private ItemPopout popout;
 		#endregion
 
-		private IEquipped unitEquipment { get { return Unit.Extensions as IEquipped; } }
-
 		private RectTransform equipmentContainer { get { return equipmentPanel.GetComponent<ScrollRect>().content; } }
+
+		private EquipIndex lastActiveEquipSlot;
+		
+		private void EquipItem(int index, object data)
+		{
+			
+
+			inventoryPanel.Clicked -= EquipItem;
+		}
 
 		public override void Draw()
 		{
@@ -28,6 +37,7 @@ namespace DnDTactics.UI
 			// Draw equipment panel
 			equipmentPanel.Data = Unit;
 			equipmentPanel.Draw();
+
 			
 			// Draw inventory panel
 			inventoryPanel.Data = Unit;
@@ -53,6 +63,8 @@ namespace DnDTactics.UI
 		{
 			base.Activate();
 
+			popout.Hide();
+
 			EventSystem.current.SetSelectedGameObject(null);
 		}
 
@@ -61,13 +73,34 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
-
-			// Bind window flow events
+			// Bind UIPanel events (these will not be cleared)
 			Submitted += () =>
 			{
 				Deactivate();
 				// Activate equipment if A button is pressed
 				equipmentPanel.Activate();
+			};
+
+			equipmentPanel.Selected += (int index) =>
+			{
+				EquipIndex target = equipmentPanel.Buttons[index].Data as EquipIndex;
+				if (target.Equip == null) popout.Hide();
+				else if (!popout.gameObject.activeSelf) popout.Show();
+				popout.Data = target.Equip;
+				popout.Refresh();
+			};
+
+			equipmentPanel.Clicked += (int index, object data) =>
+			{
+				EquipIndex target = data as EquipIndex; 
+				if (target.Equip == null)
+				{
+					// Activate inventory screen to select equipment
+					lastActiveEquipSlot = data as EquipIndex;
+					Deactivate();
+					inventoryPanel.Activate();
+					inventoryPanel.Clicked += EquipItem;
+				}
 			};
 
 			equipmentPanel.Canceled += () =>
@@ -78,17 +111,17 @@ namespace DnDTactics.UI
 
 			equipmentPanel.ButtonX += () =>
 			{
-				var current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
-				var index = current.ID;
+				EventButton current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
+				int index = current.ID;
 				if (equipmentPanel.Buttons.Contains(current))
 				{
 					// Unequip and move to inventory
-					var equip = current.Data as Equipment;
+					Equipment equip = (current.Data as EquipIndex).Equip;
 					if (equip != null)
 					{
 						var slot = equip.Slot;
-						var list = (Unit.Extensions as IEquipped)[slot];
-						(Unit.Extensions as IInventory).All.Add(equip);
+						var list = equipmentPanel.UnitEquipment[slot];
+						inventoryPanel.UnitInventory.All.Add(equip);
 						list[list.IndexOf(equip)] = null;
 						Unit.Evaluate();
 						Refresh();
@@ -108,6 +141,30 @@ namespace DnDTactics.UI
 			{
 				inventoryPanel.Deactivate();
 				Activate();
+			};
+
+			inventoryPanel.ButtonX += () =>
+			{
+				EventButton current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
+				int index = current.ID;
+				if (inventoryPanel.Buttons.Contains(current) && current.Data != null)
+				{
+					if (inventoryPanel.IsCaravan)
+					{
+						// Move item from caravan to inventory
+						inventoryPanel.UnitInventory.All.Add(DataManager.Caravan[index]);
+						DataManager.Caravan.RemoveAt(index);
+					}
+					else
+					{
+						// Move item from inventory to caravan
+						DataManager.Caravan.Add(inventoryPanel.UnitInventory.All[index]);
+						inventoryPanel.UnitInventory.All.RemoveAt(index);
+					}
+
+					inventoryPanel.Refresh();
+					EventSystem.current.SetSelectedGameObject(inventoryPanel.Buttons[index].gameObject);
+				}
 			};
 
 			inventoryPanel.BumperL += () =>
