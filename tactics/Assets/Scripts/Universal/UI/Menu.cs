@@ -75,13 +75,19 @@ namespace Universal.UI
 		{
 			selected.target.Deactivate();
 			Activate();
+		}
+
+		public override void Activate()
+		{
+			base.Activate();
+
 			EventSystem.current.SetSelectedGameObject(selected.button.gameObject);
 		}
 
 		#region Unity events
-		protected override void Start()
+		protected override void Awake()
 		{
-			base.Start();
+			base.Awake();
 
 			MenuItem prev = null;
 			foreach (MenuItem item in items)
@@ -110,6 +116,8 @@ namespace Universal.UI
 					prev = item;
 				}
 			}
+
+			selected = items[0];
 		}
 		#endregion
 	}

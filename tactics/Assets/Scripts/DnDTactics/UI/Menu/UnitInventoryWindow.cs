@@ -113,7 +113,7 @@ namespace DnDTactics.UI
 		{
 			base.Clear();
 			ClearButtons();
-			Container.Collapse();
+			Container.CollapseUp();
 		}
 
 		/// <summary>

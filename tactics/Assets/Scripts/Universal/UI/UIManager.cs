@@ -7,12 +7,16 @@ namespace Universal.UI
 	{
 		#region Inspector fields
 		[SerializeField]
+		private Menu menu;
+		[SerializeField]
 		private CommandPanel commandBox;
 		#endregion
 
 		private static UIManager instance;
 
 		public static CommandPanel CommandBox { get { return instance.commandBox; } }
+
+		public static Menu GameMenu { get { return instance.menu; } }
 
 		#region Unity events
 		void Awake()
@@ -26,6 +30,11 @@ namespace Universal.UI
 			{
 				instance = this;
 			}
+		}
+
+		void Start()
+		{
+			GameMenu.Activate();
 		}
 		#endregion
 	}

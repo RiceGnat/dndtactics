@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Universal;
 
 namespace Universal.UI
 {
@@ -31,24 +32,33 @@ namespace Universal.UI
 		/// <param name="obj">Child object</param>
 		/// <param name="offsetY">Vertical offset</param>
 		/// <param name="offsetX">Horizontal offset</param>
-		public static void Append(this RectTransform rectTransform, RectTransform obj, float offsetY = 0, float offsetX = 0)
+		public static void Append(this RectTransform parent, RectTransform obj, float offsetY = 0, float offsetX = 0)
 		{
-			obj.transform.SetParent(rectTransform.transform, false);
+			obj.transform.SetParent(parent.transform, false);
 			obj.ShiftDown(offsetY);
 			obj.ShiftRight(offsetX);
 
-			Debug.Log(string.Format("{0} {1}", rectTransform.offsetMin, rectTransform.offsetMax));
-			Debug.Log(string.Format("{0} {1}", obj.offsetMin, obj.offsetMax));
-			rectTransform.offsetMin = new Vector2(Mathf.Min(rectTransform.offsetMin.x, obj.offsetMin.x), Mathf.Min(rectTransform.offsetMin.y, obj.offsetMin.y));
-			rectTransform.offsetMax = new Vector2(Mathf.Max(rectTransform.offsetMax.x, obj.offsetMax.x), Mathf.Max(rectTransform.offsetMax.y, obj.offsetMax.y));
+			Vector2 diffMin = Vector2.Scale(new Vector2(parent.rect.width, parent.rect.height), obj.anchorMin) + obj.offsetMin;
+			Vector2 diffMax = Vector2.Scale(new Vector2(-parent.rect.width, -parent.rect.height), Vector2.one - obj.anchorMax) + obj.offsetMax;
+
+			parent.offsetMin += new Vector2(Mathf.Min(diffMin.x, 0), Mathf.Min(diffMin.y, 0));
+			parent.offsetMax += new Vector2(Mathf.Max(diffMax.x, 0), Mathf.Max(diffMax.y, 0));
 		}
 
 		/// <summary>
-		/// Collapses the RectTransform to height 0.
+		/// Collapses the bottom of the RectTransform to the top.
 		/// </summary>
-		public static void Collapse(this RectTransform rectTransform)
+		public static void CollapseUp(this RectTransform rectTransform)
 		{
 			rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, rectTransform.offsetMax.y);
+		}
+
+		/// <summary>
+		/// Collapses the top of the RectTransform to the bottom.
+		/// </summary>
+		public static void CollapseDown(this RectTransform rectTransform)
+		{
+			rectTransform.offsetMax = new Vector2(rectTransform.offsetMax.x, rectTransform.offsetMin.y);
 		}
 
 		/// <summary>

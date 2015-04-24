@@ -41,7 +41,7 @@ namespace Universal.UI
 			EventButton button, prev = null;
 			RectTransform rectTransform;
 			float offset = 0;
-			for (int i = 0; i < UIPanel.CapturedInputs.Length; i++)
+			for (int i = UIPanel.CapturedInputs.Length - 1; i >= 0; i--)
 			{
 				if (String.IsNullOrEmpty(target.CommandLabels[i])) continue;
 
@@ -53,7 +53,7 @@ namespace Universal.UI
 				// Append button to container
 				rectTransform = button.GetComponent<RectTransform>();
 				GetComponent<RectTransform>().Append(rectTransform, offset);
-				//offset += rectTransform.rect.height;
+				offset -= rectTransform.rect.height;
 
 				// Add button to list
 				buttons.Add(button);
@@ -66,7 +66,8 @@ namespace Universal.UI
 				prev = button;
 
 				// Bind events
-				button.Base.onClick.AddListener(() => { target.Delegates.Raise(UIPanel.CapturedInputs[i]); });
+				int index = i;
+				button.Base.onClick.AddListener(() => { target.Delegates.Raise(UIPanel.CapturedInputs[index]); });
 			}
 		}
 
@@ -84,7 +85,7 @@ namespace Universal.UI
 			}
 			buttons.Clear();
 
-			GetComponent<RectTransform>().Collapse();
+			GetComponent<RectTransform>().CollapseDown();
 		}
 
 		/// <summary>
@@ -110,7 +111,6 @@ namespace Universal.UI
 			base.Awake();
 
 			commandButton.gameObject.SetActive(false);
-			GetComponent<RectTransform>().Collapse();
 		}
 		#endregion
 	}
