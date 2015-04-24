@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace DnDTactics
+namespace DnDTactics.Data
 {
 	[CustomPropertyDrawer(typeof(ClassData))]
 	public class ClassDataEditor : PropertyDrawer
 	{
-		private float lines = 4;
-		private float lineOffset = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+		private const float lines = 4;
+		private static float lineOffset = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
@@ -21,12 +21,14 @@ namespace DnDTactics
 
 			var quarterWidth = position.width / 4;
 
+			float oldLabelWidth = EditorGUIUtility.labelWidth;
 			EditorGUIUtility.labelWidth = 90;
 			EditorGUI.PropertyField(new Rect(position.x, position.y, quarterWidth, EditorGUIUtility.singleLineHeight), @class, GUIContent.none);
 			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y, quarterWidth * 3, EditorGUIUtility.singleLineHeight), className, new GUIContent("Display as"));
 			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y + lineOffset, quarterWidth * 3, EditorGUIUtility.singleLineHeight), classArtwork, new GUIContent("Artwork"));
 			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y + lineOffset * 2, quarterWidth * 3, EditorGUIUtility.singleLineHeight), classPortrait, new GUIContent("Portrait"));
 			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y + lineOffset * 3, quarterWidth * 3, EditorGUIUtility.singleLineHeight), unique, new GUIContent("Unique"));
+			EditorGUIUtility.labelWidth = oldLabelWidth;
 
 			EditorGUI.EndProperty();
 		}

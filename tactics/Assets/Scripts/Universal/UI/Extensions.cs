@@ -36,6 +36,9 @@ namespace Universal.UI
 			obj.transform.SetParent(rectTransform.transform, false);
 			obj.ShiftDown(offsetY);
 			obj.ShiftRight(offsetX);
+
+			Debug.Log(string.Format("{0} {1}", rectTransform.offsetMin, rectTransform.offsetMax));
+			Debug.Log(string.Format("{0} {1}", obj.offsetMin, obj.offsetMax));
 			rectTransform.offsetMin = new Vector2(Mathf.Min(rectTransform.offsetMin.x, obj.offsetMin.x), Mathf.Min(rectTransform.offsetMin.y, obj.offsetMin.y));
 			rectTransform.offsetMax = new Vector2(Mathf.Max(rectTransform.offsetMax.x, obj.offsetMax.x), Mathf.Max(rectTransform.offsetMax.y, obj.offsetMax.y));
 		}

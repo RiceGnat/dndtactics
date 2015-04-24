@@ -63,7 +63,7 @@ namespace Universal.UI
 		/// <returns>Data cast as T</returns>
 		public T GetData<T>()
 		{
-			return (T)Data;
+			return Data != null ? (T)Data : default(T);
 		}
 
 		void ISelectHandler.OnSelect(BaseEventData eventData)

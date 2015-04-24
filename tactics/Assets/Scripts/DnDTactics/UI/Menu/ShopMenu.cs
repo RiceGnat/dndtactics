@@ -4,17 +4,19 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using DnDEngine.Items;
+using Universal;
 using Universal.UI;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {
-	public class ShopMenu : Universal.UI.UIPanel
+	public class ShopMenu : UIPanel
 	{
 		#region Inspector fields
 		[SerializeField]
 		private EventButton itemButton;
 		[SerializeField]
-		private Window itemPanel;
+		private Selector itemPanel;
 		[SerializeField]
 		private ScrollRect scrollRegion;
 		[SerializeField]
@@ -106,7 +108,7 @@ namespace DnDTactics.UI
 
 			itemPanel.Clicked += ShowConfirm;
 			itemPanel.Selected += BindDetails;
-			itemPanel.Canceled += OnCanceled;
+			itemPanel.Delegates.Add(EventKey.Cancel, OnCanceled);
 			itemPanel.Draw();
 		}
 

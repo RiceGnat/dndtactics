@@ -14,7 +14,7 @@ namespace DnDTactics.UI
 	/// Shows and manages unit's equipment. Uses the Universal.UI.Window object's Data property.
 	/// </summary>
 	[RequireComponent(typeof(ScrollRect))]
-	public class UnitEquipmentWindow : Window
+	public class UnitEquipmentWindow : Selector
 	{
 		#region Inspector fields
 		[SerializeField]
@@ -69,7 +69,7 @@ namespace DnDTactics.UI
 					button = Instantiate<EventButton>(itemButton);
 
 					// Set button name and text
-					button.SetText(String.Format("[{0}] {1}", slot.Key, equip != null ? equip.Name : "(Empty)"));
+					button.Text = String.Format("[{0}] {1}", slot.Key, equip != null ? equip.Name : "(Empty)");
 					button.Data = new EquipIndex(slot.Key, index, equip);
 
 					// Adjust item offset and container height

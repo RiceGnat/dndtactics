@@ -5,6 +5,7 @@ using RPGEngine;
 using DnDEngine;
 using DnDEngine.Items;
 using Universal.UI;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {
@@ -12,7 +13,7 @@ namespace DnDTactics.UI
 	/// Shows and manages unit's equipment. Uses the Universal.UI.Window object's Data property.
 	/// </summary>
 	[RequireComponent(typeof(ScrollRect))]
-	public class UnitInventoryWindow : Window
+	public class UnitInventoryWindow : Selector
 	{
 		#region Inspector fields
 		[SerializeField]
@@ -73,7 +74,7 @@ namespace DnDTactics.UI
 				button = Instantiate<EventButton>(itemButton);
 
 				// Set button name and text
-				button.SetText(item.Name);
+				button.Text = item.Name;
 				button.Data = item;
 
 				// Adjust item offset and container height
@@ -96,7 +97,7 @@ namespace DnDTactics.UI
 			if (Buttons.Count == 0)
 			{
 				button = Instantiate<EventButton>(itemButton);
-				button.SetText("(No items)");
+				button.Text = "(No items)";
 				Container.Append(button.GetComponent<RectTransform>());
 				Buttons.Add(button);
 				button.gameObject.SetActive(true);
@@ -129,13 +130,13 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
-			ButtonY += () =>
-			{
-				showCaravan = !showCaravan;
-				Deactivate();
-				Refresh();
-				Activate();
-			};
+			//ButtonY += () =>
+			//{
+			//	showCaravan = !showCaravan;
+			//	Deactivate();
+			//	Refresh();
+			//	Activate();
+			//};
 		}
 
 		protected override void Start()

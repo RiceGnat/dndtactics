@@ -41,8 +41,10 @@ namespace Universal.UI
 		{
 			// Hide currently selected menu
 			if (selected != null)
+			{
 				selected.target.Hide();
-
+			}
+				
 			// Set selected menu
 			selected = item;
 
@@ -61,6 +63,10 @@ namespace Universal.UI
 		private void ItemClicked()
 		{
 			Deactivate();
+
+			// Prevent cascading of submit input event
+			Input.ResetInputAxes();
+
 			// Clicked implies selected event has already occurred
 			selected.target.Activate();
 		}
@@ -86,7 +92,7 @@ namespace Universal.UI
 				// Bind events
 				item.button.Select += ItemSelected;
 				item.button.Base.onClick.AddListener(ItemClicked);
-				item.target.Canceled += ItemExited;
+				item.target.Delegates.Add(EventKey.Cancel, ItemExited);
 
 				if (!manualButtonNavigation)
 				{

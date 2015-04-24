@@ -2,52 +2,57 @@
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using System.Collections;
+using System;
+using System.Collections.Generic;
 
 namespace Universal.UI
 {
 	/// <summary>
 	/// Manages drawing of UI elements.
 	/// </summary>
+	[RequireComponent(typeof(RectTransform))]
 	public class UIPanel : MonoBehaviour
 	{
-		#region Events
-		/// <summary>
-		/// Called when the user cancels out of the UIPanel.
-		/// </summary>
-		public event UnityAction Canceled;
-
-		/// <summary>
-		/// Called when the user submits the UIPanel.
-		/// </summary>
-		public event UnityAction Submitted;
-
-		public event UnityAction ButtonX;
-		public event UnityAction ButtonY;
-		public event UnityAction BumperL;
-		public event UnityAction BumperR;
+		public void OnCanceled() {  }
+		public virtual void ClearEvents() { }
+		#region Inspector fields
+		[SerializeField]
+		private CommandLabelSet commandLabels;
 		#endregion
 
-		protected static UIPanel activeWindow;
+		#region Fields
+		private static EventKey[] capturedInputs = new EventKey[] { EventKey.Submit, EventKey.Cancel, EventKey.ButtonX, EventKey.ButtonY, EventKey.BumperL, EventKey.BumperR };
+		private UnityActionSet delegates = new UnityActionSet();
 
-		protected static void DeactivateCurrent()
-		{
-			if (activeWindow) activeWindow.Deactivate();
-		}
+		protected static UIPanel activeWindow;
+		#endregion
+
+		#region Properties
+		/// <summary>
+		/// Gets the input event keys that UIPanel objects will check.
+		/// </summary>
+		public static EventKey[] CapturedInputs { get { return capturedInputs; } }
 
 		/// <summary>
 		/// Gets the activated state of this UIPanel.
 		/// </summary>
 		public bool IsActivated { get; private set; }
+		
+		/// <summary>
+		/// Gets the delegate set for this UIPanel.
+		/// </summary>
+		public UnityActionSet Delegates { get { return delegates; } }
 
-		public virtual void ClearEvents()
+		/// <summary>
+		/// Gets the set of command labels.
+		/// </summary>
+		public CommandLabelSet CommandLabels { get { return commandLabels; } }
+		#endregion
+
+		#region Methods
+		protected static void DeactivateCurrent()
 		{
-			Canceled = null;
-			Submitted = null;
-			ButtonX = null;
-			ButtonY = null;
-			BumperL = null;
-			BumperR = null;
+			if (activeWindow) activeWindow.Deactivate();
 		}
 
 		/// <summary>
@@ -67,7 +72,7 @@ namespace Universal.UI
 		}
 
 		/// <summary>
-		/// Calls Clear() then Draw(). Can be overridden for additional functionality.
+		/// Calls Clear() then Draw(). Can be overridden for additional/alternate functionality.
 		/// </summary>
 		public virtual void Refresh()
 		{
@@ -101,8 +106,18 @@ namespace Universal.UI
 		public virtual void Activate()
 		{
 			if (Debug.isDebugBuild) Debug.Log("Activating " + name);
+
+			// Only one panel should be active and capturing inputs
+			// This is kind of a failsafe, should Deactivate() properly when possible
+			DeactivateCurrent();
+
 			IsActivated = true;
 			activeWindow = this;
+
+			if (CommandPanel.IsEnabled)
+			{
+				UIManager.CommandBox.Bind(this);
+			}
 		}
 
 		/// <summary>
@@ -114,88 +129,32 @@ namespace Universal.UI
 			IsActivated = false;
 			if (this.Equals(activeWindow)) activeWindow = null;
 		}
-
-		protected virtual void OnSubmitted()
-		{
-			if (Submitted != null) Submitted();
-		}
-
-		protected virtual void OnCanceled()
-		{
-			if (Canceled != null) Canceled();
-		}
-
-		protected virtual void OnButtonX()
-		{
-			if (ButtonX != null) ButtonX();
-		}
-
-		protected virtual void OnButtonY()
-		{
-			if (ButtonY != null) ButtonY();
-		}
-
-		protected virtual void OnBumperL()
-		{
-			if (BumperL != null) BumperL();
-		}
-
-		protected virtual void OnBumperR()
-		{
-			if (BumperR != null) BumperR();
-		}
-
-		private void MapEvents(string inputName)
-		{
-
-		}
+		#endregion
 
 		#region Unity events
 		protected virtual void Awake()
 		{
-
 		}
 
 		protected virtual void Start()
 		{
-
 		}
 
 		protected virtual void Update()
 		{
 			if (IsActivated)
 			{
-				if (Input.GetButtonDown("Submit"))
+				// Check captured inputs
+				foreach (EventKey key in capturedInputs)
 				{
-					if (Debug.isDebugBuild) Debug.Log("Submit event on " + name);
-					OnSubmitted();
-					Input.ResetInputAxes();
-				}
-				if (Input.GetButtonDown("Cancel"))
-				{
-					if (Debug.isDebugBuild) Debug.Log("Cancel event on " + name);
-					OnCanceled();
-					Input.ResetInputAxes();
-				}
-				if (Input.GetButtonDown("Button X"))
-				{
-					OnButtonX();
-					Input.ResetInputAxes();
-				}
-				if (Input.GetButtonDown("Button Y"))
-				{
-					OnButtonY();
-					Input.ResetInputAxes();
-				}
-				if (Input.GetButtonDown("Bumper L"))
-				{
-					OnBumperL();
-					Input.ResetInputAxes();
-				}
-				if (Input.GetButtonDown("Bumper R"))
-				{
-					OnBumperR();
-					Input.ResetInputAxes();
+					if (Input.GetButtonDown(key.Name))
+					{
+						if (Debug.isDebugBuild) Debug.Log(String.Format("{0} event on {1}", key.Name, name));
+						Delegates.Raise(key);
+
+						// Reset inputs for the rest of this frame to prevent cascading 
+						Input.ResetInputAxes();
+					}
 				}
 			}
 		}

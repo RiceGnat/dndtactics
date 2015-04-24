@@ -73,105 +73,105 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
-			// Bind UIPanel events (these will not be cleared)
-			Submitted += () =>
-			{
-				Deactivate();
-				// Activate equipment if A button is pressed
-				equipmentPanel.Activate();
-			};
+			//// Bind UIPanel events (these will not be cleared)
+			//Submitted += () =>
+			//{
+			//	Deactivate();
+			//	// Activate equipment if A button is pressed
+			//	equipmentPanel.Activate();
+			//};
 
-			equipmentPanel.Selected += (int index) =>
-			{
-				EquipIndex target = equipmentPanel.Buttons[index].Data as EquipIndex;
-				if (target.Equip == null) popout.Hide();
-				else if (!popout.gameObject.activeSelf) popout.Show();
-				popout.Data = target.Equip;
-				popout.Refresh();
-			};
+			//equipmentPanel.Selected += (int index) =>
+			//{
+			//	EquipIndex target = equipmentPanel.Buttons[index].Data as EquipIndex;
+			//	if (target.Equip == null) popout.Hide();
+			//	else if (!popout.gameObject.activeSelf) popout.Show();
+			//	popout.Data = target.Equip;
+			//	popout.Refresh();
+			//};
 
-			equipmentPanel.Clicked += (int index, object data) =>
-			{
-				EquipIndex target = data as EquipIndex; 
-				if (target.Equip == null)
-				{
-					// Activate inventory screen to select equipment
-					lastActiveEquipSlot = data as EquipIndex;
-					Deactivate();
-					inventoryPanel.Activate();
-					inventoryPanel.Clicked += EquipItem;
-				}
-			};
+			//equipmentPanel.Clicked += (int index, object data) =>
+			//{
+			//	EquipIndex target = data as EquipIndex; 
+			//	if (target.Equip == null)
+			//	{
+			//		// Activate inventory screen to select equipment
+			//		lastActiveEquipSlot = data as EquipIndex;
+			//		Deactivate();
+			//		inventoryPanel.Activate();
+			//		inventoryPanel.Clicked += EquipItem;
+			//	}
+			//};
 
-			equipmentPanel.Canceled += () =>
-			{
-				equipmentPanel.Deactivate();
-				Activate();
-			};
+			//equipmentPanel.Canceled += () =>
+			//{
+			//	equipmentPanel.Deactivate();
+			//	Activate();
+			//};
 
-			equipmentPanel.ButtonX += () =>
-			{
-				EventButton current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
-				int index = current.ID;
-				if (equipmentPanel.Buttons.Contains(current))
-				{
-					// Unequip and move to inventory
-					Equipment equip = (current.Data as EquipIndex).Equip;
-					if (equip != null)
-					{
-						var slot = equip.Slot;
-						var list = equipmentPanel.UnitEquipment[slot];
-						inventoryPanel.UnitInventory.All.Add(equip);
-						list[list.IndexOf(equip)] = null;
-						Unit.Evaluate();
-						Refresh();
-						Deactivate();
-						EventSystem.current.SetSelectedGameObject(equipmentPanel.Buttons[index].gameObject);
-					}
-				}
-			};
+			//equipmentPanel.ButtonX += () =>
+			//{
+			//	EventButton current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
+			//	int index = current.ID;
+			//	if (equipmentPanel.Buttons.Contains(current))
+			//	{
+			//		// Unequip and move to inventory
+			//		Equipment equip = (current.Data as EquipIndex).Equip;
+			//		if (equip != null)
+			//		{
+			//			var slot = equip.Slot;
+			//			var list = equipmentPanel.UnitEquipment[slot];
+			//			inventoryPanel.UnitInventory.All.Add(equip);
+			//			list[list.IndexOf(equip)] = null;
+			//			Unit.Evaluate();
+			//			Refresh();
+			//			Deactivate();
+			//			EventSystem.current.SetSelectedGameObject(equipmentPanel.Buttons[index].gameObject);
+			//		}
+			//	}
+			//};
 
-			equipmentPanel.BumperR += () =>
-			{
-				equipmentPanel.Deactivate();
-				inventoryPanel.Activate();
-			};
+			//equipmentPanel.BumperR += () =>
+			//{
+			//	equipmentPanel.Deactivate();
+			//	inventoryPanel.Activate();
+			//};
 
-			inventoryPanel.Canceled += () =>
-			{
-				inventoryPanel.Deactivate();
-				Activate();
-			};
+			//inventoryPanel.Canceled += () =>
+			//{
+			//	inventoryPanel.Deactivate();
+			//	Activate();
+			//};
 
-			inventoryPanel.ButtonX += () =>
-			{
-				EventButton current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
-				int index = current.ID;
-				if (inventoryPanel.Buttons.Contains(current) && current.Data != null)
-				{
-					if (inventoryPanel.IsCaravan)
-					{
-						// Move item from caravan to inventory
-						inventoryPanel.UnitInventory.All.Add(DataManager.Caravan[index]);
-						DataManager.Caravan.RemoveAt(index);
-					}
-					else
-					{
-						// Move item from inventory to caravan
-						DataManager.Caravan.Add(inventoryPanel.UnitInventory.All[index]);
-						inventoryPanel.UnitInventory.All.RemoveAt(index);
-					}
+			//inventoryPanel.ButtonX += () =>
+			//{
+			//	EventButton current = EventSystem.current.currentSelectedGameObject.GetComponent<EventButton>();
+			//	int index = current.ID;
+			//	if (inventoryPanel.Buttons.Contains(current) && current.Data != null)
+			//	{
+			//		if (inventoryPanel.IsCaravan)
+			//		{
+			//			// Move item from caravan to inventory
+			//			inventoryPanel.UnitInventory.All.Add(DataManager.Caravan[index]);
+			//			DataManager.Caravan.RemoveAt(index);
+			//		}
+			//		else
+			//		{
+			//			// Move item from inventory to caravan
+			//			DataManager.Caravan.Add(inventoryPanel.UnitInventory.All[index]);
+			//			inventoryPanel.UnitInventory.All.RemoveAt(index);
+			//		}
 
-					inventoryPanel.Refresh();
-					EventSystem.current.SetSelectedGameObject(inventoryPanel.Buttons[index].gameObject);
-				}
-			};
+			//		inventoryPanel.Refresh();
+			//		EventSystem.current.SetSelectedGameObject(inventoryPanel.Buttons[index].gameObject);
+			//	}
+			//};
 
-			inventoryPanel.BumperL += () =>
-			{
-				inventoryPanel.Deactivate();
-				equipmentPanel.Activate();
-			};
+			//inventoryPanel.BumperL += () =>
+			//{
+			//	inventoryPanel.Deactivate();
+			//	equipmentPanel.Activate();
+			//};
 		}
 
 		protected override void Update()

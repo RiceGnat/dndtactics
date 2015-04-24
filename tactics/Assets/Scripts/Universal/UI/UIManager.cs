@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Universal.UI;
 
-namespace DnDTactics.UI
+namespace Universal.UI
 {
 	public sealed class UIManager : MonoBehaviour
 	{
 		#region Inspector fields
-		private Window commandBox;
+		[SerializeField]
+		private CommandPanel commandBox;
 		#endregion
 
 		private static UIManager instance;
+
+		public static CommandPanel CommandBox { get { return instance.commandBox; } }
 
 		#region Unity events
 		void Awake()

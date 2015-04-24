@@ -11,7 +11,7 @@ namespace DnDTactics.UI
 	/// Shows item info and options.
 	/// </summary>
 	[RequireComponent(typeof(EquipmentCard))]
-	public class ItemPopout : Window
+	public class ItemPopout : Selector
 	{
 		#region Inspector fields
 		[SerializeField]
