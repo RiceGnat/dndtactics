@@ -3,18 +3,20 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using DnDEngine;
+using Universal;
 using Universal.UI;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {
 	/// <summary>
 	/// Sets up UI for party management.
 	/// </summary>
-	public class PartyMenu : UIPanel
+	public class PartyMenu : Selector
 	{
 		#region Inspector fields
 		[SerializeField]
-		private Window partyPanel;
+		private ScrollRect partyScrollRect;
 		[SerializeField]
 		private UnitCard unitCard;
 		[SerializeField]
@@ -23,17 +25,21 @@ namespace DnDTactics.UI
 
 		private int lastIndex;
 
-		private UnitCard lastSelected { get { return partyPanel.Buttons[lastIndex].GetComponent<UnitCard>(); } }
-		private RectTransform partyContainer { get { return partyPanel.GetComponent<ScrollRect>().content; } }
+		private UnitCard lastSelected { get { return Buttons[lastIndex].GetComponent<UnitCard>(); } }
+		private RectTransform partyContainer { get { return partyScrollRect.content; } }
 
 		private void BindDetails(int index, object data)
 		{
 			lastIndex = index;
 			Deactivate();
 			detailsPage.Bind(lastSelected.Unit);
-			detailsPage.Canceled += CloseDetails;
-			detailsPage.BumperL += BindPrev;
-			detailsPage.BumperR += BindNext;
+
+			detailsPage.Delegates.Add(EventKey.Cancel, CloseDetails);
+			detailsPage.Delegates.Add(EventKey.BumperL, BindPrev);
+			detailsPage.Delegates.Add(EventKey.BumperR, BindNext);
+			//detailsPage.Canceled += CloseDetails;
+			//detailsPage.BumperL += BindPrev;
+			//detailsPage.BumperR += BindNext;
 
 			// UnitDetails page automatically calls Activate()
 			detailsPage.Show();
@@ -41,7 +47,7 @@ namespace DnDTactics.UI
 
 		private void BindNext()
 		{
-			if (lastIndex + 1 < partyPanel.Buttons.Count)
+			if (lastIndex + 1 < Buttons.Count)
 			{
 				lastIndex++;
 				detailsPage.Bind(lastSelected.Unit);
@@ -62,9 +68,9 @@ namespace DnDTactics.UI
 		private void CloseDetails()
 		{
 			// Clean up UnitDetails page
-			detailsPage.Canceled -= CloseDetails;
-			detailsPage.BumperL -= BindPrev;
-			detailsPage.BumperR -= BindNext;
+			detailsPage.Delegates.Remove(EventKey.Cancel, CloseDetails);
+			detailsPage.Delegates.Remove(EventKey.BumperL, BindPrev);
+			detailsPage.Delegates.Remove(EventKey.BumperR, BindNext);
 			detailsPage.Hide();
 
 			Activate();
@@ -87,10 +93,7 @@ namespace DnDTactics.UI
 			{
 				card = Instantiate<UnitCard>(unitCard);
 
-				// Set parent to container
-				card.transform.SetParent(partyContainer.transform, false);
-
-				// Adjust card offset and container height
+				// Append card to container
 				rectTransform = card.GetComponent<RectTransform>();
 				partyContainer.Append(rectTransform, offset);
 				offset += rectTransform.rect.height + 20;
@@ -104,20 +107,17 @@ namespace DnDTactics.UI
 
 				// Add card to list
 				button = card.GetComponent<EventButton>();
-				partyPanel.Buttons.Add(button);
+				Buttons.Add(button);
 
 				// Set button navigation
-				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+				button.Base.BindNavigation(prev != null ? prev.Base : null);
 				prev = button;
 			}
 
 			// Add space for gutter in scroll region
 			partyContainer.offsetMin += new Vector2(0, unitCard.GetComponent<RectTransform>().offsetMax.y);
 
-			// Bind event handler for populating details panel on select
-			//partyPanel.Selected += BindDetails;
-			partyPanel.Clicked += BindDetails;
-			partyPanel.Draw();
+			BindButtonEvents();
 		}
 
 		/// <summary>
@@ -127,30 +127,11 @@ namespace DnDTactics.UI
 		{
 			base.Clear();
 
-			// Clear window events
-			partyPanel.Clear();
-
 			// Clear existing unit cards
-			partyPanel.ClearButtons();
+			ClearButtons();
 
 			// Reset scroll height
 			partyContainer.offsetMin = Vector2.Scale(partyContainer.offsetMin, new Vector2(1, 0));
-		}
-
-		/// <summary>
-		/// Selects the first unit card.
-		/// </summary>
-		public override void Activate()
-		{
-			partyPanel.Activate();
-		}
-
-		/// <summary>
-		/// Cancels out of the party management menu.
-		/// </summary>
-		public override void Deactivate()
-		{
-			partyPanel.Deactivate();
 		}
 
 		#region Unity events
@@ -158,12 +139,14 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
-			partyPanel.Canceled += OnCanceled;
+			// Bind clicked handler to open details page
+			Clicked += BindDetails;
 		}
 
 		protected override void Start()
 		{
 			base.Start();
+
 			unitCard.gameObject.SetActive(false);
 		}
 		#endregion

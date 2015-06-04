@@ -24,7 +24,7 @@ namespace Universal.UI
 
 		private Queue<UnityAction> callQueue = new Queue<UnityAction>();
 
-		private static Window window;
+		private static Selector window;
 
 		private static ModalDialog instance;
 
@@ -73,10 +73,10 @@ namespace Universal.UI
 			window.Message = message;
 			Instance.Show();
 
-			SetCallback((window as AlertDialog).OkButton.Selectable, callback);
+			SetCallback((window as AlertDialog).OkButton.Base, callback);
 
-			window.Canceled += callback;
-			window.Canceled += Instance.Hide;
+			window.Delegates.Add(EventKey.Cancel, callback);
+			window.Delegates.Add(EventKey.Cancel, Instance.Hide);
 		}
 
 		/// <summary>
@@ -97,11 +97,11 @@ namespace Universal.UI
 			window.Message = message;
 			Instance.Show();
 
-			SetCallback((window as ConfirmDialog).YesButton.Selectable, yesCallback);
-			SetCallback((window as ConfirmDialog).NoButton.Selectable, noCallback);
+			SetCallback((window as ConfirmDialog).YesButton.Base, yesCallback);
+			SetCallback((window as ConfirmDialog).NoButton.Base, noCallback);
 
-			window.Canceled += noCallback;
-			window.Canceled += Instance.Hide;
+			window.Delegates.Add(EventKey.Cancel, noCallback);
+			window.Delegates.Add(EventKey.Cancel, Instance.Hide);
 		}
 
 		/// <summary>
@@ -124,13 +124,12 @@ namespace Universal.UI
 
 			window.Clicked += (int index, object data) =>
 			{
-				if (index == 0) submitCallback(index, data);
-				else cancelCallback();
+				submitCallback(index, data);
 				Instance.Hide();
 			};
 
-			window.Canceled += cancelCallback;
-			window.Canceled += Instance.Hide;
+			window.Delegates.Add(EventKey.Cancel, cancelCallback);
+			window.Delegates.Add(EventKey.Cancel, Instance.Hide);
 		}
 
 		//public static void Dialog(Window dialog)
@@ -141,7 +140,7 @@ namespace Universal.UI
 
 		//	Instance.Show();
 
-		//	window.Canceled += Instance.Hide;
+		//	window.Delegates.Add(EventKey.Cancel, Instance.Hide;
 		//}
 
 		#region UIPanel methods
@@ -154,6 +153,7 @@ namespace Universal.UI
 			window.transform.SetParent(overlay.transform, false);
 			window.transform.SetAsLastSibling();
 			window.Show();
+			window.BindButtonEvents();
 			window.Activate();
 		}
 

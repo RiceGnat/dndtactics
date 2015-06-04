@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using RPGEngine;
+using DnDEngine.Items;
 using Universal.UI;
 
 namespace DnDTactics.UI
@@ -9,13 +11,15 @@ namespace DnDTactics.UI
 	/// Shows item info and options.
 	/// </summary>
 	[RequireComponent(typeof(EquipmentCard))]
-	public class ItemPopout : Window
+	public class ItemPopout : Selector
 	{
 		#region Inspector fields
 		[SerializeField]
-		private EventButton itemButton;
+		private Text description;
 		[SerializeField]
-		private RectTransform buttonArea;
+		private EventButton useButton;
+		[SerializeField]
+		private EventButton equipButton;
 		#endregion
 
 		/// <summary>
@@ -34,9 +38,25 @@ namespace DnDTactics.UI
 		/// </summary>
 		public override void Draw()
 		{
-			base.Draw();
+			if (Item != null)
+			{
+				// Show/hide buttons
+				if (Item is Equipment)
+				{
+					Buttons[0] = equipButton;
+					GetComponent<EquipmentCard>().Bind(Item as IEquipment);
+					GetComponent<EquipmentCard>().Draw();
+				}
+				else
+				{
+					Buttons[0] = useButton;
+				}
 
-			// Add buttons
+				Message = Item.Name;
+				description.text = Item.Description;
+
+				base.Draw();
+			}
 		}
 
 		/// <summary>

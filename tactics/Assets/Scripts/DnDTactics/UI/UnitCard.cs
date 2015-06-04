@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using RPGEngine;
 using DnDEngine;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {

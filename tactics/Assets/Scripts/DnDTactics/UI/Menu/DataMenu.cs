@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Universal.UI;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {
@@ -17,7 +18,7 @@ namespace DnDTactics.UI
 		{
 			base.Awake();
 
-			saveButton.Selectable.onClick.AddListener(DataManager.Save);
+			saveButton.Base.onClick.AddListener(DataManager.Save);
 		}
 	}
 }

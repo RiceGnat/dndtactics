@@ -2,7 +2,7 @@
 using System;
 using DnDEngine;
 
-namespace DnDTactics
+namespace DnDTactics.Data
 {
 	/// <summary>
 	/// Associates some auxiliary data to a class.

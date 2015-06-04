@@ -8,7 +8,7 @@ using RPGEngine;
 using DnDEngine;
 using DnDEngine.Items;
 
-namespace DnDTactics
+namespace DnDTactics.Data
 {
 	public sealed class DataManager : MonoBehaviour
 	{
@@ -69,6 +69,16 @@ namespace DnDTactics
 			}
 		}
 
+		public static SettingsData Settings
+		{
+			get
+			{
+				if (CurrentFile.Settings == null)
+					CurrentFile.Settings = new SettingsData();
+				return CurrentFile.Settings;
+			}
+		}
+
 		public static void Save()
 		{
 			CurrentFile.Timestamp = DateTime.Now;
@@ -88,11 +98,13 @@ namespace DnDTactics
 				}
 				catch (SerializationException)
 				{
+					Debug.LogWarning("Could not deserialize data.");
 				}
 				stream.Close();
 			}
 			catch (IOException)
 			{
+				Debug.LogWarning("Could not read save file.");
 			}
 		}
 
@@ -169,18 +181,23 @@ namespace DnDTactics
 						//u.Core.LVL++;
 					}
 				}
-
-				foreach (IUnit u in Party)
-				{
-					u.Evaluate();
-					if (Debug.isDebugBuild) Debug.Log(DnDEngine.DnDUnit.Describe(u).Full);
-				}
-
-				foreach (ICatalogable i in Caravan)
-				{
-					if (Debug.isDebugBuild) Debug.Log(i.Name);
-				}
 			}
+		}
+
+		void Start()
+		{
+			foreach (IUnit u in Party)
+			{
+				u.Evaluate();
+				if (Debug.isDebugBuild) Debug.Log(DnDEngine.DnDUnit.Describe(u).Full);
+			}
+
+			foreach (ICatalogable i in Caravan)
+			{
+				if (Debug.isDebugBuild) Debug.Log(i.Name);
+			}
+
+			Settings.Apply();
 		}
 		#endregion
 	}

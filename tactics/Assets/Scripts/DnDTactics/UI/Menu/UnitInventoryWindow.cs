@@ -5,6 +5,7 @@ using RPGEngine;
 using DnDEngine;
 using DnDEngine.Items;
 using Universal.UI;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {
@@ -12,7 +13,7 @@ namespace DnDTactics.UI
 	/// Shows and manages unit's equipment. Uses the Universal.UI.Window object's Data property.
 	/// </summary>
 	[RequireComponent(typeof(ScrollRect))]
-	public class UnitInventoryWindow : Window
+	public class UnitInventoryWindow : Selector
 	{
 		#region Inspector fields
 		[SerializeField]
@@ -51,6 +52,11 @@ namespace DnDTactics.UI
 		public IInventory UnitInventory { get { return Unit != null ? Unit.Extensions as IInventory : null; } }
 
 		/// <summary>
+		/// Gets whether or not the panel is showing the caravan.
+		/// </summary>
+		public bool IsCaravan { get { return showCaravan; } }
+
+		/// <summary>
 		/// Draws the equipment list.
 		/// </summary>
 		public override void Draw()
@@ -68,7 +74,8 @@ namespace DnDTactics.UI
 				button = Instantiate<EventButton>(itemButton);
 
 				// Set button name and text
-				button.SetText(item.Name);
+				button.Text = item.Name;
+				button.Data = item;
 
 				// Adjust item offset and container height
 				rectTransform = button.GetComponent<RectTransform>();
@@ -82,7 +89,7 @@ namespace DnDTactics.UI
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
-				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+				button.Base.BindNavigation(prev != null ? prev.Base : null);
 				prev = button;
 			}
 
@@ -90,7 +97,7 @@ namespace DnDTactics.UI
 			if (Buttons.Count == 0)
 			{
 				button = Instantiate<EventButton>(itemButton);
-				button.SetText("(No items)");
+				button.Text = "(No items)";
 				Container.Append(button.GetComponent<RectTransform>());
 				Buttons.Add(button);
 				button.gameObject.SetActive(true);
@@ -106,20 +113,30 @@ namespace DnDTactics.UI
 		{
 			base.Clear();
 			ClearButtons();
-			Container.Collapse();
+			Container.CollapseUp();
+		}
+
+		/// <summary>
+		/// Redraws the window while preserving data and state.
+		/// </summary>
+		public override void Refresh()
+		{
+			bool caravan = showCaravan;
+			base.Refresh();
+			showCaravan = caravan;
 		}
 
 		protected override void Awake()
 		{
 			base.Awake();
 
-			ButtonY += () =>
-			{
-				showCaravan = !showCaravan;
-				Deactivate();
-				Refresh();
-				Activate();
-			};
+			//ButtonY += () =>
+			//{
+			//	showCaravan = !showCaravan;
+			//	Deactivate();
+			//	Refresh();
+			//	Activate();
+			//};
 		}
 
 		protected override void Start()

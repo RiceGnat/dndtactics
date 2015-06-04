@@ -3,12 +3,16 @@ using System.Collections;
 
 namespace Universal.UI
 {
-	public class AlertDialog : Window
+	public sealed class AlertDialog : Selector
 	{
+		#region Inspector fields
+		[SerializeField]
+		private EventButton okButton;
+		#endregion
+
 		public EventButton OkButton
 		{
-			get { return Buttons[0]; }
-			set { Buttons[0] = value; }
+			get { return okButton; }
 		}
 	}
 }

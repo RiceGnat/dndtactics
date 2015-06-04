@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DnDEngine;
+using Universal;
 using Universal.UI;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {
@@ -16,30 +18,26 @@ namespace DnDTactics.UI
 	{
 		#region Inspector fields
 		[SerializeField]
-		private Window classPanel;
+		private Selector classPanel;
 		[SerializeField]
-		private ClassButton classButton;
+		private EventButton classButton;
 		[SerializeField]
-		private Window genderPanel;
-		[SerializeField]
-		private Window nameDialog;
+		private Selector genderPanel;
 		#endregion
 
-		private ClassButton maleButton { get { return genderPanel.Buttons[0] as ClassButton; } }
-		private ClassButton femaleButton { get { return genderPanel.Buttons[1] as ClassButton; } }
-		private List<ClassButton> buttonList;
-		private ClassButton lastClass;
-		private ClassButton lastGender;
-		private DnDUnit.ClassType selectedClass { get { return lastClass.Class; } }
-		private DnDUnit.GenderType selectedGender { get { return lastGender.Gender; } }
+		#region Properties
+		private EventButton MaleButton { get { return genderPanel.Buttons[0]; } }
+		private EventButton FemaleButton { get { return genderPanel.Buttons[1]; } }
+		private DnDUnit.ClassType SelectedClass { get { return classPanel.LastSelected.GetData<DnDUnit.ClassType>(); } }
+		private DnDUnit.GenderType SelectedGender { get { return genderPanel.LastSelected.GetData<DnDUnit.GenderType>(); } }
+		#endregion
 
+		#region Methods
 		private void SetSelectedClass(int index)
 		{
-			lastClass = classPanel.Buttons[index] as ClassButton;
-
 			// Will load unit artwork here
-			maleButton.GetComponentInChildren<Text>().text = selectedClass + " placeholder\nMale";
-			femaleButton.GetComponentInChildren<Text>().text = selectedClass + " placeholder\nFemale";
+			MaleButton.GetComponentInChildren<Text>().text = SelectedClass + " placeholder\nMale";
+			FemaleButton.GetComponentInChildren<Text>().text = SelectedClass + " placeholder\nFemale";
 		}
 
 		private void ActivateGender(int index, object data)
@@ -50,13 +48,13 @@ namespace DnDTactics.UI
 
 		private void SetSelectedGender(int index)
 		{
-			lastGender = genderPanel.Buttons[index] as ClassButton;
-		}
+
+		}	
 
 		private void OnGenderCanceled()
 		{
 			genderPanel.Deactivate();
-			var last = lastClass.gameObject;
+			var last = classPanel.LastSelected.gameObject;
 			Activate();
 			EventSystem.current.SetSelectedGameObject(last);
 		}
@@ -64,31 +62,33 @@ namespace DnDTactics.UI
 		private void ShowConfirm(int index, object data)
 		{
 			genderPanel.Deactivate();
-			ModalDialog.Confirm(string.Format("Create a new {0} {1}?", selectedGender.ToString().ToLower(), selectedClass.ToString().ToLower()), ShowNameDialog, OnConfirmCanceled);
+			ModalDialog.Confirm(string.Format("Create a new {0} {1}?", SelectedGender.ToString().ToLower(), SelectedClass.ToString().ToLower()), ShowNameDialog, OnConfirmCanceled);
 		}
 
 		private void ShowNameDialog()
 		{
-			ModalDialog.TextDialog(string.Format("Enter a name for the new {0} {1}:", selectedGender.ToString().ToLower(), selectedClass.ToString().ToLower()), OnNameSubmitted, OnConfirmCanceled);
+			ModalDialog.TextDialog(string.Format("Enter a name for the new {0} {1}:", SelectedGender.ToString().ToLower(), SelectedClass.ToString().ToLower()), OnNameSubmitted, OnConfirmCanceled);
 		}
 
 		private void OnConfirmCanceled()
 		{
-			var last = lastGender.gameObject;
+			var last = genderPanel.LastSelected.gameObject;
 			genderPanel.Activate();
 			EventSystem.current.SetSelectedGameObject(last);
 		}
 
 		private void OnNameSubmitted(int index, object data)
 		{
-			DnDUnit unit = new DnDUnit(data.ToString(), selectedClass, new CoreStats(1, 10, 10, 10, 10, 10, 10, 5, 10), DnDUnit.BodyType.Humanoid, selectedGender);
+			DnDUnit unit = new DnDUnit(data.ToString(), SelectedClass, new CoreStats(1, 10, 10, 10, 10, 10, 10, 5, 10), DnDUnit.BodyType.Humanoid, SelectedGender);
 			unit.Evaluate();
 			if (Debug.isDebugBuild)
 			{
-				Debug.Log(string.Format("Creating new {0} {1} named {2}", selectedGender.ToString().ToLower(), selectedClass.ToString().ToLower(), data));
+				Debug.Log(string.Format("Creating new {0} {1} named {2}", SelectedGender.ToString().ToLower(), SelectedClass.ToString().ToLower(), data));
 				Debug.Log(DnDUnit.Describe(unit).Full);
 			}
 			DataManager.Party.Add(unit);
+
+			Activate();
 		}
 
 		/// <summary>
@@ -102,25 +102,21 @@ namespace DnDTactics.UI
 							where !DataManager.IsClassUnique(c)
 							select c;
 
-			ClassButton button, prev = null;
+			EventButton button, prev = null;
 			RectTransform rectTransform;
-			float offset;
+			float offset = 0;
 			foreach (DnDUnit.ClassType @class in classList)
 			{
 				button = Instantiate(classButton);
 
-				// Set parent to container
-				button.transform.SetParent(classPanel.transform, false);
-
 				// Set button's class value
-				button.Class = @class;
-				button.name = @class.ToString();
+				button.Data = @class;
+				button.Text = DataManager.GetClassDisplayName(@class);
 
-				// Adjust offset
+				// Append button to container
 				rectTransform = button.GetComponent<RectTransform>();
-				offset = rectTransform.rect.height * classPanel.Buttons.Count;
-				rectTransform.offsetMax -= new Vector2(0, offset);
-				rectTransform.offsetMin -= new Vector2(0, offset);
+				classPanel.GetComponent<RectTransform>().Append(rectTransform, offset);
+				offset += rectTransform.rect.height;
 
 				// Add button to list
 				classPanel.Buttons.Add(button);
@@ -129,30 +125,12 @@ namespace DnDTactics.UI
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
-				var nav = button.Selectable.navigation;
-				nav.mode = Navigation.Mode.Explicit;
-				if (prev != null) {
-					nav.selectOnUp = prev.Selectable;
-					var prevNav = prev.Selectable.navigation;
-					prevNav.selectOnDown = button.Selectable;
-					prev.Selectable.navigation = prevNav;
-				}
-				button.Selectable.navigation = nav;
+				button.Base.BindNavigation(prev != null ? prev.Base : null);
 				prev = button;
 			}
 
-			// Bind events
-			classPanel.Selected += SetSelectedClass;
-			classPanel.Clicked += ActivateGender;
-			classPanel.Draw();
-
-			genderPanel.Selected += SetSelectedGender;
-			genderPanel.Clicked += ShowConfirm;
-			genderPanel.Draw();
-
-			// Automatically show first class in list
-			if (classPanel.Buttons.Count > 0)
-				SetSelectedClass(0);
+			// Bind button events
+			classPanel.BindButtonEvents();
 		}
 
 		/// <summary>
@@ -162,15 +140,12 @@ namespace DnDTactics.UI
 		{
 			base.Clear();
 
-			// Clear window events
+			// Clear window data
 			classPanel.Clear();
 			genderPanel.Clear();
 
 			// Clear existing buttons
 			classPanel.ClearButtons();
-
-			lastClass = null;
-			lastGender = null;
 		}
 
 		/// <summary>
@@ -179,6 +154,7 @@ namespace DnDTactics.UI
 		public override void Activate()
 		{
 			classPanel.Activate();
+
 		}
 
 		/// <summary>
@@ -188,13 +164,27 @@ namespace DnDTactics.UI
 		{
 			classPanel.Deactivate();
 		}
+		#endregion
 
 		#region Unity events
 		protected override void Awake()
 		{
 			base.Awake();
-			classPanel.Canceled += OnCanceled;
-			genderPanel.Canceled += OnGenderCanceled;
+
+			// Assign gender data to buttons
+			MaleButton.Data = DnDUnit.GenderType.Male;
+			FemaleButton.Data = DnDUnit.GenderType.Female;
+
+			// Bind control events
+			classPanel.Selected += SetSelectedClass;
+			classPanel.Clicked += ActivateGender;
+
+			genderPanel.Selected += SetSelectedGender;
+			genderPanel.Clicked += ShowConfirm;
+			genderPanel.BindButtonEvents();
+
+			classPanel.Delegates.Add(EventKey.Cancel, OnCanceled);
+			genderPanel.Delegates.Add(EventKey.Cancel, OnGenderCanceled);
 		}
 
 		protected override void Start()

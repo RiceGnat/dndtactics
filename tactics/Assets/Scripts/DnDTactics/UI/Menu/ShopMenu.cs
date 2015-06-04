@@ -4,17 +4,19 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using DnDEngine.Items;
+using Universal;
 using Universal.UI;
+using DnDTactics.Data;
 
 namespace DnDTactics.UI
 {
-	public class ShopMenu : Universal.UI.UIPanel
+	public class ShopMenu : UIPanel
 	{
 		#region Inspector fields
 		[SerializeField]
 		private EventButton itemButton;
 		[SerializeField]
-		private Window itemPanel;
+		private Selector itemPanel;
 		[SerializeField]
 		private ScrollRect scrollRegion;
 		[SerializeField]
@@ -86,7 +88,7 @@ namespace DnDTactics.UI
 				button = Instantiate(itemButton);
 
 				// Set button name and text
-				button.SetText(String.Format("{0} ({1})", equipList[i].Name, equipList[i].Description));
+				button.Text = String.Format("{0} ({1})", equipList[i].Name, equipList[i].Description);
 
 				// Adjust item offset and container height
 				rectTransform = button.GetComponent<RectTransform>();
@@ -100,13 +102,13 @@ namespace DnDTactics.UI
 				button.gameObject.SetActive(true);
 
 				// Set button navigation
-				button.Selectable.BindNavigation(prev != null ? prev.Selectable : null);
+				button.Base.BindNavigation(prev != null ? prev.Base : null);
 				prev = button;
 			}
 
 			itemPanel.Clicked += ShowConfirm;
 			itemPanel.Selected += BindDetails;
-			itemPanel.Canceled += OnCanceled;
+			itemPanel.Delegates.Add(EventKey.Cancel, OnCanceled);
 			itemPanel.Draw();
 		}
 

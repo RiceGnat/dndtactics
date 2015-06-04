@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Universal.UI
 {
-	public class ConfirmDialog : Window
+	public class ConfirmDialog : Selector
 	{
 		public EventButton YesButton
 		{
