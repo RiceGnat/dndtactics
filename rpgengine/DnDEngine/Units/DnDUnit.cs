@@ -49,20 +49,12 @@ namespace DnDEngine
 
 		#region Override properties inherited from RPGEngine.Unit
 		/// <summary>
-		/// Gets this unit's class as a string.
-		/// </summary>
-		public override string Class
-		{
-			get { return classEnum.ToString(); }
-			protected set { }
-		}
-		/// <summary>
 		/// Gets this unit's level.
 		/// </summary>
 		public override ushort Level
 		{
 			get { return (ushort)Stats[CoreStats.Type.LVL]; }
-			protected set { }
+            protected set { Core.LVL = (short)value; }
 		}
 
 		/// <summary>
@@ -154,32 +146,43 @@ namespace DnDEngine
 			extensions.LinkUnit(this);
 		}
 
-		#region Constructors
+        #region Constructors
+        public DnDUnit(string className, BodyType body = BodyType.Inanimate, GenderType gender = GenderType.None)
+            : this(className, className, body, gender) { }
+
+        public DnDUnit(string name, string className, BodyType body = BodyType.Inanimate, GenderType gender = GenderType.None)
+            : this(name, className, null, body, gender) { }
+
 		/// <summary>
 		/// Creates a new DnDUnit object with the specified parameters. Name is set to the class.
 		/// </summary>
-		/// <param name="class">The unit's class.</param>
+        /// <param name="className">The unit's class.</param>
 		/// <param name="coreStats">The unit's core stats.</param>
 		/// <param name="body">(optional) The unit's body shape. This is used to set up equipment slots.</param>
 		/// <param name="gender">(optional) The unit's gender.</param>
-		public DnDUnit(ClassType @class, CoreStats coreStats, BodyType body = BodyType.Inanimate, GenderType gender = GenderType.None)
-			: this(@class.ToString(), @class, coreStats, body, gender) { }
+		public DnDUnit(string className, CoreStats coreStats, BodyType body = BodyType.Inanimate, GenderType gender = GenderType.None)
+            : this(className, className, coreStats, body, gender) { }
 
 		/// <summary>
 		/// Creates a new DnDUnit object with the specified parameters.
 		/// </summary>
 		/// <param name="name">The unit's name.</param>
-		/// <param name="class">The unit's class.</param>
+        /// <param name="className">The unit's class.</param>
 		/// <param name="coreStats">The unit's core stats.</param>
 		/// <param name="body">(optional) The unit's body shape. This is used to set up equipment slots.</param>
 		/// <param name="gender">(optional) The unit's gender.</param>
-		public DnDUnit(string name, ClassType @class, CoreStats coreStats, BodyType body = BodyType.Inanimate, GenderType gender = GenderType.None)
+		public DnDUnit(string name, string className, CoreStats coreStats, BodyType body = BodyType.Inanimate, GenderType gender = GenderType.None)
 		{
 			Name = name;
-			classEnum = @class;
+			//classEnum = @class;
 			this.body = body;
 			this.gender = gender;
-			Core = coreStats;
+
+            if (coreStats == null)
+            {
+                Core = UnitClass.Get(className).BaseStats;
+            }
+            else Core = coreStats;
 
 			extensions = new UnitExtensions(this);
 			LinkStats();

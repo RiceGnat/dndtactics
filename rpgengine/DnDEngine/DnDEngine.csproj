@@ -69,6 +69,7 @@
     <Compile Include="Units\DnDUnit.Enums.cs" />
     <Compile Include="Units\DnDUnit.UnitExtensions.cs" />
     <Compile Include="Units\StatsRouter.cs" />
+    <Compile Include="Units\UnitClass.cs" />
     <Compile Include="Units\UnitModifier.cs" />
   </ItemGroup>
   <ItemGroup>
