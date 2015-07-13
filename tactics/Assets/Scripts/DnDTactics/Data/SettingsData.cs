@@ -12,7 +12,6 @@ namespace DnDTactics.Data
 		public void Apply()
 		{
 			CommandPanel.IsEnabled = showCommandBox;
-			UIManager.CommandBox.gameObject.SetActive(showCommandBox);
 		}
 	} 
 }

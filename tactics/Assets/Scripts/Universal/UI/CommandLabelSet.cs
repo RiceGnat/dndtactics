@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Universal.UI
 {
+	/// <summary>
+	/// Associates labels to the Universal.EventKeys captured by UIPanel.
+	/// </summary>
 	[Serializable]
 	public class CommandLabelSet
 	{
@@ -13,6 +16,7 @@ namespace Universal.UI
 		public string this[int i]
 		{
 			get { return labels[i]; }
+			set { labels[i] = value; }
 		}
 	}
 }

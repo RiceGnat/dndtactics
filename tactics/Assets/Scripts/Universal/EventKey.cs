@@ -5,11 +5,16 @@ namespace Universal
 {
 	public sealed class EventKey
 	{
-		public string Name { get; private set; }
+		private static int index = 0;
 
-		public EventKey(string name)
+		public string Name { get; private set; }
+		public int Index { get; private set; }
+
+		private EventKey(string name)
 		{
 			Name = name;
+			Index = index;
+			index++;
 		}
 
 		public static EventKey Submit = new EventKey("Submit");

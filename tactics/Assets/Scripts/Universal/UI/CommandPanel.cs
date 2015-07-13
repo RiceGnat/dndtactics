@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Universal.UI
 {
+	/// <summary>
+	/// Displays labels for possible actions on the active panel. Buttons are displayed in the order of UIPanel.CapturedInputs.
+	/// </summary>
 	public class CommandPanel : UIPanel
 	{
 		#region Inspector fields
@@ -12,23 +15,43 @@ namespace Universal.UI
 		#endregion
 
 		#region Fields
+		private static CommandPanel instance;
 		private List<EventButton> buttons = new List<EventButton>();
 		private UIPanel target;
 		#endregion
 
+		private static bool isEnabled = true;
+
 		#region Properties
-		public static bool IsEnabled { get; set; }
+		/// <summary>
+		/// Gets or sets the enabled state of the command box
+		/// </summary>
+		public static bool IsEnabled
+		{
+			get
+			{
+				return isEnabled;
+			}
+			set
+			{
+				isEnabled = value;
+				instance.gameObject.SetActive(isEnabled);
+			}
+		}
 		#endregion
 
 		#region Methods
 		/// <summary>
-		/// Binds the command box to a target UIPanel.
+		/// Binds the singleton command box instance to a target UIPanel. If CommandPanel.IsEnabled is false, silently fails.
 		/// </summary>
 		/// <param name="target"></param>
-		public void Bind(UIPanel target)
+		public static void Bind(UIPanel target)
 		{
-			this.target = target;
-			Refresh();
+			if (isEnabled)
+			{
+				instance.target = target;
+				instance.Refresh();
+			}
 		}
 
 		/// <summary>
@@ -56,6 +79,7 @@ namespace Universal.UI
 				offset -= rectTransform.rect.height;
 
 				// Add button to list
+				button.ID = buttons.Count;
 				buttons.Add(button);
 
 				// Show the button
@@ -108,9 +132,19 @@ namespace Universal.UI
 		#region Unity events
 		protected override void Awake()
 		{
-			base.Awake();
+			if (instance != null)
+			{
+				// Selfdestruct if there is already a CommandPanel present
+				Destroy(gameObject);
+			}
+			else
+			{
+				instance = this;
 
-			commandButton.gameObject.SetActive(false);
+				base.Awake();
+
+				commandButton.gameObject.SetActive(false);
+			}
 		}
 		#endregion
 	}
