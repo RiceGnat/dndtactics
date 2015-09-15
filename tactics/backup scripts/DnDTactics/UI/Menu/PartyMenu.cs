@@ -19,62 +19,56 @@ namespace DnDTactics.UI
 		private ScrollRect partyScrollRect;
 		[SerializeField]
 		private UnitCard unitCard;
-		[SerializeField]
-		private UnitDetails detailsPage;
 		#endregion
 
-		private int lastIndex;
-
-		private UnitCard lastSelected { get { return Buttons[lastIndex].GetComponent<UnitCard>(); } }
-		private RectTransform partyContainer { get { return partyScrollRect.content; } }
+		private UnitDetails DetailsPage { get { return UIManager.UnitDetailsPage; } }
+		private UnitCard LastUnit { get { return LastSelected.GetComponent<UnitCard>(); } }
+		private RectTransform PartyContainer { get { return partyScrollRect.content; } }
 
 		private void BindDetails(int index, object data)
 		{
-			lastIndex = index;
 			Deactivate();
-			detailsPage.Bind(lastSelected.Unit);
+			DetailsPage.Bind(LastUnit.Unit);
 
-			detailsPage.Delegates.Add(EventKey.Cancel, CloseDetails);
-			detailsPage.Delegates.Add(EventKey.BumperL, BindPrev);
-			detailsPage.Delegates.Add(EventKey.BumperR, BindNext);
-			//detailsPage.Canceled += CloseDetails;
-			//detailsPage.BumperL += BindPrev;
-			//detailsPage.BumperR += BindNext;
+			DetailsPage.Delegates.Add(EventKey.Cancel, CloseDetails);
+			DetailsPage.Delegates.Add(EventKey.BumperL, BindPrev);
+			DetailsPage.Delegates.Add(EventKey.BumperR, BindNext);
 
 			// UnitDetails page automatically calls Activate()
-			detailsPage.Show();
+			DetailsPage.Show();
 		}
 
 		private void BindNext()
 		{
-			if (lastIndex + 1 < Buttons.Count)
+			if (LastSelected.ID + 1 < Buttons.Count)
 			{
-				lastIndex++;
-				detailsPage.Bind(lastSelected.Unit);
-				detailsPage.Refresh();
+				LastSelected = Buttons[LastSelected.ID + 1];
+				DetailsPage.Bind(LastUnit.Unit);
+				DetailsPage.Refresh();
 			}
 		}
 
 		private void BindPrev()
 		{
-			if (lastIndex > 0)
+			if (LastSelected.ID > 0)
 			{
-				lastIndex--;
-				detailsPage.Bind(lastSelected.Unit);
-				detailsPage.Refresh();
+				LastSelected = Buttons[LastSelected.ID - 1];
+				DetailsPage.Bind(LastUnit.Unit);
+				DetailsPage.Refresh();
 			}
 		}
 
 		private void CloseDetails()
 		{
 			// Clean up UnitDetails page
-			detailsPage.Delegates.Remove(EventKey.Cancel, CloseDetails);
-			detailsPage.Delegates.Remove(EventKey.BumperL, BindPrev);
-			detailsPage.Delegates.Remove(EventKey.BumperR, BindNext);
-			detailsPage.Hide();
+			DetailsPage.Delegates.Remove(EventKey.Cancel, CloseDetails);
+			DetailsPage.Delegates.Remove(EventKey.BumperL, BindPrev);
+			DetailsPage.Delegates.Remove(EventKey.BumperR, BindNext);
+			DetailsPage.Hide();
 
+			var last = LastUnit.gameObject;
 			Activate();
-			EventSystem.current.SetSelectedGameObject(lastSelected.gameObject);
+			EventSystem.current.SetSelectedGameObject(last);
 		}
 
 		/// <summary>
@@ -95,7 +89,7 @@ namespace DnDTactics.UI
 
 				// Append card to container
 				rectTransform = card.GetComponent<RectTransform>();
-				partyContainer.Append(rectTransform, offset);
+				PartyContainer.Append(rectTransform, offset);
 				offset += rectTransform.rect.height + 20;
 
 				// Bind card to unit
@@ -115,7 +109,7 @@ namespace DnDTactics.UI
 			}
 
 			// Add space for gutter in scroll region
-			partyContainer.offsetMin += new Vector2(0, unitCard.GetComponent<RectTransform>().offsetMax.y);
+			PartyContainer.offsetMin += new Vector2(0, unitCard.GetComponent<RectTransform>().offsetMax.y);
 
 			BindButtonEvents();
 		}
@@ -131,7 +125,7 @@ namespace DnDTactics.UI
 			ClearButtons();
 
 			// Reset scroll height
-			partyContainer.offsetMin = Vector2.Scale(partyContainer.offsetMin, new Vector2(1, 0));
+			PartyContainer.offsetMin = Vector2.Scale(PartyContainer.offsetMin, new Vector2(1, 0));
 		}
 
 		#region Unity events

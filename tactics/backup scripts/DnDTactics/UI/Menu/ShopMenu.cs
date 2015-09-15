@@ -108,7 +108,7 @@ namespace DnDTactics.UI
 
 			itemPanel.Clicked += ShowConfirm;
 			itemPanel.Selected += BindDetails;
-			itemPanel.Delegates.Add(EventKey.Cancel, OnCanceled);
+			itemPanel.Delegates.Add(EventKey.Cancel, () => { Delegates.Raise(EventKey.Cancel); });
 			itemPanel.Draw();
 		}
 

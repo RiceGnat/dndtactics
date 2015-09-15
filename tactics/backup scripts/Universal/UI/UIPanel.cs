@@ -13,15 +13,15 @@ namespace Universal.UI
 	[RequireComponent(typeof(RectTransform))]
 	public class UIPanel : MonoBehaviour
 	{
-		public void OnCanceled() {  }
-		public virtual void ClearEvents() { }
+		//public void OnCanceled() {  }
+		//public virtual void ClearEvents() { }
 		#region Inspector fields
 		[SerializeField]
 		private CommandLabelSet commandLabels;
 		#endregion
 
 		#region Fields
-		private static EventKey[] capturedInputs = new EventKey[] { EventKey.Submit, EventKey.Cancel, EventKey.ButtonX, EventKey.ButtonY, EventKey.BumperL, EventKey.BumperR };
+		private static EventKey[] capturedInputs = new EventKey[] { EventKey.Submit, EventKey.ButtonX, EventKey.ButtonY, EventKey.BumperL, EventKey.BumperR, EventKey.Cancel };
 		private UnityActionSet delegates = new UnityActionSet();
 
 		protected static UIPanel activeWindow;
@@ -114,10 +114,7 @@ namespace Universal.UI
 			IsActivated = true;
 			activeWindow = this;
 
-			if (CommandPanel.IsEnabled)
-			{
-				UIManager.CommandBox.Bind(this);
-			}
+			CommandPanel.Bind(this);
 		}
 
 		/// <summary>

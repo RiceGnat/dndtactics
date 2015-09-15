@@ -8,17 +8,16 @@ namespace Universal.UI
 	{
 		private static float lines = UIPanel.CapturedInputs.Length;
 		private static float lineOffset = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-		private bool isExpanded = false;
-		
+
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
 
 			var labels = property.FindPropertyRelative("labels");
 
-			isExpanded = EditorGUI.Foldout(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight), isExpanded, label);
+			property.isExpanded = EditorGUI.Foldout(new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight), property.isExpanded, label, true);
 
-			if (isExpanded)
+			if (property.isExpanded)
 			{
 				EditorGUI.indentLevel++;
 				for (int i = 0; i < lines; i++)
@@ -33,7 +32,7 @@ namespace Universal.UI
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
-			return lineOffset * (isExpanded ? lines + 1 : 1) - 2;
+			return lineOffset * (property.isExpanded ? lines + 1 : 1) - 2;
 		}
 	}
 }

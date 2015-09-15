@@ -51,6 +51,7 @@ namespace DnDTactics.UI
 		/// </summary>
 		public IEquipped UnitEquipment { get { return Unit != null ? Unit.Extensions as IEquipped : null; } }
 
+		#region Methods
 		/// <summary>
 		/// Draws the equipment list.
 		/// </summary>
@@ -103,7 +104,9 @@ namespace DnDTactics.UI
 			ClearButtons();
 			Container.CollapseUp();
 		}
+		#endregion
 
+		#region Unity events
 		protected override void Awake()
 		{
 			base.Awake();
@@ -116,5 +119,6 @@ namespace DnDTactics.UI
 
 			itemButton.gameObject.SetActive(false);
 		}
+		#endregion
 	}
 }

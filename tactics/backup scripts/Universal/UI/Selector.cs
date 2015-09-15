@@ -23,7 +23,6 @@ namespace Universal.UI
 		#endregion
 
 		#region Fields
-		private int selectedButtonIndex;
 		#endregion
 
 		#region Properties
@@ -38,7 +37,7 @@ namespace Universal.UI
 		/// <summary>
 		/// Gets the last selected EventButton
 		/// </summary>
-		public virtual EventButton LastSelected { get; private set; }
+		public virtual EventButton LastSelected { get; protected set; }
 
 		/// <summary>
 		/// Gets the cancel button for the window.
@@ -66,7 +65,7 @@ namespace Universal.UI
 		#region Methods
 		protected virtual void OnButtonClicked()
 		{
-			if (Clicked != null) Clicked(selectedButtonIndex, Data);
+			if (Clicked != null) Clicked(LastSelected.ID, Data);
 		}
 
 		protected virtual void OnButtonSelected(Button sender, BaseEventData eventData)
@@ -77,10 +76,9 @@ namespace Universal.UI
 				Activate();
 			}
 
-			selectedButtonIndex = sender.GetComponent<EventButton>().ID;
 			LastSelected = sender.GetComponent<EventButton>();
 
-			if (Selected != null) Selected(selectedButtonIndex);
+			if (Selected != null) Selected(LastSelected.ID);
 		}
 
 		protected virtual void OnButtonCanceled()
@@ -137,6 +135,15 @@ namespace Universal.UI
 
 			Data = null;
 			Message = "";
+		}
+
+		/// <summary>
+		/// Redraws panel while preserving data.
+		/// </summary>
+		public override void Refresh()
+		{
+			base.Clear();
+			Draw();
 		}
 
 		/// <summary>

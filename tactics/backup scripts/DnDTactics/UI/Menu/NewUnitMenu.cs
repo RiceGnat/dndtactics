@@ -40,6 +40,11 @@ namespace DnDTactics.UI
 			FemaleButton.GetComponentInChildren<Text>().text = SelectedClass + " placeholder\nFemale";
 		}
 
+		private void OnClassCanceled()
+		{
+			Delegates.Raise(EventKey.Cancel);
+		}
+
 		private void ActivateGender(int index, object data)
 		{
 			Deactivate();
@@ -183,13 +188,14 @@ namespace DnDTactics.UI
 			genderPanel.Clicked += ShowConfirm;
 			genderPanel.BindButtonEvents();
 
-			classPanel.Delegates.Add(EventKey.Cancel, OnCanceled);
+			classPanel.Delegates.Add(EventKey.Cancel, OnClassCanceled);
 			genderPanel.Delegates.Add(EventKey.Cancel, OnGenderCanceled);
 		}
 
 		protected override void Start()
 		{
 			base.Start();
+
 			classButton.gameObject.SetActive(false);
 		}
 		#endregion

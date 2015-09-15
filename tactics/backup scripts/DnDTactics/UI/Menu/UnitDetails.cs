@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System;
 using DnDEngine;
 using DnDEngine.Items;
+using Universal;
 using Universal.UI;
 
 namespace DnDTactics.UI
@@ -19,10 +20,11 @@ namespace DnDTactics.UI
 		private ItemPopout popout;
 		#endregion
 
-		private RectTransform equipmentContainer { get { return equipmentPanel.GetComponent<ScrollRect>().content; } }
-
 		private EquipIndex lastActiveEquipSlot;
-		
+
+		private RectTransform EquipmentContainer { get { return equipmentPanel.GetComponent<ScrollRect>().content; } }
+
+		#region Methods
 		private void EquipItem(int index, object data)
 		{
 			
@@ -67,29 +69,30 @@ namespace DnDTactics.UI
 
 			EventSystem.current.SetSelectedGameObject(null);
 		}
+		#endregion
 
 		#region Unity events
 		protected override void Awake()
 		{
 			base.Awake();
 
-			//// Bind UIPanel events (these will not be cleared)
-			//Submitted += () =>
-			//{
-			//	Deactivate();
-			//	// Activate equipment if A button is pressed
-			//	equipmentPanel.Activate();
-			//};
+			// Activate equipment panel on submit button press
+			Delegates.Add(EventKey.Submit, () =>
+			{
+				Deactivate();
+				equipmentPanel.Activate();
+			});
 
-			//equipmentPanel.Selected += (int index) =>
-			//{
-			//	EquipIndex target = equipmentPanel.Buttons[index].Data as EquipIndex;
-			//	if (target.Equip == null) popout.Hide();
-			//	else if (!popout.gameObject.activeSelf) popout.Show();
-			//	popout.Data = target.Equip;
-			//	popout.Refresh();
-			//};
-
+			// Show selected equipment's details
+			equipmentPanel.Selected += (int index) =>
+			{
+				EquipIndex target = equipmentPanel.Buttons[index].Data as EquipIndex;
+				if (target.Equip == null) popout.Hide();
+				else if (!popout.gameObject.activeSelf) popout.Show();
+				popout.Data = target.Equip;
+				popout.Refresh();
+			}; 
+			
 			//equipmentPanel.Clicked += (int index, object data) =>
 			//{
 			//	EquipIndex target = data as EquipIndex; 
@@ -103,11 +106,12 @@ namespace DnDTactics.UI
 			//	}
 			//};
 
-			//equipmentPanel.Canceled += () =>
-			//{
-			//	equipmentPanel.Deactivate();
-			//	Activate();
-			//};
+			// Deactivate equipment
+			equipmentPanel.Delegates.Add(EventKey.Cancel, () =>
+			{
+				equipmentPanel.Deactivate();
+				Activate();
+			});
 
 			//equipmentPanel.ButtonX += () =>
 			//{
@@ -131,17 +135,19 @@ namespace DnDTactics.UI
 			//	}
 			//};
 
-			//equipmentPanel.BumperR += () =>
-			//{
-			//	equipmentPanel.Deactivate();
-			//	inventoryPanel.Activate();
-			//};
+			// Shift focus from equipment to inventory
+			equipmentPanel.Delegates.Add(EventKey.BumperR, () =>
+			{
+				equipmentPanel.Deactivate();
+				inventoryPanel.Activate();
+			});
 
-			//inventoryPanel.Canceled += () =>
-			//{
-			//	inventoryPanel.Deactivate();
-			//	Activate();
-			//};
+			// Deactivate inventory
+			inventoryPanel.Delegates.Add(EventKey.Cancel, () =>
+			{
+				inventoryPanel.Deactivate();
+				Activate();
+			});
 
 			//inventoryPanel.ButtonX += () =>
 			//{
@@ -167,21 +173,12 @@ namespace DnDTactics.UI
 			//	}
 			//};
 
-			//inventoryPanel.BumperL += () =>
-			//{
-			//	inventoryPanel.Deactivate();
-			//	equipmentPanel.Activate();
-			//};
-		}
-
-		protected override void Update()
-		{
-			base.Update();
-
-			if (IsActivated)
+			// Shift focus from inventory to equipment
+			inventoryPanel.Delegates.Add(EventKey.BumperL, () =>
 			{
-
-			}
+				inventoryPanel.Deactivate();
+				equipmentPanel.Activate();
+			});
 		}
 		#endregion
 	}

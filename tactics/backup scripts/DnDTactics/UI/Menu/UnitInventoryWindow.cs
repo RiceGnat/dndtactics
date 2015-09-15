@@ -4,6 +4,7 @@ using System;
 using RPGEngine;
 using DnDEngine;
 using DnDEngine.Items;
+using Universal;
 using Universal.UI;
 using DnDTactics.Data;
 
@@ -23,17 +24,7 @@ namespace DnDTactics.UI
 		private RectTransform container;
 		private bool showCaravan = false;
 
-		/// <summary>
-		/// Gets this window's bound unit.
-		/// </summary>
-		public IUnit Unit
-		{
-			get
-			{
-				return Data as IUnit;
-			}
-		}
-
+		#region Properties
 		/// <summary>
 		/// Gets this window's content container.
 		/// </summary>
@@ -49,13 +40,15 @@ namespace DnDTactics.UI
 		/// <summary>
 		/// Gets the bound unit's inventory.
 		/// </summary>
-		public IInventory UnitInventory { get { return Unit != null ? Unit.Extensions as IInventory : null; } }
+		public IInventory UnitInventory { get { return Data != null ? GetData<IUnit>().Extensions as IInventory : null; } }
 
 		/// <summary>
 		/// Gets whether or not the panel is showing the caravan.
 		/// </summary>
 		public bool IsCaravan { get { return showCaravan; } }
+		#endregion
 
+		#region Methods
 		/// <summary>
 		/// Draws the equipment list.
 		/// </summary>
@@ -67,6 +60,8 @@ namespace DnDTactics.UI
 
 			var list = showCaravan ? DataManager.Caravan : UnitInventory.All;
 			Message = showCaravan ? "Caravan" : "Inventory";
+			CommandLabels[Array.IndexOf<EventKey>(UIPanel.CapturedInputs, EventKey.ButtonY)] = showCaravan ? "Inventory" : "Caravan";
+			CommandPanel.Bind(this);
 
 			// Draw inventory panel
 			foreach (var item in list)
@@ -115,28 +110,25 @@ namespace DnDTactics.UI
 			ClearButtons();
 			Container.CollapseUp();
 		}
+		#endregion
 
-		/// <summary>
-		/// Redraws the window while preserving data and state.
-		/// </summary>
-		public override void Refresh()
-		{
-			bool caravan = showCaravan;
-			base.Refresh();
-			showCaravan = caravan;
-		}
-
+		#region Unity events
 		protected override void Awake()
 		{
 			base.Awake();
 
-			//ButtonY += () =>
-			//{
-			//	showCaravan = !showCaravan;
-			//	Deactivate();
-			//	Refresh();
-			//	Activate();
-			//};
+			Delegates.Add(EventKey.ButtonY, () =>
+			{
+				showCaravan = !showCaravan;
+				Deactivate();
+				Refresh();
+				Activate();
+			});
+
+			Delegates.Add(EventKey.Cancel, () =>
+			{
+				showCaravan = false;
+			});
 		}
 
 		protected override void Start()
@@ -145,5 +137,6 @@ namespace DnDTactics.UI
 
 			itemButton.gameObject.SetActive(false);
 		}
+		#endregion
 	}
 }
