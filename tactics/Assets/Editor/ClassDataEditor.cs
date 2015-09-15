@@ -6,28 +6,92 @@ namespace DnDTactics.Data
 	[CustomPropertyDrawer(typeof(ClassData))]
 	public class ClassDataEditor : PropertyDrawer
 	{
-		private const float lines = 4;
+		private const float lines = 8;
 		private static float lineOffset = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
 
-			var @class = property.FindPropertyRelative("class");
-			var className = property.FindPropertyRelative("className");
-			var classArtwork = property.FindPropertyRelative("classArtwork");
-			var classPortrait = property.FindPropertyRelative("classPortrait");
+			var name = property.FindPropertyRelative("name");
+			var artwork = property.FindPropertyRelative("artwork");
+			var portrait = property.FindPropertyRelative("portrait");
 			var unique = property.FindPropertyRelative("unique");
+			var baseStats = property.FindPropertyRelative("baseStats");
+			var pointCosts = property.FindPropertyRelative("pointCosts");
+			var movement = property.FindPropertyRelative("movement");
 
-			var quarterWidth = position.width / 4;
+			Rect pos = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
 
 			float oldLabelWidth = EditorGUIUtility.labelWidth;
-			EditorGUIUtility.labelWidth = 90;
-			EditorGUI.PropertyField(new Rect(position.x, position.y, quarterWidth, EditorGUIUtility.singleLineHeight), @class, GUIContent.none);
-			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y, quarterWidth * 3, EditorGUIUtility.singleLineHeight), className, new GUIContent("Display as"));
-			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y + lineOffset, quarterWidth * 3, EditorGUIUtility.singleLineHeight), classArtwork, new GUIContent("Artwork"));
-			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y + lineOffset * 2, quarterWidth * 3, EditorGUIUtility.singleLineHeight), classPortrait, new GUIContent("Portrait"));
-			EditorGUI.PropertyField(new Rect(position.x + quarterWidth, position.y + lineOffset * 3, quarterWidth * 3, EditorGUIUtility.singleLineHeight), unique, new GUIContent("Unique"));
+			EditorGUIUtility.labelWidth = 100;
+			EditorGUI.PropertyField(pos, name, new GUIContent("Name"));
+			pos.y += lineOffset;
+			EditorGUI.PropertyField(pos, unique, new GUIContent("Unique"));
+			pos.y += lineOffset;
+			EditorGUI.PropertyField(pos, artwork, new GUIContent("Artwork"));
+			pos.y += lineOffset;
+			EditorGUI.PropertyField(pos, portrait, new GUIContent("Portrait"));
+			pos.y += lineOffset;
+
+			Rect gridPos = new Rect(pos);
+			gridPos.x += EditorGUIUtility.labelWidth;
+			gridPos.width = (position.width - EditorGUIUtility.labelWidth) / 6;
+			GUI.Label(gridPos, "STR");
+			gridPos.x += gridPos.width;
+			GUI.Label(gridPos, "CON");
+			gridPos.x += gridPos.width;
+			GUI.Label(gridPos, "DEX");
+			gridPos.x += gridPos.width;
+			GUI.Label(gridPos, "INT");
+			gridPos.x += gridPos.width;
+			GUI.Label(gridPos, "WIS");
+			gridPos.x += gridPos.width;
+			GUI.Label(gridPos, "CHA");
+
+			pos.y += lineOffset;
+			EditorGUI.PrefixLabel(pos, new GUIContent("Base Stats"));
+
+			EditorGUI.indentLevel--;
+			gridPos.y += lineOffset;
+			gridPos.x = pos.x + EditorGUIUtility.labelWidth;
+			baseStats.arraySize = 6;
+			EditorGUI.PropertyField(gridPos, baseStats.GetArrayElementAtIndex(0), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, baseStats.GetArrayElementAtIndex(1), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, baseStats.GetArrayElementAtIndex(2), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, baseStats.GetArrayElementAtIndex(3), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, baseStats.GetArrayElementAtIndex(4), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, baseStats.GetArrayElementAtIndex(5), new GUIContent());
+			EditorGUI.indentLevel++;
+
+			pos.y += lineOffset;
+			EditorGUI.PrefixLabel(pos, new GUIContent("Point Costs"));
+
+			EditorGUI.indentLevel--;
+			gridPos.y += lineOffset;
+			gridPos.x = pos.x + EditorGUIUtility.labelWidth;
+			pointCosts.arraySize = 6;
+			EditorGUI.PropertyField(gridPos, pointCosts.GetArrayElementAtIndex(0), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, pointCosts.GetArrayElementAtIndex(1), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, pointCosts.GetArrayElementAtIndex(2), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, pointCosts.GetArrayElementAtIndex(3), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, pointCosts.GetArrayElementAtIndex(4), new GUIContent());
+			gridPos.x += gridPos.width;
+			EditorGUI.PropertyField(gridPos, pointCosts.GetArrayElementAtIndex(5), new GUIContent());
+			EditorGUI.indentLevel++;
+
+			pos.y += lineOffset;
+			EditorGUI.PropertyField(pos, movement, new GUIContent("Movement"));
+
 			EditorGUIUtility.labelWidth = oldLabelWidth;
 
 			EditorGUI.EndProperty();

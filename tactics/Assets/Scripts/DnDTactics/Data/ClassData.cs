@@ -10,10 +10,17 @@ namespace DnDTactics.Data
 	[Serializable]
 	public class ClassData
 	{
-		public DnDUnit.ClassType @class;
-		public string className;
-		public Sprite classArtwork;
-		public Sprite classPortrait;
+		public string name;
+		public Sprite artwork;
+		public Sprite portrait;
 		public bool unique;
+		public short[] baseStats;
+		public short[] pointCosts;
+		public short movement;
+
+		public CoreStats BaseStats
+		{
+			get { return new CoreStats(1, baseStats[0], baseStats[1], baseStats[2], baseStats[3], baseStats[4], baseStats[5], movement); }
+		}
 	}
 }

@@ -6,8 +6,8 @@ namespace DnDTactics.UI
 	{
 		void Start()
 		{
-			UIManager.UnitDetailsPage.gameObject.SetActive(false);
-			UIManager.GameMenu.Activate();
+			//UIManager.UnitDetailsPage.gameObject.SetActive(false);
+			//UIManager.GameMenu.Activate();
 		}
 	}
 }

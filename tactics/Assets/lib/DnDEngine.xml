@@ -198,8 +198,9 @@
         </member>
         <member name="M:DnDEngine.Combat.CombatDetails.ToString">
             <summary>
-            Gets a short summary of the combat action.
+            Gets the combat summary.
             </summary>
+            <returns>Summary string</returns>
         </member>
         <member name="P:DnDEngine.Combat.CombatDetails.Attacker">
             <summary>
@@ -304,6 +305,146 @@
         <member name="F:DnDEngine.Combat.CombatDetails.MissedBy.DexBonus">
             <summary>
             Defender evaded the attack.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Combat.DamageDetails">
+            <summary>
+            Contains detailed damage values organized by energy type.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Combat.DamageDetails.AddRoll(System.Int32,System.String,DnDEngine.Combat.Magic.Spell.EnergyType)">
+            <summary>
+            Adds a die roll only.
+            </summary>
+            <param name="roll">Die roll total</param>
+            <param name="breakdown">Die roll breakdown string</param>
+            <param name="energy">(optional) Energy type</param>
+        </member>
+        <member name="M:DnDEngine.Combat.DamageDetails.Add(System.Int32,System.String,System.Int32,DnDEngine.Combat.Magic.Spell.EnergyType)">
+            <summary>
+            Adds a die roll and calculated damage value.
+            </summary>
+            <param name="roll">Die roll total</param>
+            <param name="breakdown">Die roll breakdown string</param>
+            <param name="damage">Calculated damage value</param>
+            <param name="energy">(optional) Energy type</param>
+        </member>
+        <member name="M:DnDEngine.Combat.DamageDetails.#ctor">
+            <summary>
+            Initializes an empty DamageDetails object.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Combat.DamageDetails.#ctor(System.Int32,System.String,System.Int32,DnDEngine.Combat.Magic.Spell.EnergyType)">
+            <summary>
+            Initializes a DamageDetails object with the given values.
+            </summary>
+            <param name="roll">Die roll total</param>
+            <param name="breakdown">Die roll breakdown string</param>
+            <param name="damage">Calculated damage value</param>
+            <param name="energy">(optional) Energy type</param>
+        </member>
+        <member name="M:DnDEngine.Combat.DamageDetails.ToString">
+            <summary>
+            Gets the damage summary.
+            </summary>
+            <returns>Summary string</returns>
+        </member>
+        <member name="P:DnDEngine.Combat.DamageDetails.Rolls">
+            <summary>
+            Gets the die roll totals organized by energy type.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.DamageDetails.Breakdowns">
+            <summary>
+            Gets the die roll breakdown strings organized by energy type.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.DamageDetails.Damages">
+            <summary>
+            Gets the total damage values after bonus organized by energy type.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.DamageDetails.Total">
+            <summary>
+            Gets the total damage value.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.DamageDetails.Item(DnDEngine.Combat.Magic.Spell.EnergyType)">
+            <summary>
+            Gets the damage total for the given energy type.
+            </summary>
+            <param name="energy">Energy type</param>
+            <returns>The total damage after bonus for the given energy type</returns>
+        </member>
+        <member name="P:DnDEngine.Combat.DamageDetails.Summary">
+            <summary>
+            Gets a short summary of the damage.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.DamageDetails.Full">
+            <summary>
+            Gets a full detailed description of the damage values.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Combat.InitiativeDetails">
+            <summary>
+            Contains details about an initiative roll.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Combat.InitiativeDetails.Zero(RPGEngine.IUnit)">
+            <summary>
+            Gets a zero-value initiative.
+            </summary>
+            <param name="unit">(optional) The unit whose name will be used</param>
+            <returns>A new zero-valued InitiativeDetails object</returns>
+        </member>
+        <member name="M:DnDEngine.Combat.InitiativeDetails.#ctor(RPGEngine.IUnit,System.Int32,System.Int32)">
+            <summary>
+            Creates a new InititativeDetails object with the provided values.
+            </summary>
+            <param name="unit">The rolling unit</param>
+            <param name="roll">The die roll value</param>
+            <param name="bonus">The unit's bonus to initiative</param>
+        </member>
+        <member name="M:DnDEngine.Combat.InitiativeDetails.ToString">
+            <summary>
+            Gets the initiative summary.
+            </summary>
+            <returns>Summary string</returns>
+        </member>
+        <member name="P:DnDEngine.Combat.InitiativeDetails.UnitName">
+            <summary>
+            Gets the name of the unit.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.InitiativeDetails.Total">
+            <summary>
+            Gets the total initiative value after bonus.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.InitiativeDetails.Roll">
+            <summary>
+            Gets the die roll value.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.InitiativeDetails.Bonus">
+            <summary>
+            Gets the unit's bonus to initiative.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.InitiativeDetails.Tiebreaker">
+            <summary>
+            Gets a randomly generated value for initiative tiebreakers. Used when sorting by initiative.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.InitiativeDetails.Summary">
+            <summary>
+            Gets a description of the initiative roll (values only).
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Combat.InitiativeDetails.Full">
+            <summary>
+            Gets a description of the initiative roll.
             </summary>
         </member>
         <member name="T:DnDEngine.Constants">
@@ -428,6 +569,160 @@
         <member name="P:DnDEngine.Items.Equipment.GrantedBuffs">
             <summary>
             Gets the buffs that the new equipment will grant the wearer.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Items.Equipment.WeaponProps">
+            <summary>
+            Defines various combat properties for weapons.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.WeaponProps.Clone">
+            <summary>
+            Clones this properties object.
+            </summary>
+            <returns>A deep clone of this object.</returns>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.WeaponProps.#ctor(DnDEngine.Items.Equipment.WeaponProps.Type,RPGEngine.Dice.Type,System.Byte,System.Byte)">
+            <summary>
+            Initializes a new WeaponProps object with the specified values.
+            </summary>
+            <param name="category">Weapon type</param>
+            <param name="damage">Base damage die</param>
+            <param name="critRange">Critical hit range</param>
+            <param name="critMultiplier">Critical hit damage multiplier</param>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.Category">
+            <summary>
+            Gets the type of this weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.Damage">
+            <summary>
+            Gets the base damage die of this weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.CritRange">
+            <summary>
+            Gets the critical hit range of this weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.CritMultiplier">
+            <summary>
+            Gets the critical hit damage multiplier of this weapon.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Items.Equipment.WeaponProps.Type">
+            <summary>
+            Defines different types of weapons.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Unarmed">
+            <summary>
+            An unarmed strike. This is used for attacks with no equipped weapon.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Longsword">
+            <summary>
+            General use balanced swords.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Shortsword">
+            <summary>
+            Light swords that are easier to hit with.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Rapier">
+            <summary>
+            Finesse weapon with high critical hit ranges.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Spear">
+            <summary>
+            General use polearms.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Lance">
+            <summary>
+            Heavy thrusting weapons. Minimum range required.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Halberd">
+            <summary>
+            Bladed polearms designed for slashing.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Axe">
+            <summary>
+            Heavy slashing weapons. Hard to hit with.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Club">
+            <summary>
+            Heavy smashing weapons. Hard to hit with.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Longbow">
+            <summary>
+            Long-ranged projectile weapons.
+            </summary>
+        </member>
+        <member name="F:DnDEngine.Items.Equipment.WeaponProps.Type.Crossbow">
+            <summary>
+            Light one-handed projectile weapons.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Items.Equipment.WeaponProps.Builder">
+            <summary>
+            Builder class for WeaponProps. Used with Equipment.Builder.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.WeaponProps.Builder.Build">
+            <summary>
+            Creates a new WeaponProps object with the set properties.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.Builder.Category">
+            <summary>
+            Gets or sets the type for the new weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.Builder.Damage">
+            <summary>
+            Gets or sets the base damage die for the new weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.Builder.CritRange">
+            <summary>
+            Gets or sets the critical hit range for the new weapon.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.WeaponProps.Builder.CritMultiplier">
+            <summary>
+            Gets or sets the critical hit damage multipler for the new weapon.
+            </summary>
+        </member>
+        <member name="T:DnDEngine.Items.Equipment.Armory">
+            <summary>
+            Contains equipment presets.
+            </summary>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.Armory.Register(DnDEngine.Items.Equipment)">
+            <summary>
+            Register a new equipment in the armory.
+            </summary>
+            <param name="equipment">Equipment to be registered</param>
+        </member>
+        <member name="M:DnDEngine.Items.Equipment.Armory.GetNewEquipment(System.UInt32)">
+            <summary>
+            Get a copy of an equipment in the armory.
+            </summary>
+            <param name="id">The ID of the equipment</param>
+            <returns>A deep copy of the requested equipment</returns>
+        </member>
+        <member name="P:DnDEngine.Items.Equipment.Armory.NextID">
+            <summary>
+            Gets the next available ID; effectively, this is the number of equipment registered in the armor.
             </summary>
         </member>
         <member name="T:DnDEngine.Items.Equipment.Type">
@@ -748,21 +1043,21 @@
             Relinks non-serialized dynamic properties after deserialization.
             </summary>
         </member>
-        <member name="M:DnDEngine.DnDUnit.#ctor(DnDEngine.DnDUnit.ClassType,DnDEngine.CoreStats,DnDEngine.DnDUnit.BodyType,DnDEngine.DnDUnit.GenderType)">
+        <member name="M:DnDEngine.DnDUnit.#ctor(System.String,DnDEngine.CoreStats,DnDEngine.DnDUnit.BodyType,DnDEngine.DnDUnit.GenderType)">
             <summary>
             Creates a new DnDUnit object with the specified parameters. Name is set to the class.
             </summary>
-            <param name="class">The unit's class.</param>
+            <param name="className">The unit's class.</param>
             <param name="coreStats">The unit's core stats.</param>
             <param name="body">(optional) The unit's body shape. This is used to set up equipment slots.</param>
             <param name="gender">(optional) The unit's gender.</param>
         </member>
-        <member name="M:DnDEngine.DnDUnit.#ctor(System.String,DnDEngine.DnDUnit.ClassType,DnDEngine.CoreStats,DnDEngine.DnDUnit.BodyType,DnDEngine.DnDUnit.GenderType)">
+        <member name="M:DnDEngine.DnDUnit.#ctor(System.String,System.String,DnDEngine.CoreStats,DnDEngine.DnDUnit.BodyType,DnDEngine.DnDUnit.GenderType)">
             <summary>
             Creates a new DnDUnit object with the specified parameters.
             </summary>
             <param name="name">The unit's name.</param>
-            <param name="class">The unit's class.</param>
+            <param name="className">The unit's class.</param>
             <param name="coreStats">The unit's core stats.</param>
             <param name="body">(optional) The unit's body shape. This is used to set up equipment slots.</param>
             <param name="gender">(optional) The unit's gender.</param>
@@ -798,11 +1093,6 @@
         <member name="P:DnDEngine.DnDUnit.StatPoints">
             <summary>
             Gets or sets this unit's unused stat points.
-            </summary>
-        </member>
-        <member name="P:DnDEngine.DnDUnit.Class">
-            <summary>
-            Gets this unit's class as a string.
             </summary>
         </member>
         <member name="P:DnDEngine.DnDUnit.Level">
@@ -868,11 +1158,6 @@
         <member name="T:DnDEngine.IDetails">
             <summary>
             Allows access to additional unit properties.
-            </summary>
-        </member>
-        <member name="P:DnDEngine.IDetails.Class">
-            <summary>
-            Gets the unit's class enum value.
             </summary>
         </member>
         <member name="P:DnDEngine.IDetails.Body">
@@ -1013,6 +1298,21 @@
             <param name="coreStats">Core stats will be retrieved from this object.</param>
             <param name="derivedStats">Derived stats will be retrieved from this object.</param>
             <param name="final">(optional) If set to true, core stats will have a lower bound of 0.</param>
+        </member>
+        <member name="P:DnDEngine.UnitClass.Name">
+            <summary>
+            Gets the class's name.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.UnitClass.BaseStats">
+            <summary>
+            Gets the object representing the class's base stats.
+            </summary>
+        </member>
+        <member name="P:DnDEngine.UnitClass.PointCosts">
+            <summary>
+            Gets the object representing the cost to level each stat.
+            </summary>
         </member>
     </members>
 </doc>

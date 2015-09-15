@@ -6,7 +6,7 @@ namespace Universal.UI
 	[CustomPropertyDrawer(typeof(CommandLabelSet))]
 	public class CommandLabelSetEditor : PropertyDrawer
 	{
-		private static float lines = UIPanel.CapturedInputs.Length;
+		private static float lines = CommandManager.CapturedInputs.Length;
 		private static float lineOffset = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -22,7 +22,7 @@ namespace Universal.UI
 				EditorGUI.indentLevel++;
 				for (int i = 0; i < lines; i++)
 				{
-					EditorGUI.PropertyField(new Rect(position.x, position.y + lineOffset * (i + 1), position.width, EditorGUIUtility.singleLineHeight), labels.GetArrayElementAtIndex(i), new GUIContent(UIPanel.CapturedInputs[i].Name));
+					EditorGUI.PropertyField(new Rect(position.x, position.y + lineOffset * (i + 1), position.width, EditorGUIUtility.singleLineHeight), labels.GetArrayElementAtIndex(i), new GUIContent(CommandManager.CapturedInputs[i].Name));
 				}
 				EditorGUI.indentLevel--;
 			}

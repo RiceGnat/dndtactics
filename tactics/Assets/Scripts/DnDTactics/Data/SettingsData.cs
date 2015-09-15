@@ -11,7 +11,7 @@ namespace DnDTactics.Data
 
 		public void Apply()
 		{
-			CommandPanel.IsEnabled = showCommandBox;
+			//CommandPanel.IsEnabled = showCommandBox;
 		}
 	} 
 }

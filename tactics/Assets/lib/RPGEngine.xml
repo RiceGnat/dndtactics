@@ -41,9 +41,75 @@
             <param name="count">Number of dice</param>
             <param name="sides">Number of sides on each die</param>
         </member>
+        <member name="M:RPGEngine.Dice.ToString">
+            <summary>
+            Prints a summary of the roll.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:RPGEngine.Dice.Count">
+            <summary>
+            Gets the number of dice.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.Dice.Sides">
+            <summary>
+            Gets the number of sides of each die.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.Dice.Result">
+            <summary>
+            Gets the total result of the roll.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.Dice.Breakdown">
+            <summary>
+            Gets an array of the individual die rolls.
+            </summary>
+        </member>
+        <member name="T:RPGEngine.Dice.Type">
+            <summary>
+            Defines die presets.
+            </summary>
+        </member>
+        <member name="F:RPGEngine.Dice.Type.None">
+            <summary>
+            Default null value
+            </summary>
+        </member>
+        <member name="F:RPGEngine.Dice.Type.D4">
+            <summary>
+            Defines a d4
+            </summary>
+        </member>
+        <member name="F:RPGEngine.Dice.Type.D6">
+            <summary>
+            Defines a d4
+            </summary>
+        </member>
+        <member name="F:RPGEngine.Dice.Type.D8">
+            <summary>
+            Defines a d4
+            </summary>
+        </member>
+        <member name="F:RPGEngine.Dice.Type.D10">
+            <summary>
+            Defines a d10
+            </summary>
+        </member>
+        <member name="F:RPGEngine.Dice.Type.D12">
+            <summary>
+            Defines a d12
+            </summary>
+        </member>
+        <member name="F:RPGEngine.Dice.Type.D20">
+            <summary>
+            Defines a d20
+            </summary>
+        </member>
         <member name="T:RPGEngine.ICatalogable">
             <summary>
-            Represents an item to be listed.
+            Represents a catalogable item.
             </summary>
         </member>
         <member name="P:RPGEngine.ICatalogable.ID">
@@ -157,9 +223,46 @@
             Gets an object containing additional properties or methods.
             </summary>
         </member>
+        <member name="T:RPGEngine.LoggableString">
+            <summary>
+            Defines a short and a full version of a message.
+            </summary>
+        </member>
+        <member name="M:RPGEngine.LoggableString.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new LoggableString from a string.
+            </summary>
+            <param name="message">The message</param>
+            <param name="fullMessage">(optional) The full version of the message; if omitted, the message parameter will be used</param>
+        </member>
+        <member name="M:RPGEngine.LoggableString.ToString">
+            <summary>
+            Gets the summary version of the message.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.LoggableString.Summary">
+            <summary>
+            Gets the summary version of the message.
+            </summary>
+        </member>
+        <member name="P:RPGEngine.LoggableString.Full">
+            <summary>
+            Gets the full version of the message;
+            </summary>
+        </member>
+        <member name="T:RPGEngine.Stats">
+            <summary>
+            Template for stats implementations.
+            </summary>
+        </member>
         <member name="P:RPGEngine.Stats.Zero">
             <summary>
             Gets a reference to an object that returns 0 for all stats
+            </summary>
+        </member>
+        <member name="T:RPGEngine.Unit">
+            <summary>
+            Template class for IUnit implementations.
             </summary>
         </member>
         <member name="P:RPGEngine.Unit.Name">
@@ -175,6 +278,11 @@
         <member name="P:RPGEngine.Unit.Level">
             <summary>
             Gets this unit's level.
+            </summary>
+        </member>
+        <member name="T:RPGEngine.UnitDecorator">
+            <summary>
+            Template class for unit decorator implementations.
             </summary>
         </member>
     </members>
