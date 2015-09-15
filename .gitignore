@@ -23,5 +23,5 @@ tactics/*.sln
 tactics/*.csproj
 
 # Specifics
-DnDEngineTest
+TestResults
 save.bin
