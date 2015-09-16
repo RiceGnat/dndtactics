@@ -10,6 +10,7 @@ namespace RPGLibrary
 		where T : class
 	{
 		private List<IDecorator<T>> master = new List<IDecorator<T>>();
+
 		[NonSerialized]
 		private T target;
 
@@ -37,12 +38,18 @@ namespace RPGLibrary
 			}
 		}
 
-		public void Add(IDecorator<T> decorator)
+		public virtual void Add(IDecorator<T> decorator)
 		{
 			if (!(decorator is T))
 			{
-				throw new ArgumentException(String.Format("Decorator should share the {0} interface with the target", typeof(T)));
+				throw new ArgumentException(String.Format("Decorator should share the {0} interface with the target.", typeof(T)));
 			}
+
+			if (master.Contains(decorator))
+			{
+				throw new ArgumentException(String.Format("Cannot add the same decorator more than once."));
+			}
+
 			decorator.Bind(Result);
 			master.Add(decorator);
 		}
@@ -60,10 +67,14 @@ namespace RPGLibrary
 			RemoveAt(master.IndexOf(decorator));
 		}
 
-		public void RemoveAt(int index)
+		public virtual IDecorator<T> RemoveAt(int index)
 		{
+			IDecorator<T> removed = null;
+
 			if (index > -1)
 			{
+				removed = master[index];
+
 				if (Count > 1)
 				{
 					if (index == 0)
@@ -77,6 +88,17 @@ namespace RPGLibrary
 				}
 
 				master.RemoveAt(index);
+				removed.Bind(null);
+			}
+
+			return removed;
+		}
+
+		public IDecorator<T> this[int index]
+		{
+			get
+			{
+				return master[index];
 			}
 		}
 
@@ -96,15 +118,15 @@ namespace RPGLibrary
 			}
 		}
 
-		public IList<U> GetSubsetOfType<U>()
-			where U : class
+		public IList<Tsub> GetSubsetOfType<Tsub>()
+			where Tsub : class
 		{
-			IList<U> list = new List<U>();
+			IList<Tsub> list = new List<Tsub>();
 
 			foreach (IDecorator<T> decorator in Children)
 			{
-				if (decorator is U)
-					list.Add(decorator as U);
+				if (decorator is Tsub)
+					list.Add(decorator as Tsub);
 			}
 
 			return list;

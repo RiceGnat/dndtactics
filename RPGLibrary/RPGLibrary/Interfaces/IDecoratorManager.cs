@@ -10,8 +10,10 @@ namespace RPGLibrary
 		void Add(IDecorator<T> decorator);
 		void Add(params IDecorator<T>[] decorators);
 		void Remove(IDecorator<T> decorator);
-		void RemoveAt(int index);
+		IDecorator<T> RemoveAt(int index);
 
-		IList<U> GetSubsetOfType<U>() where U : class;
+		IDecorator<T> this[int index] { get; }
+
+		IList<Tsub> GetSubsetOfType<Tsub>() where Tsub : class;
 	}
 }

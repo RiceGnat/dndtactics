@@ -19,7 +19,7 @@ namespace RPGLibrary
 			baseUnit = unit;
 		}
 
-		public IList<IDecorator<IUnit>> Children
+		public virtual IList<IDecorator<IUnit>> Children
 		{
 			get { return null; }
 		}

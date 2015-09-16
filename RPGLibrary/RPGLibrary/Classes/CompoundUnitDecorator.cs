@@ -1,6 +1,9 @@
-﻿namespace RPGLibrary
+﻿using System;
+
+namespace RPGLibrary
 {
-	public class CompoundUnitDecorator : DecoratorManager<IUnit>, IUnit
+	[Serializable]
+	public abstract class CompoundUnitDecorator : DecoratorManager<IUnit>, IUnit
 	{
 		string IUnit.Name
 		{

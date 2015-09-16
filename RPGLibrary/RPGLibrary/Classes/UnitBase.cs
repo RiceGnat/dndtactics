@@ -13,7 +13,9 @@ namespace RPGLibrary
 
 			public IStats Calculated
 			{
-				get { return unit.Modifiers.Result.Stats.Calculated; }
+				get { 
+					return unit.Modifiers.Result == unit ? Base : unit.modifiers.Result.Stats.Calculated; 
+				}
 			}
 
 			public IStats Base

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using RPGLibrary;
 
 namespace DnDEngine
 {
 	public interface IUnitEquipment
 	{
-		IList<IEquipment> Equipped { get; }
+		IList<IEquipment> AllEquipment { get; }
 
-		void Equip(IEquipment equipment);
-		void Unequip(IEquipment equipment);
-		void UnequipAt(int index);
+		IEquipment GetSlot(EquipmentSlot equipment, int slotIndex);
+		IEquipment Equip(IEquipment equipment, int slotIndex);
+		IEquipment Unequip(EquipmentSlot slot, int slotIndex);
+
+		IUnit EquippedBaselineUnit { get; }
 	}
 
 	public interface IVolatileStats

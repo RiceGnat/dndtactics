@@ -16,7 +16,7 @@ namespace DnDEngineTest
 		private const int MULTVALUE = 20;
 
 		[TestMethod]
-		public void Unit_Initialization()
+		public void DnDUnit_Initialization()
 		{
 			DnDUnit unit = new DnDUnit(UNITNAME, UNITCLASS, UNITLEVEL);
 
@@ -28,11 +28,46 @@ namespace DnDEngineTest
 		}
 
 		[TestMethod]
-		public void Unit_Details()
+		public void DnDUnit_DetailsInitialization()
 		{
 			DnDUnit unit = new DnDUnit(UNITNAME, UNITCLASS, UNITLEVEL);
 
 			Assert.IsNotNull(unit.GetDetails<Object>());
+		}
+
+		[TestMethod]
+		public void DnDUnit_EquipUnit()
+		{
+			DnDUnit unit = new DnDUnit(UNITNAME, UNITCLASS, UNITLEVEL);
+			unit.Stats.Base[STATNAME] = STATVALUE;
+
+			BasicEquipment equipment = new BasicEquipment();
+			equipment.Adds[STATNAME] = ADDVALUE;
+			equipment.Mults[STATNAME] = MULTVALUE;
+			equipment.Slot = EquipmentSlot.HumanoidBody;
+
+			unit.GetDetails<IUnitEquipment>().Equip(equipment, 0);
+
+			Assert.AreEqual(159, unit.Stats.Calculated[STATNAME]);
+			Assert.AreEqual(equipment, unit.Modifiers.Children[1]);
+			Assert.AreEqual(equipment, unit.Modifiers.GetSubsetOfType<IEquipment>()[0]);
+			Assert.AreEqual(unit.Name, unit.Modifiers.Result.Name);
+		}
+
+		[TestMethod]
+		public void DnDUnit_UnequipUnit()
+		{
+			DnDUnit unit = new DnDUnit(UNITNAME, UNITCLASS, UNITLEVEL);
+			unit.Stats.Base[STATNAME] = STATVALUE;
+
+			BasicEquipment equipment = new BasicEquipment();
+			equipment.Adds[STATNAME] = ADDVALUE;
+			equipment.Mults[STATNAME] = MULTVALUE;
+			equipment.Slot = EquipmentSlot.HumanoidBody;
+
+			unit.GetDetails<IUnitEquipment>().Equip(equipment, 0);
+
+			Assert.AreEqual(159, unit.Stats.Calculated[STATNAME]);
 		}
 	}
 }

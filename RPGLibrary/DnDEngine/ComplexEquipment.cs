@@ -12,6 +12,8 @@ namespace DnDEngine
 		public string Name { get; set; }
 		public string Description { get; set; }
 
+		public EquipmentSlot Slot { get; set; }
+
 		public ComplexEquipment()
 		{
 			StatsModifier mods = new StatsModifier(new DnDStats(false), new DnDStats(false));

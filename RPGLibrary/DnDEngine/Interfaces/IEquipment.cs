@@ -8,5 +8,6 @@ namespace DnDEngine
 {
 	public interface IEquipment : IDecorator<IUnit>, ICatalogable
 	{
+		EquipmentSlot Slot { get; }
 	}
 }

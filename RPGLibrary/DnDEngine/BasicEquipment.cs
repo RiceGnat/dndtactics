@@ -8,7 +8,11 @@ namespace DnDEngine
 {
 	public enum EquipmentSlot
 	{
-
+		HumanoidHead,
+		HumanoidNeck,
+		HumanoidBody,
+		HumanoidHand,
+		HumanoidFeet
 	}
 
 	public class BasicEquipment : StatsModifier, IEquipment
