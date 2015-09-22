@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RPGLibrary;
+﻿using RPGLibrary;
 
 namespace DnDEngine
 {
 	public enum EquipmentSlot
 	{
-		HumanoidHead,
-		HumanoidNeck,
-		HumanoidBody,
-		HumanoidHand,
-		HumanoidFeet
+		Weapon,
+		Head,
+		Neck,
+		Body,
+		Hand,
+		Feet
 	}
 
 	public class BasicEquipment : StatsModifier, IEquipment
@@ -22,6 +19,7 @@ namespace DnDEngine
 		public string Description { get; set; }
 
 		public EquipmentSlot Slot { get; set; }
+		public int SlotsRequired { get; set; }
 
 		public BasicEquipment() : base(new DnDStats(false), new DnDStats(false)) { }
 	}

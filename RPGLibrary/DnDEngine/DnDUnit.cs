@@ -1,12 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
+using System.Text;
+using RPGLibrary;
 
 namespace DnDEngine
 {
 	[Serializable]
-	public partial class DnDUnit : RPGLibrary.UnitBase
+	public partial class DnDUnit : UnitBase
 	{
+		public override int Level
+		{
+			get
+			{
+				return Stats.Calculated[CoreStats.LVL];
+			}
+			set
+			{
+				baseStats[CoreStats.LVL] = value;
+			}
+		}
+
 		protected override void Link()
 		{
 			base.Link();

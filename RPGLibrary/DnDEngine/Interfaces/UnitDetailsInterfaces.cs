@@ -7,11 +7,17 @@ namespace DnDEngine
 	{
 		IList<IEquipment> AllEquipment { get; }
 
-		IEquipment GetSlot(EquipmentSlot equipment, int slotIndex);
-		IEquipment Equip(IEquipment equipment, int slotIndex);
-		IEquipment Unequip(EquipmentSlot slot, int slotIndex);
+		IEquipment GetSlot(EquipmentSlot equipment, int slotIndex = 0);
+		IEquipment Equip(IEquipment equipment, int slotIndex = 0);
+		IEquipment Unequip(EquipmentSlot slot, int slotIndex = 0);
+		IWeapon GetWeapon(int slotIndex = 0);
 
 		IUnit EquippedBaselineUnit { get; }
+	}
+
+	public interface IUnitBuffs
+	{
+		IList<IBuff> AllBuffs { get; }
 	}
 
 	public interface IVolatileStats

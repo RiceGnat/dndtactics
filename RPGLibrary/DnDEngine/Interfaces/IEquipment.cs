@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RPGLibrary;
+﻿using RPGLibrary;
 
 namespace DnDEngine
 {
 	public interface IEquipment : IDecorator<IUnit>, ICatalogable
 	{
 		EquipmentSlot Slot { get; }
+		int SlotsRequired { get; }
 	}
 }

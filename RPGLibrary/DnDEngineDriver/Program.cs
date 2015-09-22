@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
@@ -13,14 +12,6 @@ namespace DnDEngineDriver
 	class Program
 	{
 		private const string SAVEFILE = "save.bin";
-
-		private const string UNITNAME = "Test Unit";
-		private const string UNITCLASS = "Test Class";
-		private const int UNITLEVEL = 10;
-		private const string STATNAME = "TEST";
-		private const int STATVALUE = 123;
-		private const int ADDVALUE = 10;
-		private const int MULTVALUE = 20;
 
 		private static IFormatter formatter = new BinaryFormatter();
 		private static Stream stream;
@@ -57,6 +48,42 @@ namespace DnDEngineDriver
 
 		static void Main(string[] args)
 		{
+			IUnit unit = new DnDUnit("Kevin", "Fighter", 3);
+			unit.Stats.Base[CoreStats.STR] = 14;
+			unit.Stats.Base[CoreStats.CON] = 12;
+			unit.Stats.Base[CoreStats.DEX] = 10;
+			unit.Stats.Base[CoreStats.INT] = 9;
+			unit.Stats.Base[CoreStats.WIS] = 10;
+			unit.Stats.Base[CoreStats.CHA] = 11;
+
+			unit = new UnitProxy(unit);
+
+			BasicEquipment equip = new BasicEquipment();
+			equip.Name = "Helmet";
+			equip.Slot = EquipmentSlot.Head;
+			equip.Adds[DerivedStats.DEF] = 10;
+			equip.Mults[DerivedStats.HP] = 10;
+
+			Weapon weapon = new Weapon();
+			weapon.Name = "Longsword";
+			weapon.Type = WeaponType.Longsword;
+			weapon.Damage = DiceType.D6;
+			weapon.CritRange = 19;
+			weapon.CritMultiplier = 2;
+			weapon.Adds[DerivedStats.ATK] = 20;
+
+			unit.GetDetails<IUnitEquipment>().Equip(weapon, 0);
+			unit.GetDetails<IUnitEquipment>().Equip(equip, 0);
+
+			Console.WriteLine(Logging.DescribeUnit(unit));
+
+			foreach (IEquipment equipment in unit.GetDetails<IUnitEquipment>().AllEquipment)
+			{
+				Console.WriteLine(equipment.Name);
+			}
+			Console.ReadKey();
+
+			/*
 			IUnit unit = new DnDUnit(UNITNAME, UNITCLASS, UNITLEVEL);
 			unit.Stats.Base[STATNAME] = STATVALUE;
 
@@ -94,6 +121,7 @@ namespace DnDEngineDriver
 			Console.WriteLine(dice.Roll());
 			Console.WriteLine(dice.Roll());
 			Console.ReadKey();
+			*/
 		}
 	}
 }

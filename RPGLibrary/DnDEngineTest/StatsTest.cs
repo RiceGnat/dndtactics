@@ -13,7 +13,7 @@ namespace DnDEngineTest
 		{
 			IStats stats = new DnDStats();
 
-			foreach (string stat in Enum.GetNames(typeof(DnDStats.Core)))
+			foreach (string stat in Enum.GetNames(typeof(CoreStats)))
 			{
 				Assert.AreEqual(0, stats.Get(stat));
 			}
@@ -24,7 +24,7 @@ namespace DnDEngineTest
 		{
 			IStats stats = new DnDStats(false);
 
-			foreach (string stat in Enum.GetNames(typeof(DnDStats.Derived)))
+			foreach (string stat in Enum.GetNames(typeof(DerivedStats)))
 			{
 				Assert.AreEqual(0, stats.Get(stat));
 			}
@@ -36,7 +36,7 @@ namespace DnDEngineTest
 			IStats stats = new DnDStats();
 			int i = 1;
 			
-			foreach (string stat in Enum.GetNames(typeof(DnDStats.Core)))
+			foreach (string stat in Enum.GetNames(typeof(CoreStats)))
 			{
 				stats.Set(stat, i);
 				Assert.AreEqual(i, stats.Get(stat));
@@ -50,7 +50,7 @@ namespace DnDEngineTest
 		{
 			IStats stats = new DnDStats();
 
-			stats.Set(DnDStats.Derived.HP, 1);
+			stats.Set(DerivedStats.HP, 1);
 		}
 
 		[TestMethod]
@@ -59,7 +59,7 @@ namespace DnDEngineTest
 			IStats stats = new DnDStats(false);
 			int i = 1;
 
-			foreach (string stat in Enum.GetNames(typeof(DnDStats.Derived)))
+			foreach (string stat in Enum.GetNames(typeof(DerivedStats)))
 			{
 				stats.Set(stat, i);
 				Assert.AreEqual(i, stats.Get(stat));

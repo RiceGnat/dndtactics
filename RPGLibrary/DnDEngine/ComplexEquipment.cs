@@ -13,11 +13,12 @@ namespace DnDEngine
 		public string Description { get; set; }
 
 		public EquipmentSlot Slot { get; set; }
+		public int SlotsRequired { get; set; }
 
 		public ComplexEquipment()
 		{
-			StatsModifier mods = new StatsModifier(new DnDStats(false), new DnDStats(false));
-			Add(mods);
+			//StatsModifier mods = new StatsModifier(new DnDStats(false), new DnDStats(false));
+			//Add(mods);
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace DnDEngine
 	public partial class DnDUnit
 	{
 		[Serializable]
-		private class UnitDetails : IUnitEquipment, IVolatileStats
+		private class UnitDetails : IUnitEquipment, IUnitBuffs, IVolatileStats
 		{
 			[NonSerialized]
 			private DnDUnit unit;
@@ -91,9 +91,21 @@ namespace DnDEngine
 				// Move removed equipment to inventory
 			}
 
+			public IWeapon GetWeapon(int slotIndex)
+			{
+				return equipmentManager.GetSlot(EquipmentSlot.Weapon, slotIndex) as IWeapon;
+			}
+
 			public IUnit EquippedBaselineUnit
 			{
 				get { return equipmentManager.Result; }
+			}
+			#endregion
+
+			#region IUnitBuffs
+			public IList<IBuff> AllBuffs
+			{
+				get { return equipmentManager.GetSubsetOfType<IBuff>(); }
 			}
 			#endregion
 

@@ -14,7 +14,7 @@ namespace RPGLibrary
 			public IStats Calculated
 			{
 				get { 
-					return unit.Modifiers.Result == unit ? Base : unit.modifiers.Result.Stats.Calculated; 
+					return unit.Modifiers.Result.Stats == this ? Base : unit.modifiers.Result.Stats.Calculated; 
 				}
 			}
 
@@ -79,10 +79,11 @@ namespace RPGLibrary
 
 		public UnitBase(string name, string unitClass, int level, IStats baseStats)
 		{
+			this.baseStats = baseStats;
+
 			Name = name;
 			Class = unitClass;
 			Level = level;
-			this.baseStats = baseStats;
 
 			Link();
 		}

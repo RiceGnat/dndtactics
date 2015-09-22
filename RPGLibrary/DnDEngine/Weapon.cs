@@ -8,10 +8,11 @@ namespace DnDEngine
 		Longsword,
 		Shortsword,
 		Spear,
-		Axe
+		Axe,
+		Bow
 	}
 
-	public class Weapon : BasicEquipment
+	public class Weapon : BasicEquipment, IWeapon
 	{
 		public WeaponType Type { get; set; }
 		public DiceType Damage { get; set; }
