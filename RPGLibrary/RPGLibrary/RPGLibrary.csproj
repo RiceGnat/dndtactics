@@ -49,6 +49,7 @@
     <Compile Include="Classes\StatsBase.cs" />
     <Compile Include="Classes\StatsMap.cs" />
     <Compile Include="Classes\UnitDecorator.cs" />
+    <Compile Include="Utilities\Serializer.cs" />
     <Compile Include="Interfaces\IDecorator.cs" />
     <Compile Include="Interfaces\IDecoratorManager.cs" />
     <Compile Include="Interfaces\ICatalogable.cs" />

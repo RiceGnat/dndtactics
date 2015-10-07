@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using RPGLibrary;
 
 namespace DnDEngine
 {
 	public interface ISpell
 	{
-		EnergyType? Energy { get; }
-		DiceType? Damage { get; }
+		string Name { get; }
 
+		CastType Type { get; }
 		int Range { get; }
 		int Radius { get; }
 
+		MagicType Magic { get; }
+		EnergyType? Energy { get; }
+		DiceType? Damage { get; }
+		CoreStats? Save { get; }
+
+		ILoggable Cast(IUnit caster, IUnit target, bool saved);
 	}
 }

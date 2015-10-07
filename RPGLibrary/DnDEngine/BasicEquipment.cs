@@ -1,4 +1,5 @@
-﻿using RPGLibrary;
+﻿using System;
+using RPGLibrary;
 
 namespace DnDEngine
 {
@@ -12,6 +13,7 @@ namespace DnDEngine
 		Feet
 	}
 
+	[Serializable]
 	public class BasicEquipment : StatsModifier, IEquipment
 	{
 		public uint ID { get; set; }

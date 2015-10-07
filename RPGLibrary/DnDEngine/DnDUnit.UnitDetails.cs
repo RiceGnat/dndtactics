@@ -110,8 +110,19 @@ namespace DnDEngine
 			#endregion
 
 			#region IVolatileStats
-			public int CurrentHP { get; set; }
-			public int CurrentMP { get; set; }
+			private int hp;
+			private int mp;
+
+			public int CurrentHP
+			{
+				get { return hp; }
+				set { hp = Math.Max(0, hp - value); }
+			}
+			public int CurrentMP
+			{
+				get { return mp; }
+				set { hp = Math.Max(0, mp - value); }
+			}
 			public int Experience { get; set; }
 			#endregion
 

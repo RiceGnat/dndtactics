@@ -83,6 +83,15 @@ namespace DnDEngineDriver
 			}
 			Console.ReadKey();
 
+			Dice dice = new Dice(DiceType.D8, 4);
+			Damage d = new Damage(DamageType.Physical, EnergyType.Fire, 5);
+			DamageReport rpt = new DamageReport(unit, unit);
+			rpt.AddDamage(dice.Roll(), d, 5);
+			rpt.AddDamage(dice.Roll(), d, 5);
+			rpt.AddDamage(dice.Roll(), d, 5);
+			Console.Write((rpt as ILoggable).Full);
+			Console.ReadKey();
+
 			/*
 			IUnit unit = new DnDUnit(UNITNAME, UNITCLASS, UNITLEVEL);
 			unit.Stats.Base[STATNAME] = STATVALUE;
