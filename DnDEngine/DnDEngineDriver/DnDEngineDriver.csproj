@@ -44,13 +44,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\RPGLibrary\RPGLibrary\RPGLibrary.csproj">
+      <Project>{d244c221-8815-4d26-9535-c668e4d789c6}</Project>
+      <Name>RPGLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DnDEngine\DnDEngine.csproj">
       <Project>{25713ebf-b96b-403c-83df-64eb78c115fa}</Project>
       <Name>DnDEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RPGLibrary\RPGLibrary.csproj">
-      <Project>{d244c221-8815-4d26-9535-c668e4d789c6}</Project>
-      <Name>RPGLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

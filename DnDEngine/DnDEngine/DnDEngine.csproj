@@ -64,12 +64,11 @@
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RPGLibrary\RPGLibrary.csproj">
+    <ProjectReference Include="..\..\RPGLibrary\RPGLibrary\RPGLibrary.csproj">
       <Project>{d244c221-8815-4d26-9535-c668e4d789c6}</Project>
       <Name>RPGLibrary</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Compile Include="DnDUnit.UnitDetails.cs" />
   </ItemGroup>

@@ -23,5 +23,5 @@ tactics/*.sln
 tactics/*.csproj
 
 # Specifics
-TestResults
+TestResults/
 save.bin
