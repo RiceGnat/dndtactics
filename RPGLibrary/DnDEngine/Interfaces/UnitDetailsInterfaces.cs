@@ -3,6 +3,21 @@ using RPGLibrary;
 
 namespace DnDEngine
 {
+	public interface IUnitAttributes
+	{
+
+	}
+		
+	public interface IVolatileStats
+	{
+		int CurrentHP { get; set; }
+		int CurrentMP { get; set; }
+
+		int Experience { get; set; }
+
+		void Initialize();
+	}
+
 	public interface IUnitEquipment
 	{
 		IList<IEquipment> AllEquipment { get; }
@@ -18,13 +33,5 @@ namespace DnDEngine
 	public interface IUnitBuffs
 	{
 		IList<IBuff> AllBuffs { get; }
-	}
-
-	public interface IVolatileStats
-	{
-		int CurrentHP { get; set; }
-		int CurrentMP { get; set; }
-
-		int Experience { get; set; }
 	}
 }

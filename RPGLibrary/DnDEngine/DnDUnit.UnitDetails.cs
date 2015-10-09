@@ -8,10 +8,33 @@ namespace DnDEngine
 	public partial class DnDUnit
 	{
 		[Serializable]
-		private class UnitDetails : IUnitEquipment, IUnitBuffs, IVolatileStats
+		private class UnitDetails : IUnitAttributes, IVolatileStats, IUnitEquipment, IUnitBuffs
 		{
 			[NonSerialized]
 			private DnDUnit unit;
+
+			#region IVolatileStats
+			private int hp;
+			private int mp;
+
+			public int CurrentHP
+			{
+				get { return hp; }
+				set { hp = Math.Min(Math.Max(0, value), unit.Stats.Calculated[DerivedStats.HP]); }
+			}
+			public int CurrentMP
+			{
+				get { return mp; }
+				set { hp = Math.Min(Math.Max(0, value), unit.Stats.Calculated[DerivedStats.MP]); }
+			}
+			public int Experience { get; set; }
+
+			public void Initialize()
+			{
+				hp = unit.Stats.Calculated[DerivedStats.HP];
+				mp = unit.Stats.Calculated[DerivedStats.MP];
+			}
+			#endregion
 
 			#region IUnitEquipment
 			[Serializable]
@@ -107,23 +130,6 @@ namespace DnDEngine
 			{
 				get { return equipmentManager.GetSubsetOfType<IBuff>(); }
 			}
-			#endregion
-
-			#region IVolatileStats
-			private int hp;
-			private int mp;
-
-			public int CurrentHP
-			{
-				get { return hp; }
-				set { hp = Math.Max(0, hp - value); }
-			}
-			public int CurrentMP
-			{
-				get { return mp; }
-				set { hp = Math.Max(0, mp - value); }
-			}
-			public int Experience { get; set; }
 			#endregion
 
 			public void Rebind(DnDUnit unit)

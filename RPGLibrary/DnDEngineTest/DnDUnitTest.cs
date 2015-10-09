@@ -44,7 +44,7 @@ namespace DnDEngineTest
 			BasicEquipment equipment = new BasicEquipment();
 			equipment.Adds[STATNAME] = ADDVALUE;
 			equipment.Mults[STATNAME] = MULTVALUE;
-			equipment.Slot = EquipmentSlot.HumanoidBody;
+			equipment.Slot = EquipmentSlot.Body;
 
 			unit.GetDetails<IUnitEquipment>().Equip(equipment, 0);
 
@@ -63,7 +63,7 @@ namespace DnDEngineTest
 			BasicEquipment equipment = new BasicEquipment();
 			equipment.Adds[STATNAME] = ADDVALUE;
 			equipment.Mults[STATNAME] = MULTVALUE;
-			equipment.Slot = EquipmentSlot.HumanoidBody;
+			equipment.Slot = EquipmentSlot.Body;
 
 			unit.GetDetails<IUnitEquipment>().Equip(equipment, 0);
 

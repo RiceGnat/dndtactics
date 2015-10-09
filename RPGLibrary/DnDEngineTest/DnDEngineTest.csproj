@@ -55,6 +55,7 @@
     <Compile Include="StatsTest.cs" />
     <Compile Include="DnDUnitTest.cs" />
     <Compile Include="EquipmentTest.cs" />
+    <Compile Include="CombatManagerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DnDEngine\DnDEngine.csproj">

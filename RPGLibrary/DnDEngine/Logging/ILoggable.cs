@@ -1,4 +1,4 @@
-﻿namespace DnDEngine
+﻿namespace DnDEngine.Logging
 {
 	public interface ILoggable
 	{

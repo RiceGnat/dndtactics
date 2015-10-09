@@ -6,13 +6,12 @@ namespace DnDEngine
 {
 	public enum CoreStats
 	{
-		LVL,
 		STR,
 		CON,
 		DEX,
 		INT,
 		WIS,
-		CHA
+		CHA,
 	}
 
 	public enum DerivedStats
@@ -27,6 +26,12 @@ namespace DnDEngine
 		AVD
 	}
 
+	public enum OtherStats
+	{
+		LVL,
+		MOV
+	}
+
 	[Serializable]
 	public class DnDStats : StatsMap
 	{
@@ -39,9 +44,9 @@ namespace DnDEngine
 		{
 			int val = 0;
 			if (stat == DerivedStats.HP.ToString())
-				val = 10 + Get(CoreStats.CON) * Get(CoreStats.LVL);
+				val = 10 + Get(CoreStats.CON) * Get(OtherStats.LVL);
 			if (stat == DerivedStats.MP.ToString())
-				val = (Get(CoreStats.INT) + Get(CoreStats.WIS) - 10) * Get(CoreStats.LVL);
+				val = Get(CoreStats.WIS) + Get(CoreStats.INT) * Get(OtherStats.LVL);
 			if (stat == DerivedStats.ATK.ToString())
 				val = (Get(CoreStats.STR) - 10) * 10;
 			if (stat == DerivedStats.DEF.ToString())
@@ -49,9 +54,9 @@ namespace DnDEngine
 			if (stat == DerivedStats.MAG.ToString())
 				val = (Get(CoreStats.INT) - 10) * 10;
 			if (stat == DerivedStats.RES.ToString())
-				val = (Get(CoreStats.WIS) - 10) * 5 + (Get(CoreStats.CHA) - 10) * 5;
+				val = (Get(CoreStats.WIS) - 10) * 8 + (Get(CoreStats.CHA) - 10) * 2;
 			if (stat == DerivedStats.HIT.ToString())
-				val = Get(CoreStats.DEX) - 10 + Get(CoreStats.LVL) - 1;
+				val = Get(CoreStats.DEX) - 10 + Get(OtherStats.LVL) - 1;
 			if (stat == DerivedStats.AVD.ToString())
 				val = Get(CoreStats.DEX);
 			return val;

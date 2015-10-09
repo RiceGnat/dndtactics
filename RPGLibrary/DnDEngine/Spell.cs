@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using RPGLibrary;
+using DnDEngine.Logging;
 
 namespace DnDEngine
 {
@@ -24,7 +25,6 @@ namespace DnDEngine
 		Fire,
 		Lightning,
 		Ice,
-		Corrosive,
 		Force,
 		Positive,
 		Negative

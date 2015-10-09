@@ -39,26 +39,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicEquipment.cs" />
-    <Compile Include="Catalog.cs" />
-    <Compile Include="CombatManager.cs" />
+    <Compile Include="Managers\ClassManager.cs" />
+    <Compile Include="Managers\EquipmentCatalog.cs" />
+    <Compile Include="Combat\CombatManager.cs" />
     <Compile Include="ComplexEquipment.cs" />
-    <Compile Include="Damage.cs" />
+    <Compile Include="Combat\Damage.cs" />
     <Compile Include="Dice.cs" />
     <Compile Include="EquipmentKey.cs" />
-    <Compile Include="Interfaces\ICombatUnit.cs" />
-    <Compile Include="Interfaces\ILoggable.cs" />
+    <Compile Include="Interfaces\IUnitEx.cs" />
+    <Compile Include="Logging\ILoggable.cs" />
     <Compile Include="Interfaces\IEquipment.cs" />
     <Compile Include="Interfaces\IBuff.cs" />
     <Compile Include="Interfaces\ISpell.cs" />
     <Compile Include="Interfaces\IWeapon.cs" />
     <Compile Include="Interfaces\UnitDetailsInterfaces.cs" />
-    <Compile Include="Logging.cs" />
-    <Compile Include="LogString.cs" />
+    <Compile Include="Logging\Logging.cs" />
+    <Compile Include="Logging\LogString.cs" />
+    <Compile Include="Managers\UnitCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DnDStats.cs" />
     <Compile Include="DnDUnit.cs" />
     <Compile Include="Spell.cs" />
-    <Compile Include="UnitProxy.cs" />
+    <Compile Include="UnitAdapter.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

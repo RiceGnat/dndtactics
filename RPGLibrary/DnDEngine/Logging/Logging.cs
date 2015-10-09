@@ -2,9 +2,9 @@
 using System.Text;
 using RPGLibrary;
 
-namespace DnDEngine
+namespace DnDEngine.Logging
 {
-	public static class Logging
+	public static class Log
 	{
 		public const string ModifierFormat = "+#;-#;+0";
 
@@ -16,7 +16,7 @@ namespace DnDEngine
 			s.AppendLine();
 
 			s.AppendFormat("HP {0}/{1}", unit.GetDetails<IVolatileStats>().CurrentHP, unit.Stats.Calculated[DerivedStats.HP]);
-			s.AppendLine(String.Format("\tHIT {0,3}", unit.Stats.Calculated[DerivedStats.HIT].ToString(Logging.ModifierFormat)));
+			s.AppendLine(String.Format("\tHIT {0,3}", unit.Stats.Calculated[DerivedStats.HIT].ToString(ModifierFormat)));
 			s.AppendFormat("MP {0}/{1}", unit.GetDetails<IVolatileStats>().CurrentMP, unit.Stats.Calculated[DerivedStats.MP]);
 			s.AppendLine(String.Format("\tAVD {0,3}", unit.Stats.Calculated[DerivedStats.AVD]));
 			s.AppendLine();

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RPGLibrary;
+using DnDEngine.Logging;
 
-namespace DnDEngine
+namespace DnDEngine.Combat
 {
 	public enum DamageType
 	{
@@ -71,8 +72,25 @@ namespace DnDEngine
 
 				for (int i = 0; i < rolls.Count; i++)
 				{
-					s.AppendLine(String.Format("{0} rolls {1}, dealing {2}{3} damage.", Source, rolls[i].RollsString, damageDealt[i].Value, damageDealt[i].Energy != null ? " " + damageDealt[i].Energy : ""));
-					s.AppendLine(String.Format("{0} loses {1} health after reductions ({2} total).", Target, damageTaken[i], totalLost += damageTaken[i]));
+					s.AppendFormat("{0} rolls {1}, ", Source, rolls[i].RollsString);
+					if (damageDealt[i].Energy == EnergyType.Positive || damageDealt[i].Energy == EnergyType.Negative)
+					{
+						if (damageTaken[i] < 0)
+						{
+							s.AppendFormat("healing {0} for {1}.", Target, -damageTaken[i]);
+						}
+						else if (damageTaken[i] > 0)
+						{
+							s.AppendFormat("causing {0} to lose {1} health ({2} total).", Target, damageTaken[i], totalLost += damageTaken[i]);
+						}
+						else s.Append("with no effect.");
+						s.AppendLine();
+					}
+					else
+					{
+						s.AppendLine(String.Format("dealing {0}{1} damage.", damageDealt[i].Value, damageDealt[i].Energy != null ? " " + damageDealt[i].Energy : ""));
+						s.AppendLine(String.Format("{0} {1} {2} health ({3} total).", Target, damageTaken[i] < 0 ? "gains" : "loses", damageTaken[i], totalLost += damageTaken[i]));
+					}
 				}
 
 				return s.ToString();

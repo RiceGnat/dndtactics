@@ -2,13 +2,16 @@
 
 namespace DnDEngine
 {
-	public interface ICombatUnit : IUnit
+	public interface IUnitEx : IUnit
 	{
+		IVolatileStats VolatileStats { get; }
 		int CurrentHP { get; set; }
 		int CurrentMP { get; set; }
 		int Experience { get; set; }
 
-		IStats BaselineStats { get; }
 		IUnitEquipment Equipment { get; }
+		IStats BaselineStats { get; }
+
+		void Initialize();
 	}
 }

@@ -3,7 +3,8 @@ using RPGLibrary;
 
 namespace DnDEngine
 {
-	public class UnitProxy : ICombatUnit
+	[Serializable]
+	public class UnitAdapter : IUnitEx
 	{
 		private IUnit unit;
 
@@ -50,8 +51,8 @@ namespace DnDEngine
 		}
 
 		public IStatsPackage Stats { get { return Proxy.Stats; } }
-		public IStats BaselineStats { get { return Equipment.EquippedBaselineUnit.Stats.Calculated; } }
 		public IDecoratorManager<IUnit> Modifiers { get { return Proxy.Modifiers; } }
+		
 
 		public IVolatileStats VolatileStats { get { return GetDetails<IVolatileStats>(); } }
 		public int CurrentHP
@@ -71,13 +72,19 @@ namespace DnDEngine
 		}
 
 		public IUnitEquipment Equipment { get { return GetDetails<IUnitEquipment>(); } }
+		public IStats BaselineStats { get { return Equipment.EquippedBaselineUnit.Stats.Calculated; } }
+
+		public void Initialize()
+		{
+			VolatileStats.Initialize();
+		}
 
 		public T GetDetails<T>() where T : class
 		{
 			return Proxy.GetDetails<T>();
 		}
 
-		public UnitProxy(IUnit unit)
+		public UnitAdapter(IUnit unit)
 		{
 			this.unit = unit;
 		}

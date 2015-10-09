@@ -11,11 +11,11 @@ namespace DnDEngine
 		{
 			get
 			{
-				return Stats.Calculated[CoreStats.LVL];
+				return Stats.Calculated[OtherStats.LVL];
 			}
 			set
 			{
-				baseStats[CoreStats.LVL] = value;
+				baseStats[OtherStats.LVL] = value;
 			}
 		}
 

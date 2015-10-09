@@ -13,7 +13,7 @@ namespace RPGLibrary
 
 		public int Generate()
 		{
-			return LastResult = rng.Next(Min, Max);
+			return LastResult = rng.Next(Min, Max + 1);
 		}
 
 		public RNG(int max) : this(0, max) { }

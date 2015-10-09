@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using RPGLibrary;
+using DnDEngine.Logging;
 
-namespace DnDEngine
+namespace DnDEngine.Combat
 {
 	public static class CombatManager
 	{
-		public static Damage CalculateDamage(IUnit unit, DamageType type, EnergyType? energy, int baseValue)
+		public static Damage CalculateDamage(IUnitEx unit, DamageType type, EnergyType? energy, int baseValue)
 		{
-			if (unit == null) throw new ArgumentException("Unit cannot be null.", "unit");
+			if (unit == null) throw new ArgumentNullException("unit");
 
 			int dmgVal = baseValue;
 			string stat = null;
@@ -28,15 +28,15 @@ namespace DnDEngine
 			// Calculate damage with bonus
 			statVal = unit.Stats.Calculated[stat];
 			dmgVal = statVal < 0 ?
-				(int)Math.Ceiling(dmgVal / (Math.Abs(statVal) / 100f + 1)) :
+				(int)Math.Ceiling(dmgVal / (-statVal / 100f + 1)) :
 				dmgVal + dmgVal * statVal / 100;
 
 			return new Damage(type, energy, dmgVal);
 		}
 
-		public static int ApplyDamage(IUnit unit, Damage damage)
+		public static int ApplyDamage(IUnitEx unit, Damage damage)
 		{
-			if (unit == null) throw new ArgumentException("Unit cannot be null.", "unit");
+			if (unit == null) throw new ArgumentNullException("unit");
 
 			IVolatileStats unitVals = unit.GetDetails<IVolatileStats>();
 
@@ -63,8 +63,8 @@ namespace DnDEngine
 			{
 				statVal = unit.Stats.Calculated[stat];
 				dmgVal = statVal >= 0 ?
-					(int)Math.Ceiling(dmgVal / (Math.Abs(statVal) / 100f + 1)) :
-					dmgVal + dmgVal * statVal / 100;
+					(int)Math.Ceiling(dmgVal / (statVal / 100f + 1)) :
+					dmgVal + dmgVal * -statVal / 100;
 			}
 
 			// Modify unit's current HP
@@ -78,18 +78,18 @@ namespace DnDEngine
 			return initial - unitVals.CurrentHP;
 		}
 
-		public static ILoggable RollAttack(IUnit attacker, IUnit defender, IWeapon weapon = null)
+		public static ILoggable RollAttack(IUnitEx attacker, IUnitEx defender, IWeapon weapon = null)
 		{
-			if (attacker == null) throw new ArgumentException("Attacker cannot be null.", "attacker");
-			if (defender == null) throw new ArgumentException("Defender cannot be null.", "defender");
+			if (attacker == null) throw new ArgumentNullException("attacker");
+			if (defender == null) throw new ArgumentNullException("defender");
 
 			// If no weapon specified in function call, get attacker's equipped weapon
 			if (weapon == null)
-				weapon = attacker.GetDetails<IUnitEquipment>().GetWeapon();
+				weapon = attacker.Equipment.GetWeapon();
 
 			// If no equipped weapon, default to unarmed strike
 			if (weapon == null)
-				weapon = Catalog.UnarmedStrike;
+				weapon = EquipmentCatalog.UnarmedStrike;
 
 			// Resolve attack and return result
 			return new AttackResult(attacker, defender, weapon);
@@ -110,7 +110,7 @@ namespace DnDEngine
 			public bool Crit { get; private set; }
 			public bool CritConfirm { get; private set; }
 
-			public HitResult(IUnit attacker, IUnit defender, int critRange)
+			public HitResult(IUnitEx attacker, IUnitEx defender, int critRange)
 			{
 				Attacker = attacker.Name;
 				Defender = defender.Name;
@@ -147,8 +147,8 @@ namespace DnDEngine
 				get
 				{
 					StringBuilder s = new StringBuilder();
-					s.AppendLine(String.Format("{0} rolls a {1} ({2}+{3}) and {4} {5} ({6})!",
-						Attacker, Roll.Total + AttackerBonus, Roll.TotalString, AttackerBonus,
+					s.AppendLine(String.Format("{0} rolls a {1} ({2}{3}) and {4} {5} ({6})!",
+						Attacker, Roll.Total + AttackerBonus, Roll.TotalString, AttackerBonus.ToString(Log.ModifierFormat),
 						Hit ? "hits" : "misses", Defender, DefenderAVD));
 					if (Crit)
 					{
@@ -163,9 +163,9 @@ namespace DnDEngine
 		private class AttackResult : ILoggable
 		{
 			[NonSerialized]
-			private IUnit attacker;
+			private IUnitEx attacker;
 			[NonSerialized]
-			private IUnit defender;
+			private IUnitEx defender;
 			[NonSerialized]
 			private IWeapon weapon;
 
@@ -202,7 +202,7 @@ namespace DnDEngine
 				}
 			}
 
-			public AttackResult(IUnit attacker, IUnit defender, IWeapon weapon)
+			public AttackResult(IUnitEx attacker, IUnitEx defender, IWeapon weapon)
 			{
 				this.attacker = attacker;
 				this.defender = defender;
@@ -245,10 +245,10 @@ namespace DnDEngine
 			}
 		}
 
-		public static ILoggable RollSpell(IUnit caster, ISpell spell, params IUnit[] targets)
+		public static ILoggable RollSpell(IUnitEx caster, ISpell spell, params IUnitEx[] targets)
 		{
-			if (caster == null) throw new ArgumentException("Caster cannot be null.", "caster");
-			if (spell == null) throw new ArgumentException("Spell cannot be null.", "spell");
+			if (caster == null) throw new ArgumentNullException("caster");
+			if (spell == null) throw new ArgumentNullException("spell");
 
 			// Resolve spell and return result
 			return new SpellResult(caster, spell, targets);
@@ -258,9 +258,9 @@ namespace DnDEngine
 		private class SpellResult : ILoggable
 		{
 			[NonSerialized]
-			private IUnit caster;
+			private IUnitEx caster;
 			[NonSerialized]
-			private IUnit[] targets;
+			private IUnitEx[] targets;
 			[NonSerialized]
 			private ISpell spell;
 
@@ -320,7 +320,7 @@ namespace DnDEngine
 					if (SpellSave != null)
 					{
 						SaveRolls[i] = d20.Roll();
-						SaveBonus[i] = targets[i].Stats.Calculated[SpellSave];
+						SaveBonus[i] = targets[i].Stats.Calculated[SpellSave] - 10;
 						Saved[i] = SaveRolls[i].Total + SaveBonus[i] >= SpellDC;
 					}
 
@@ -334,24 +334,28 @@ namespace DnDEngine
 							Dice damageDice = new Dice(spell.Damage.Value, n);
 							DiceResult damageRoll = damageDice.Roll();
 
-							// Calculate damage dealt
+							// Calculate damage dealt (double damage for crit, half damage for successful save)
 							DamageType type = spell.Energy == EnergyType.Force ? DamageType.Physical : DamageType.Magical;
-							Damage damageDealt = CalculateDamage(caster, type, spell.Energy, damageRoll.Total);
+							Damage damageDealt = CalculateDamage(caster, type, spell.Energy,
+								(int)Math.Ceiling(damageRoll.Total
+								* (HitRolls[i] != null && HitRolls[i].CritConfirm ? 2 : 1)
+								/ (Saved[i] ? 2f : 1f)));
 
 							// Apply damage to target (heals from Positive energy included)
 							int damageTaken = ApplyDamage(targets[i], damageDealt);
 
 							// Record damage results
+							DamageDealt[i] = new DamageReport(caster, targets[i]);
 							DamageDealt[i].AddDamage(damageRoll, damageDealt, damageTaken);
 						}
-						
+
 						// Call spell-specific cast handlers
 						AdditionalEffects[i] = spell.Cast(caster, targets[i], Saved[i]);
 					}
 				}
 			}
 
-			public SpellResult(IUnit caster, ISpell spell, params IUnit[] targets)
+			public SpellResult(IUnitEx caster, ISpell spell, params IUnitEx[] targets)
 			{
 				this.caster = caster;
 				this.targets = targets;
@@ -359,7 +363,7 @@ namespace DnDEngine
 
 				Caster = caster.Name;
 				Spell = spell.Name;
-				Targets = targets.Select<IUnit, string>(x => x.Name).ToArray<string>();
+				Targets = targets.Select<IUnitEx, string>(x => x.Name).ToArray<string>();
 
 				HitRolls = new HitResult[Targets.Length];
 				SpellSave = spell.Save;
@@ -369,19 +373,60 @@ namespace DnDEngine
 				Saved = new bool[Targets.Length];
 
 				DamageDealt = new DamageReport[Targets.Length];
-				AdditionalEffects = new ILoggable[Targets.Length];
+				AdditionalEffects = new ILoggable[Targets.Length + 1];
 
 				Resolve();
 			}
 
 			string ILoggable.Inline
 			{
-				get { throw new NotImplementedException(); }
+				get
+				{
+					return String.Format("{0} casts {1}", Caster, Spell);
+				}
 			}
 
+			// Consider prebuilding this string due to its complexity
 			string ILoggable.Full
 			{
-				get { throw new NotImplementedException(); }
+				get
+				{
+					StringBuilder head = new StringBuilder();
+					StringBuilder body = new StringBuilder();
+
+					head.AppendFormat("{0} casts {1}", Caster, Spell);
+					if (Targets.Length > 0)
+					{
+						head.Append(" on ");
+						for (int i = 0; i < Targets.Length; i++)
+						{
+							head.AppendFormat(Targets[i]);
+							if (i < Targets.Length - 1) head.Append(", ");
+
+							if (HitRolls[i] != null)
+								body.Append((HitRolls[i] as ILoggable).Full);
+
+							if (SpellSave != null)
+							{
+								body.AppendLine(String.Format("{0} rolls a {1} ({2}{3}) and {4} the {5} save ({6}).",
+									Targets[i], SaveRolls[i].Total + SaveBonus[i], SaveRolls[i].TotalString, SaveBonus[i].ToString(Log.ModifierFormat),
+									Saved[i] ? "succeeds" : "fails", SpellSave, SpellDC));
+							}
+
+							if (DamageDealt[i] != null)
+								body.Append((DamageDealt[i] as ILoggable).Full);
+
+							if (AdditionalEffects[i] != null)
+								body.Append(AdditionalEffects[i].Full);
+						}
+					}
+					head.AppendLine(".");
+
+					if (AdditionalEffects[Targets.Length] != null)
+						body.Append(AdditionalEffects[Targets.Length].Full);
+
+					return head.ToString() + body.ToString();
+				}
 			}
 		}
 	}
