@@ -5,6 +5,13 @@ using RPGLibrary;
 
 namespace DnDEngine
 {
+	public enum GenderType
+	{
+		None,
+		Male,
+		Female
+	}
+
 	public partial class DnDUnit
 	{
 		[Serializable]
@@ -12,6 +19,11 @@ namespace DnDEngine
 		{
 			[NonSerialized]
 			private DnDUnit unit;
+
+			#region IUnitAttributes
+			public GenderType Gender { get; set; }
+			public ICollection<ISpell> SpellsKnown { get; private set; }
+			#endregion
 
 			#region IVolatileStats
 			private int hp;
@@ -141,8 +153,9 @@ namespace DnDEngine
 			{
 				Rebind(unit);
 
-				unit.Modifiers.Add(equipmentManager);
+				SpellsKnown = new List<ISpell>();
 
+				unit.Modifiers.Add(equipmentManager);
 			}
 		}
 	}

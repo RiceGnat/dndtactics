@@ -1,4 +1,5 @@
-﻿using RPGLibrary;
+﻿using System.Collections.Generic;
+using RPGLibrary;
 using DnDEngine.Logging;
 
 namespace DnDEngine
@@ -15,6 +16,8 @@ namespace DnDEngine
 		EnergyType? Energy { get; }
 		DiceType? Damage { get; }
 		CoreStats? Save { get; }
+
+		ICollection<EnhancementType> Enhancements { get; }
 
 		ILoggable Cast(IUnit caster, IUnit target, bool saved);
 	}

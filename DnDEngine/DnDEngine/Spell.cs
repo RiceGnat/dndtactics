@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using RPGLibrary;
 using DnDEngine.Logging;
 
@@ -30,6 +32,11 @@ namespace DnDEngine
 		Negative
 	}
 
+	public enum EnhancementType
+	{
+
+	}
+
 	public class SpellEventArgs
 	{
 		public IUnit Caster { get; set; }
@@ -40,6 +47,7 @@ namespace DnDEngine
 
 	public delegate void CastHandler(SpellEventArgs e);
 
+	[Serializable]
 	public class Spell : ISpell
 	{
 		public string Name { get; set; }
@@ -52,6 +60,9 @@ namespace DnDEngine
 		public EnergyType? Energy { get; set; }
 		public DiceType? Damage { get; set; }
 		public CoreStats? Save { get; set; }
+
+		public List<EnhancementType> enhancements = new List<EnhancementType>();
+		public ICollection<EnhancementType> Enhancements { get { return enhancements; } }
 
 		public event CastHandler OnCast;
 

@@ -5,7 +5,9 @@ namespace DnDEngine
 {
 	public interface IUnitAttributes
 	{
+		GenderType Gender { get; set; }
 
+		ICollection<ISpell> SpellsKnown { get; }
 	}
 		
 	public interface IVolatileStats
