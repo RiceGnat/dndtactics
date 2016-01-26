@@ -39,6 +39,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicEquipment.cs" />
+    <Compile Include="Combat\Battle.cs" />
+    <Compile Include="DiceResult.cs" />
+    <Compile Include="Logging\AttackResult.cs" />
+    <Compile Include="Logging\DamageReport.cs" />
+    <Compile Include="Logging\HitResult.cs" />
     <Compile Include="Managers\ClassManager.cs" />
     <Compile Include="Managers\EquipmentCatalog.cs" />
     <Compile Include="Combat\CombatManager.cs" />
@@ -53,7 +58,7 @@
     <Compile Include="Interfaces\ISpell.cs" />
     <Compile Include="Interfaces\IWeapon.cs" />
     <Compile Include="Interfaces\UnitDetailsInterfaces.cs" />
-    <Compile Include="Logging\Logging.cs" />
+    <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogString.cs" />
     <Compile Include="Managers\UnitCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

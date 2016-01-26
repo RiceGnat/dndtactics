@@ -2,6 +2,9 @@
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Represents the sum of two sets of stats.
+	/// </summary>
 	public class StatsAdder : StatsBase
 	{
 		private IStats a;

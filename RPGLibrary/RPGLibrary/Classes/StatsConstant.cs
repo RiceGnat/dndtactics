@@ -2,6 +2,9 @@
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Gives a constant value for every stat.
+	/// </summary>
 	public class StatsConstant : StatsBase
 	{
 		private int value;
@@ -21,7 +24,10 @@ namespace RPGLibrary
 			this.value = value;
 		}
 
-		public static StatsConstant Zero = new StatsConstant(0);
-		public static StatsConstant One = new StatsConstant(1);
+		private static readonly StatsConstant zero = new StatsConstant(0);
+		private static readonly StatsConstant one = new StatsConstant(1);
+
+		public static StatsConstant Zero { get { return zero; } }
+		public static StatsConstant One { get { return one; } }
 	}
 }

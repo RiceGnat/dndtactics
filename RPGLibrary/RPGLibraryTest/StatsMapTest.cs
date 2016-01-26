@@ -13,8 +13,8 @@ namespace RPGLibraryTest
 		public void StatsMap_Set()
 		{
 			StatsMap statsMap = new StatsMap();
-
-			Assert.AreEqual(TESTVALUE, statsMap.Set("SET", TESTVALUE));
+			statsMap.Set("SET", TESTVALUE);
+			Assert.AreEqual(TESTVALUE, statsMap.Get("SET"));
 		}
 
 		[TestMethod]

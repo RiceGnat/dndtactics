@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Base class for a unit decorator. Anything that modifies a unit's properties can inherit from this class.
+	/// </summary>
 	[Serializable]
 	public abstract class UnitDecorator : IUnit, IDecorator<IUnit>
 	{

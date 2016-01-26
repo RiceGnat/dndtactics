@@ -5,6 +5,10 @@ using System.Runtime.Serialization;
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Manages child decorators. Can be used as a compound decorator.
+	/// </summary>
+	/// <typeparam name="T">The type of the object to be decorated.</typeparam>
 	[Serializable]
 	public class DecoratorManager<T> : IDecoratorManager<T>
 		where T : class
@@ -16,26 +20,17 @@ namespace RPGLibrary
 
 		public T Target
 		{
-			get
-			{
-				return target;
-			}
+			get { return target; }
 		}
 
 		public int Count
 		{
-			get
-			{
-				return master.Count;
-			}
+			get { return master.Count; }
 		}
 
 		public T Result
 		{
-			get
-			{
-				return (Count == 0) ? Target : master[Count - 1] as T;
-			}
+			get { return (Count == 0) ? Target : master[Count - 1] as T; }
 		}
 
 		public virtual void Add(IDecorator<T> decorator)
@@ -118,7 +113,7 @@ namespace RPGLibrary
 			}
 		}
 
-		public IList<Tsub> GetSubsetOfType<Tsub>()
+		public IList<Tsub> GetSubset<Tsub>()
 			where Tsub : class
 		{
 			IList<Tsub> list = new List<Tsub>();

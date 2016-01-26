@@ -1,48 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using RPGLibrary;
 
 namespace DnDEngine
 {
-	public struct DiceResult
-	{
-		private int[] rolls;
-		private string head;
-
-		public IList<int> Rolls { get { return Array.AsReadOnly<int>(rolls); } }
-
-		public string RollsString
-		{
-			get
-			{
-				return String.Format("<{0}:{1}>", head, String.Join("+", Array.ConvertAll<int, string>(rolls, x => x.ToString())));
-			}
-		}
-
-		public int Total { get { return rolls.Sum(); } }
-
-		public string TotalString
-		{
-			get
-			{
-				return String.Format("<{0}:{1}>", head, Total);
-			}
-		}
-
-		public DiceResult(Dice dice, int[] rolls)
-			: this()
-		{
-			head = dice.ToString();
-			this.rolls = rolls;
-		}
-
-		public override string ToString()
-		{
-			return RollsString;
-		}
-	}
-
 	public enum DiceType
 	{
 		D4 = 4,
@@ -61,9 +21,9 @@ namespace DnDEngine
 
 		public int Sides { get { return rng.Max; } }
 
-		public DiceResult Result { get; private set; }
+		public DiceRoll Result { get; private set; }
 
-		public DiceResult Roll()
+		public DiceRoll Roll()
 		{
 			int[] rolls = new int[Count];
 
@@ -72,7 +32,7 @@ namespace DnDEngine
 				rolls[i] = rng.Generate();
 			}
 
-			Result = new DiceResult(this, rolls);
+			Result = new DiceRoll(this, rolls);
 
 			return Result;
 		}

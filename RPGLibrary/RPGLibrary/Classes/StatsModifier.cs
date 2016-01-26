@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Contains core functionality for unit stat modifiers such as equipment or buffs.
+	/// </summary>
 	[Serializable]
 	public class StatsModifier : UnitDecorator, IUnit
 	{

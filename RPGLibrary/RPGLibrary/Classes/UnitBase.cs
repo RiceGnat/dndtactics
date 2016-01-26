@@ -4,6 +4,9 @@ using System.Runtime.Serialization;
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Implements basic <see cref="IUnit"/> functionality. Sets up and links unit stat and modifier managers.
+	/// </summary>
 	[Serializable]
 	public class UnitBase : IUnit
 	{

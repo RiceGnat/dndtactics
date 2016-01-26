@@ -93,7 +93,7 @@ namespace DnDEngine
 		{
 			IsLinked = linked;
 
-			foreach (string stat in Enum.GetNames(typeof(CoreStats)))
+			foreach (string stat in Enum.GetNames(typeof(CoreStats)).Concat(Enum.GetNames(typeof(OtherStats))))
 			{
 				Set(stat, 0);
 			}

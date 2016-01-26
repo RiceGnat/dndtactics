@@ -2,6 +2,9 @@
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Base class for <see cref="IStats"/>. Wires all the methods togther.
+	/// </summary>
 	[Serializable]
 	public abstract class StatsBase : IStats
 	{

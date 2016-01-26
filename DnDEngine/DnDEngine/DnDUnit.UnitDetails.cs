@@ -99,7 +99,7 @@ namespace DnDEngine
 
 			public IList<IEquipment> AllEquipment
 			{
-				get { return equipmentManager.GetSubsetOfType<IEquipment>(); }
+				get { return equipmentManager.GetSubset<IEquipment>(); }
 			}
 
 			public IEquipment GetSlot(EquipmentSlot slot, int slotIndex)
@@ -140,7 +140,7 @@ namespace DnDEngine
 			#region IUnitBuffs
 			public IList<IBuff> AllBuffs
 			{
-				get { return equipmentManager.GetSubsetOfType<IBuff>(); }
+				get { return equipmentManager.GetSubset<IBuff>(); }
 			}
 			#endregion
 

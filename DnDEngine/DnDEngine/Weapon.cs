@@ -12,6 +12,7 @@ namespace DnDEngine
 		Bow
 	}
 
+	[Serializable]
 	public class Weapon : BasicEquipment, IWeapon
 	{
 		public WeaponType Type { get; set; }
@@ -22,7 +23,7 @@ namespace DnDEngine
 		public int CritRange { get; set; }
 		public int CritMultiplier { get; set; }
 
-		// WEAPON ENCHANTMENTS!
+		// ADD WEAPON ENCHANTMENTS!
 
 		public Weapon()
 		{

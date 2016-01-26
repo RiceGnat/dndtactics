@@ -2,6 +2,9 @@
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Generates random integers.
+	/// </summary>
 	public class RNG : IRandom<int>
 	{
 		private Random rng = new Random();

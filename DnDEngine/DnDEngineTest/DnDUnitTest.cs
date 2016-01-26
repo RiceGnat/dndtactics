@@ -50,7 +50,7 @@ namespace DnDEngineTest
 
 			Assert.AreEqual(159, unit.Stats.Calculated[STATNAME]);
 			Assert.AreEqual(equipment, unit.Modifiers.Children[1]);
-			Assert.AreEqual(equipment, unit.Modifiers.GetSubsetOfType<IEquipment>()[0]);
+			Assert.AreEqual(equipment, unit.Modifiers.GetSubset<IEquipment>()[0]);
 			Assert.AreEqual(unit.Name, unit.Modifiers.Result.Name);
 		}
 

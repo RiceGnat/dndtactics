@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace RPGLibrary
 {
+	/// <summary>
+	/// Implements a map for stat lookup.
+	/// </summary>
 	[Serializable]
 	public class StatsMap : StatsBase
 	{
@@ -12,7 +15,7 @@ namespace RPGLibrary
 		{
 			if (!map.ContainsKey(stat))
 			{
-				throw new ArgumentException("No stat with the name " + stat + " has been set.");
+				return 0;
 			}
 
 			return map[stat];
@@ -25,9 +28,10 @@ namespace RPGLibrary
 				map.Add(stat, 0);
 			}
 
+			int old = map[stat];
 			map[stat] = value;
 
-			return map[stat];
+			return old;
 		}
 	}
 }
