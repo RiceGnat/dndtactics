@@ -7,7 +7,7 @@ using DnDEngine.Logging;
 namespace DnDEngine.Combat
 {
 	[Serializable]
-	private class SpellResult : ILoggable
+	public class SpellResult : ILoggable
 	{
 		[NonSerialized]
 		private IUnitEx caster;

@@ -40,10 +40,13 @@
   <ItemGroup>
     <Compile Include="BasicEquipment.cs" />
     <Compile Include="Combat\Battle.cs" />
+    <Compile Include="Combat\SpellResult.cs" />
     <Compile Include="DiceResult.cs" />
-    <Compile Include="Logging\AttackResult.cs" />
-    <Compile Include="Logging\DamageReport.cs" />
-    <Compile Include="Logging\HitResult.cs" />
+    <Compile Include="Combat\AttackResult.cs" />
+    <Compile Include="Combat\DamageReport.cs" />
+    <Compile Include="Combat\HitResult.cs" />
+    <Compile Include="Logging\ILogger.cs" />
+    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Managers\ClassManager.cs" />
     <Compile Include="Managers\EquipmentCatalog.cs" />
     <Compile Include="Combat\CombatManager.cs" />

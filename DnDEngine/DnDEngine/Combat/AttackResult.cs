@@ -64,29 +64,12 @@ namespace DnDEngine.Combat
 
 		string ILoggable.Inline
 		{
-			get
-			{
-				return String.Format("{0} attacks {1} with a {2} for {3} damage.", Attacker, Defender, Weapon, DamageDealt.TotalTaken);
-			}
+			get { return Log.LogAttack(this, LogType.Inline); }
 		}
 
 		string ILoggable.Full
 		{
-			get
-			{
-				StringBuilder s = new StringBuilder();
-				s.Append((HitRoll as ILoggable).Full);
-				if (HitRoll.Hit)
-				{
-					s.Append((DamageDealt as ILoggable).Full);
-				}
-				else
-				{
-					s.AppendLine("No damage was dealt.");
-				}
-
-				return s.ToString();
-			}
+			get { return Log.LogAttack(this, LogType.Full); }
 		}
 	}
 }

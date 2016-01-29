@@ -1,38 +1,42 @@
 ﻿using System;
 using System.Text;
 using RPGLibrary;
+using DnDEngine.Combat;
 
 namespace DnDEngine.Logging
 {
 	public static class Log
 	{
-		public const string ModifierFormat = "+#;-#;+0";
+		private static ILogger l = new Logger();
 
-		public static string DescribeUnit(IUnit unit)
+		public static void SetLogger(ILogger newLogger)
 		{
-			StringBuilder s = new StringBuilder();
-			s.AppendLine(unit.Name);
-			s.AppendLine(String.Format("Level {0} {1}", unit.Level, unit.Class));
-			s.AppendLine();
+			l = newLogger;
+		}
 
-			s.AppendFormat("HP {0}/{1}", unit.GetDetails<IVolatileStats>().CurrentHP, unit.Stats.Calculated[DerivedStats.HP]);
-			s.AppendLine(String.Format("\tHIT {0,3}", unit.Stats.Calculated[DerivedStats.HIT].ToString(ModifierFormat)));
-			s.AppendFormat("MP {0}/{1}", unit.GetDetails<IVolatileStats>().CurrentMP, unit.Stats.Calculated[DerivedStats.MP]);
-			s.AppendLine(String.Format("\tAVD {0,3}", unit.Stats.Calculated[DerivedStats.AVD]));
-			s.AppendLine();
+		public static string ModifierFormat
+		{
+			get { return l.ModifierFormat; }
+		}
 
-			s.AppendFormat("STR {0,2}", unit.Stats.Calculated[CoreStats.STR]);
-			s.AppendLine(String.Format("\tATK {0,3}", unit.Stats.Calculated[DerivedStats.ATK]));
-			s.AppendFormat("CON {0,2}", unit.Stats.Calculated[CoreStats.CON]);
-			s.AppendLine(String.Format("\tDEF {0,3}", unit.Stats.Calculated[DerivedStats.DEF]));
-			s.AppendFormat("DEX {0,2}", unit.Stats.Calculated[CoreStats.DEX]);
-			s.AppendLine(String.Format("\tMAG {0,3}", unit.Stats.Calculated[DerivedStats.MAG]));
-			s.AppendFormat("INT {0,2}", unit.Stats.Calculated[CoreStats.INT]);
-			s.AppendLine(String.Format("\tRES {0,3}", unit.Stats.Calculated[DerivedStats.RES]));
-			s.AppendLine(String.Format("WIS {0,2}", unit.Stats.Calculated[CoreStats.WIS]));
-			s.AppendLine(String.Format("CHA {0,2}", unit.Stats.Calculated[CoreStats.CHA]));
+		public static string DescribeUnit(IUnitEx unit)
+		{
+			return l.DescribeUnit(unit, LogType.Full);
+		}
 
-			return s.ToString();
+		public static string LogHit(HitResult result, LogType length)
+		{
+			return l.LogHit(result, length);
+		}
+
+		public static string LogAttack(AttackResult result, LogType length)
+		{
+			return l.LogAttack(result, length);
+		}
+
+		public static string LogSpell(SpellResult result, LogType length)
+		{
+			return l.LogSpell(result, length);
 		}
 	}
 }

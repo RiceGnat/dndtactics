@@ -48,23 +48,12 @@ namespace DnDEngine.Combat
 
 		string ILoggable.Inline
 		{
-			get { return String.Format("{0} {1} {2}!", Attacker, Hit ? CritConfirm ? "crits" : "hits" : "misses", Defender); }
+			get { return Log.LogHit(this, LogType.Inline); }
 		}
 
 		string ILoggable.Full
 		{
-			get
-			{
-				StringBuilder s = new StringBuilder();
-				s.AppendLine(String.Format("{0} rolls a {1} ({2}{3}) and {4} {5} ({6})!",
-					Attacker, Roll.Total + AttackerBonus, Roll.TotalString, AttackerBonus.ToString(Log.ModifierFormat),
-					Hit ? "hits" : "misses", Defender, DefenderAVD));
-				if (Crit)
-				{
-					s.AppendLine(String.Format("{0} rolls {1} and {2} ", Attacker, CritRoll.TotalString, CritConfirm ? "confirms crit!" : "fails to confirm crit."));
-				}
-				return s.ToString();
-			}
+			get { return Log.LogHit(this, LogType.Full); }
 		}
 	}
 }
